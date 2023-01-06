@@ -1,5 +1,9 @@
 import { createClient } from "contentful";
-import { IPhotoCollection, IThumbnail } from "../@types/generated/contentful";
+import {
+  IEntries,
+  IPhotoCollection,
+  IThumbnail,
+} from "../@types/generated/contentful";
 
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID as string,
@@ -12,6 +16,11 @@ export const getContentfulEntries = async (contentType: string) => {
   });
   return entries;
 };
+
+/**
+ * Each content type has a function to generate all slugs (used for dynamic routing)
+ * And a function to get a single piece by slug
+ */
 
 export const getRecordSlugs = async () => {
   const entries = await client.getEntries({
@@ -53,4 +62,25 @@ export const getPhotoCollectionBySlug = async (slug: string) => {
     "fields.slug": slug,
   });
   return collection.items[0] as IPhotoCollection;
+};
+
+export const getBlogEntrySlugs = async () => {
+  const entries = await client.getEntries({
+    content_type: "entries",
+  });
+  return entries.items.map((entry: any) => {
+    return {
+      params: {
+        slug: entry.fields.slug,
+      },
+    };
+  });
+};
+
+export const getBlogEntryBySlug = async (slug: string) => {
+  const entry = await client.getEntries({
+    content_type: "entries",
+    "fields.slug": slug,
+  });
+  return entry.items[0] as IEntries;
 };
