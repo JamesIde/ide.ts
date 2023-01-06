@@ -5,13 +5,32 @@ import Layout from "../../components/navigation-seo/layout";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/contentful";
 import { useState } from "react";
+import { Asset } from "contentful-management/dist/typings/entities/asset";
+export interface ModalImage {
+  url: string;
+  width: string;
+  height: string;
+  description?: string;
+}
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);
-  const [currImage, setImage] = useState();
+  const [currImage, setImage] = useState<ModalImage>({
+    url: "",
+    width: "",
+    height: "",
+    description: "",
+  });
   const imageModal = (e: any, photo: any) => {
+    console.log("what was clicked", photo);
     e.stopPropagation();
     setModal((showModal) => !showModal);
-    setImage(photo);
+    let selectedImage: ModalImage = {
+      url: `https:${photo.fields.file.url}`,
+      width: photo.fields.file.details.image?.width,
+      height: photo.fields.file.details.image?.height,
+      description: photo.fields.description,
+    };
+    setImage(selectedImage);
   };
   const closeModal = () => {
     setModal(false);
@@ -20,9 +39,9 @@ export default function Record({ record }: { record: IThumbnail }) {
     <>
       <Layout>
         <Helmet title={record.fields.title!} />
-        <div id="global-wrapper">
-          <section id="record-details">
-            <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3">
+        <div id="global-wrapper" onClick={closeModal}>
+          <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3">
+            <section id="record-details">
               <Image
                 src={`https:${record.fields.featuredImage?.fields.file?.url}`}
                 width={1920}
@@ -30,7 +49,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 alt={record.fields.title!}
                 loading="eager"
               />{" "}
-              <h1 className="text-xl text-center nav-center heading">
+              <h1 className="text-2xl text-center nav-title mt-4">
                 {record.fields.title}
               </h1>
               <p className="text-center mb-2 mt-2 font-mono">
@@ -39,12 +58,363 @@ export default function Record({ record }: { record: IThumbnail }) {
               <p>{record.fields.description}</p>
               <p className="text-right">{record.fields.date}</p>
               <hr className="mb-2 mt-2" />
+            </section>
+
+            <div className="record-details">
+              <ReactMarkdown>{record.fields?.dayOneDescription!}</ReactMarkdown>
+              <div className="record-grid-container">
+                <div className="record-grid">
+                  {record.fields?.imageBlock1 &&
+                    record.fields?.imageBlock1.map(function (photo) {
+                      if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 3024
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            className="record-img-span2 hover:cursor-pointer duration-500"
+                            alt={photo.fields.description}
+                            width={500}
+                            height={1000}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 4000
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={photo.fields.file.details.image?.width}
+                            height={photo.fields.file.details.image?.height}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={1920}
+                            height={1080}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      }
+                    })}
+                </div>
+              </div>
+              <ReactMarkdown>{record.fields?.dayTwoDescription!}</ReactMarkdown>
+              <div className="record-grid-container">
+                <div className="record-grid">
+                  {record.fields?.imageBlock2 &&
+                    record.fields?.imageBlock2.map(function (photo) {
+                      if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 3024
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            className="record-img-span2 hover:cursor-pointer duration-500"
+                            alt={photo.fields.description}
+                            width={500}
+                            height={1000}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 4000
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={photo.fields.file.details.image?.width}
+                            height={photo.fields.file.details.image?.height}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={1920}
+                            height={1080}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      }
+                    })}
+                </div>
+              </div>
+              <ReactMarkdown>
+                {record.fields?.dayThreeDescription!}
+              </ReactMarkdown>
+              <div className="record-grid-container">
+                <div className="record-grid">
+                  {record.fields?.imageBlock3 &&
+                    record.fields?.imageBlock3.map(function (photo) {
+                      if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 3024
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            className="record-img-span2 hover:cursor-pointer duration-500"
+                            alt={photo.fields.description}
+                            width={500}
+                            height={1000}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 4000
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={photo.fields.file.details.image?.width}
+                            height={photo.fields.file.details.image?.height}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={1920}
+                            height={1080}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      }
+                    })}
+                </div>
+              </div>
+              <ReactMarkdown>
+                {record.fields?.dayFourDescription!}
+              </ReactMarkdown>
+              <div className="record-grid-container">
+                <div className="record-grid">
+                  {record.fields?.imageBlock4 &&
+                    record.fields?.imageBlock4.map(function (photo) {
+                      if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 3024
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            className="record-img-span2 hover:cursor-pointer duration-500"
+                            alt={photo.fields.description}
+                            width={500}
+                            height={1000}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 4000
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={photo.fields.file.details.image?.width}
+                            height={photo.fields.file.details.image?.height}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={1920}
+                            height={1080}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      }
+                    })}
+                </div>
+              </div>
+              <ReactMarkdown>
+                {record.fields?.dayFiveDescription!}
+              </ReactMarkdown>
+              <div className="record-grid-container">
+                <div className="record-grid">
+                  {record.fields?.imageBlock5 &&
+                    record.fields?.imageBlock5.map(function (photo) {
+                      if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 3024
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            className="record-img-span2 hover:cursor-pointer duration-500"
+                            alt={photo.fields.description}
+                            width={500}
+                            height={1000}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else if (
+                        photo.fields.file.details.image?.height! >= 4000 &&
+                        photo.fields.file.details.image?.width! === 4000
+                      ) {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={photo.fields.file.details.image?.width}
+                            height={photo.fields.file.details.image?.height}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      } else {
+                        return (
+                          <Image
+                            src={`https:${photo.fields.file.url}`}
+                            alt={photo.fields.description}
+                            className="record-img hover:cursor-pointer duration-500"
+                            width={1920}
+                            height={1080}
+                            style={{
+                              objectFit: "cover",
+                              height: "100%",
+                              width: "100%",
+                            }}
+                            onClick={(e) => imageModal(e, photo as any)}
+                          />
+                        );
+                      }
+                    })}
+                </div>
+              </div>
+              <h1 className="mb-3">GPS</h1>
+              <iframe
+                src={record.fields?.map}
+                style={{
+                  width: "1px",
+                  minWidth: "100%",
+                  height: "700px",
+                  border: "none",
+                }}
+              />
+              <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
+              <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>
             </div>
-          </section>
-          {/* main-wrapper can be a global class for all entries */}
-          <div className="">
-            <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
           </div>
+          {modal && (
+            <div className="fixed flex justify-center items-center h-screen w-in top-0 left-0 bg-blurred flex-col">
+              <div>
+                <Image
+                  src={currImage.url}
+                  className="cursor-pointer  h-[96vh] object-contain"
+                  alt={record.sys.id}
+                  key={record.sys.id}
+                  width={parseInt(currImage.width)}
+                  height={parseInt(currImage.height)}
+                />
+              </div>
+              <div>
+                <p className="text-white text-center ">
+                  {currImage.description}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </Layout>
     </>
