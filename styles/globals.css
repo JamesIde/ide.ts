@@ -106,6 +106,14 @@
   font-weight: 600;
 }
 
+.record-details > .record-stats > h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #343a40;
+  font-weight: 400;
+}
+
 .record-details > h1 {
   font-family: "Playfair Display", serif;
   font-size: 2rem;
@@ -114,7 +122,69 @@
   font-weight: 400;
 }
 
+.record-details > .record-stats > ul > li:nth-of-type(1) {
+  list-style: none;
+  font-family: monospace;
+  font-size: 13px;
+  background-image: url("../public/camp.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 16px 16px;
+  padding-left: 1px;
+  margin: 0 0 0px 0px;
+}
+
+.record-details > .record-stats > ul > li:nth-of-type(1)::before {
+  content: "";
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  margin-right: 4px;
+}
+
+.record-details > .record-stats > ul > li:nth-of-type(2) {
+  list-style: none;
+  font-family: monospace;
+  font-size: 13px;
+  background-image: url("../public/hiker.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 16px 16px;
+  padding-left: 1px;
+  margin: 0 0 0px 0px;
+}
+
+.record-details > .record-stats > ul > li:nth-of-type(2)::before {
+  content: "";
+  display: inline-block;
+  width: 15px;
+  margin-right: 5px;
+}
+
+.record-details > .record-stats > ul > li:nth-of-type(3) {
+  list-style: none;
+  font-family: monospace;
+  font-size: 13px;
+  background-image: url("../public/clock.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 16px 16px;
+  padding-left: 1px;
+  margin: 0 0 0px 0px;
+}
+
+.record-details > .record-stats > ul > li:nth-of-type(3)::before {
+  content: "";
+  display: inline-block;
+  width: 15px;
+  margin-right: 4px;
+}
+
 .record-details > p {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.record-stats > p {
   font-size: 15px;
   margin-bottom: 10px;
 }
@@ -125,9 +195,8 @@
 
 ul > li {
   list-style: disc;
-  margin: 0 0 7px 35px;
-  padding-left: 15px;
-  padding-right: 15px;
+  margin: 0 0 5px 25px;
+  padding-left: 5;
   line-height: 1.65;
 }
 
@@ -142,6 +211,22 @@ ul > li > a {
 .record-details > p > a:hover {
   color: #007bff;
   text-decoration: underline;
+}
+
+.record.stats > h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #343a40;
+  font-weight: 400;
+}
+
+.record.details > ul > li {
+  list-style: lower-greek;
+  margin: 0 0 7px 35px;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 1.65;
 }
 
 /* ul > li {

@@ -40,7 +40,7 @@ export default function Record({ record }: { record: IThumbnail }) {
       <Layout>
         <Helmet title={record.fields.title!} />
         <div id="global-wrapper" onClick={closeModal}>
-          <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3">
+          <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3 p-2">
             <section id="record-details">
               <Image
                 src={`https:${record.fields.featuredImage?.fields.file?.url}`}
@@ -48,6 +48,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 height={1080}
                 alt={record.fields.title!}
                 loading="eager"
+                // onClick={(e) => imageModal(e, record.fields.featuredImage)}
               />{" "}
               <h1 className="text-2xl text-center nav-title mt-4">
                 {record.fields.title}
@@ -61,7 +62,11 @@ export default function Record({ record }: { record: IThumbnail }) {
             </section>
 
             <div className="record-details">
-              <ReactMarkdown>{record.fields?.dayOneDescription!}</ReactMarkdown>
+              <div className="record-stats">
+                <ReactMarkdown>
+                  {record.fields?.dayOneDescription!}
+                </ReactMarkdown>
+              </div>
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock1 &&
@@ -82,7 +87,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else if (
@@ -101,7 +106,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else {
@@ -117,14 +122,16 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       }
                     })}
                 </div>
               </div>
+
               <ReactMarkdown>{record.fields?.dayTwoDescription!}</ReactMarkdown>
+
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock2 &&
@@ -145,7 +152,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else if (
@@ -164,7 +171,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else {
@@ -180,16 +187,18 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       }
                     })}
                 </div>
               </div>
+
               <ReactMarkdown>
                 {record.fields?.dayThreeDescription!}
               </ReactMarkdown>
+
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock3 &&
@@ -210,7 +219,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else if (
@@ -229,7 +238,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else {
@@ -245,16 +254,18 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       }
                     })}
                 </div>
               </div>
+
               <ReactMarkdown>
                 {record.fields?.dayFourDescription!}
               </ReactMarkdown>
+
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock4 &&
@@ -275,7 +286,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else if (
@@ -294,7 +305,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else {
@@ -310,7 +321,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       }
@@ -320,6 +331,7 @@ export default function Record({ record }: { record: IThumbnail }) {
               <ReactMarkdown>
                 {record.fields?.dayFiveDescription!}
               </ReactMarkdown>
+
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock5 &&
@@ -340,7 +352,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else if (
@@ -359,7 +371,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       } else {
@@ -375,7 +387,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
-                            onClick={(e) => imageModal(e, photo as any)}
+                            onClick={(e) => imageModal(e, photo)}
                           />
                         );
                       }
