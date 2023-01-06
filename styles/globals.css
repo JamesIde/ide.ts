@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.heading {
+  font-family: "Playfair Display", serif;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  color: #343a40;
+  font-weight: 600;
+}

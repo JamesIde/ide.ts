@@ -4,19 +4,21 @@ import {
   IPhotoCollection,
   IThumbnail,
 } from "../@types/generated/contentful";
-import Layout from "../components/navigation-seo/Layout";
-import Navigation from "../components/navigation-seo/Navigation";
-import Records from "../components/records/Records";
+import Layout from "../components/navigation-seo/layout";
+import Navigation from "../components/navigation-seo/navigation";
+import Records from "../components/Records/records";
 import { getContentfulEntries } from "../lib/contentful";
 import Image from "next/image";
-import Entries from "../components/entries/Entries";
-import PhotoCollection from "../components/PhotoCollection/PhotoCollection";
+import Entries from "../components/Entries/entries";
+import PhotoCollection from "../components/PhotoCollection/photoCollection";
+import Helmet from "../components/navigation-seo/helmet";
 
 export async function getStaticProps() {
-  const cBanner = await getContentfulEntries("banner");
+  // const cBanner = await getContentfulEntries("banner");
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
+
   return {
     props: {
       entries: cEntries.items,
@@ -36,12 +38,13 @@ export default function Home({
   photos: IPhotoCollection[];
 }) {
   return (
-    <Layout>
+    <>
+      <Helmet title="Home" />
       <Navigation />
       <Records records={records} />
       <Entries entries={entries} />
       <PhotoCollection photos={photos} />
-    </Layout>
+    </>
   );
 }
 
