@@ -42,7 +42,7 @@ function about() {
             {""}.
           </p>
           <p className="text-gray-600 mt-5 text-sm">
-            Built with Gatsby, MDX, GraphQL, Contentful and TailwindCSS.
+            Built with NextJS, Markdown, Contentful and TailwindCSS
           </p>
         </div>
       </Layout>

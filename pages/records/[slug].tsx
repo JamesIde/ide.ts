@@ -6,12 +6,8 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/contentful";
 import { useState } from "react";
 import { Asset } from "contentful-management/dist/typings/entities/asset";
-export interface ModalImage {
-  url: string;
-  width: string;
-  height: string;
-  description?: string;
-}
+import { ModalImage } from "../../@types/modals";
+
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
@@ -20,17 +16,19 @@ export default function Record({ record }: { record: IThumbnail }) {
     height: "",
     description: "",
   });
+
   const imageModal = (e: any, photo: any) => {
-    console.log("what was clicked", photo);
     e.stopPropagation();
     setModal((showModal) => !showModal);
-    let selectedImage: ModalImage = {
+
+    let modalImage: ModalImage = {
       url: `https:${photo.fields.file.url}`,
       width: photo.fields.file.details.image?.width,
       height: photo.fields.file.details.image?.height,
       description: photo.fields.description,
     };
-    setImage(selectedImage);
+
+    setImage(modalImage);
   };
   const closeModal = () => {
     setModal(false);
@@ -98,7 +96,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                           <Image
                             src={`https:${photo.fields.file.url}`}
                             alt={photo.fields.description}
-                            className="record-img hover:cursor-pointer duration-500"
+                            className="record-img hover:cursor-pointer"
                             width={photo.fields.file.details.image?.width}
                             height={photo.fields.file.details.image?.height}
                             style={{
@@ -114,7 +112,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                           <Image
                             src={`https:${photo.fields.file.url}`}
                             alt={photo.fields.description}
-                            className="record-img hover:cursor-pointer duration-500"
+                            className="record-img hover:cursor-pointer"
                             width={1920}
                             height={1080}
                             style={{
@@ -129,9 +127,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                     })}
                 </div>
               </div>
-
-              <ReactMarkdown>{record.fields?.dayTwoDescription!}</ReactMarkdown>
-
+              <div className="record-stats">
+                <ReactMarkdown>
+                  {record.fields?.dayTwoDescription!}
+                </ReactMarkdown>
+              </div>
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock2 &&
@@ -143,7 +143,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                         return (
                           <Image
                             src={`https:${photo.fields.file.url}`}
-                            className="record-img-span2 hover:cursor-pointer duration-500"
+                            className="record-img-span2 hover:cursor-pointer"
                             alt={photo.fields.description}
                             width={500}
                             height={1000}
@@ -163,7 +163,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                           <Image
                             src={`https:${photo.fields.file.url}`}
                             alt={photo.fields.description}
-                            className="record-img hover:cursor-pointer duration-500"
+                            className="record-img hover:cursor-pointer"
                             width={photo.fields.file.details.image?.width}
                             height={photo.fields.file.details.image?.height}
                             style={{
@@ -194,11 +194,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                     })}
                 </div>
               </div>
-
-              <ReactMarkdown>
-                {record.fields?.dayThreeDescription!}
-              </ReactMarkdown>
-
+              <div className="record-stats">
+                <ReactMarkdown>
+                  {record.fields?.dayThreeDescription!}
+                </ReactMarkdown>
+              </div>
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock3 &&
@@ -261,11 +261,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                     })}
                 </div>
               </div>
-
-              <ReactMarkdown>
-                {record.fields?.dayFourDescription!}
-              </ReactMarkdown>
-
+              <div className="record-stats">
+                <ReactMarkdown>
+                  {record.fields?.dayFourDescription!}
+                </ReactMarkdown>
+              </div>
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock4 &&
@@ -328,10 +328,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                     })}
                 </div>
               </div>
-              <ReactMarkdown>
-                {record.fields?.dayFiveDescription!}
-              </ReactMarkdown>
-
+              <div className="record-stats">
+                <ReactMarkdown>
+                  {record.fields?.dayFiveDescription!}
+                </ReactMarkdown>
+              </div>
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock5 &&
@@ -402,6 +403,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                   minWidth: "100%",
                   height: "700px",
                   border: "none",
+                  marginBottom: "10px",
                 }}
               />
               <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
@@ -418,6 +420,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                   key={record.sys.id}
                   width={parseInt(currImage.width)}
                   height={parseInt(currImage.height)}
+                  loading="eager"
                 />
               </div>
               <div>
