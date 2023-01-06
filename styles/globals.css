@@ -4,8 +4,49 @@
 
 .heading {
   font-family: "Playfair Display", serif;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   line-height: 1.2;
   color: #343a40;
   font-weight: 600;
+}
+
+.playfair {
+  font-family: "Playfair Display", serif;
+}
+
+.nav-title {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #343a40;
+  font-weight: 600;
+}
+
+.main-wrapper > p {
+  font-size: 1.2rem;
+  color: #343a40;
+}
+
+.main-wrapper > p > a {
+  color: #007bff;
+}
+
+ul > li {
+  list-style: disc;
+  margin: 0 0 7px 35px;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 1.65;
+}
+
+ul > li > p > a {
+  color: #007bff;
+}
+
+ul > li > a {
+  color: #007bff;
+}
+.main-wrapper > p > a:hover {
+  color: #007bff;
+  text-decoration: underline;
 }

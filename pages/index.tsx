@@ -42,8 +42,8 @@ export default function Home({
       <Helmet title="Home" />
       <Navigation />
       <Records records={records} />
-      <Entries entries={entries} />
       <PhotoCollection photos={photos} />
+      <Entries entries={entries} />
     </>
   );
 }

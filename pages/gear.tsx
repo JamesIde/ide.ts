@@ -6,7 +6,7 @@ export default function gear() {
   return (
     <Layout>
       <Helmet title="Gear" />
-      <div className="mx-auto lg:w-2/3 h-auto mt-5 mb-5">
+      <div className="mx-auto xl:w-[50%] md:w-[50%] w-full h-auto mt-5 mb-5">
         <div className="mx-auto ml-5 mr-5">
           <Script src="https://lighterpack.com/e/0bu8zl" />
           <div id="0bu8zl"></div>

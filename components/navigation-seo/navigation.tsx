@@ -2,12 +2,12 @@ import Link from "next/link";
 import { HiExternalLink } from "react-icons/hi";
 function Navigation() {
   return (
-    <div className="navbar text-black mb-2">
+    <div className="navbar  mb-2">
       <div className="container mx-auto ">
         <div className="flex-1">
           <div className="flex-none text-center nav-center mb-2">
-            <Link href="/" className="text-4xl align-middle">
-              James Ide
+            <Link href="/">
+              <h1 className="playfair text-4xl">James Ide</h1>
             </Link>
           </div>
           <div className="lg:w-[900px] md:w-[600px] mx-auto">
