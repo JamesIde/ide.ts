@@ -42,7 +42,8 @@ function about() {
             .
           </p>
           <p className="text-gray-600 mt-5 text-sm">
-            Built with NextJS, Markdown, Contentful and TailwindCSS
+            Built with NextJS, Markdown, Contentful and TailwindCSS. Deployed on
+            Vercel.
           </p>
         </div>
       </Layout>
