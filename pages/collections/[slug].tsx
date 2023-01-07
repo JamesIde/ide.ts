@@ -1,6 +1,6 @@
 import { IPhotoCollection } from "../../@types/generated/contentful";
-import Helmet from "../../components/navigation-seo/helmet";
-import Layout from "../../components/navigation-seo/layout";
+import Helmet from "../../components/Navigation/Helmet";
+import Layout from "../../components/Navigation/Layout";
 import {
   getPhotoCollectionBySlug,
   getPhotoCollectionSlugs,
@@ -15,9 +15,8 @@ export default function Collection({
 }: {
   collection: IPhotoCollection;
 }) {
-  collection.fields?.photos.slice(2, 3).map((item) => {
-    console.log(JSON.stringify(item.fields));
-  });
+  collection.fields?.photos.slice(2, 3).map((item) => {});
+
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",

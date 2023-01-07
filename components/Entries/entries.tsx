@@ -1,5 +1,5 @@
 import { IEntries } from "../../@types/generated/contentful";
-import EntryThumbnail from "./entrythumbnail";
+import EntryThumbnail from "./EntryThumbnail";
 
 export default function Entries({ entries }: { entries: IEntries[] }) {
   entries.sort((a, b) => {

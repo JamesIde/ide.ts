@@ -1,5 +1,5 @@
 import { IPhotoCollection } from "../../@types/generated/contentful";
-import PhotoCollectionThumbnail from "./photoCollectionThumbnail";
+import PhotoCollectionThumbnail from "./PhotoCollectionThumbnail";
 
 export default function PhotoCollection({
   photos,

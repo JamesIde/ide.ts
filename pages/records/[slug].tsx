@@ -1,7 +1,7 @@
 import { IThumbnail } from "../../@types/generated/contentful";
 import Image from "next/image";
-import Helmet from "../../components/navigation-seo/helmet";
-import Layout from "../../components/navigation-seo/layout";
+import Helmet from "../../components/Navigation/Helmet";
+import Layout from "../../components/Navigation/Layout";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/contentful";
 import { useState } from "react";

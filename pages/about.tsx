@@ -1,6 +1,6 @@
-import Helmet from "../components/navigation-seo/helmet";
-import Layout from "../components/navigation-seo/layout";
-import Navigation from "../components/navigation-seo/navigation";
+import Helmet from "../components/Navigation/Helmet";
+import Layout from "../components/Navigation/Layout";
+import Navigation from "../components/Navigation/Navigation";
 
 function about() {
   return (

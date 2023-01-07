@@ -1,6 +1,6 @@
 import { IEntries } from "../../@types/generated/contentful";
-import Helmet from "../../components/navigation-seo/helmet";
-import Layout from "../../components/navigation-seo/layout";
+import Helmet from "../../components/Navigation/Helmet";
+import Layout from "../../components/Navigation/Layout";
 import { getBlogEntryBySlug, getBlogEntrySlugs } from "../../lib/contentful";
 import Image from "next/image";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
