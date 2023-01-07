@@ -11,7 +11,7 @@ function about() {
           <h1 className="font-bold text-xl mb-3">About</h1>
           <p className="text-gray-600">
             Developer, hiker and photographer. Sharing trips, projects, photos
-            and anything I'm interested in.
+            and anything I&apos;m interested in.
           </p>
           <h1 className="font-bold text-xl mb-3 mt-4">Contact</h1>
           <p className="text-gray-600">
