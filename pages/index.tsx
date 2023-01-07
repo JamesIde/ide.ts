@@ -6,7 +6,7 @@ import {
 import Navigation from "../components/Navigation/Navigation";
 import Records from "../components/Records/Records";
 import { getContentfulEntries } from "../lib/contentful";
-import Entries from "../components/Entries/Entries";
+import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/PhotoCollection";
 import Helmet from "../components/Navigation/Helmet";
 export async function getStaticProps() {
