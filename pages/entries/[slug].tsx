@@ -7,7 +7,7 @@ import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useState } from "react";
 import { ModalImage } from "../../@types/modals";
-export default async function Entry({ entry }: { entry: IEntries }) {
+export default function Entry({ entry }: { entry: IEntries }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -17,7 +17,6 @@ export default async function Entry({ entry }: { entry: IEntries }) {
   });
 
   const imageModal = (e: any, photo: any) => {
-    console.log("what was clicked", photo);
     e.stopPropagation();
     setModal((showModal) => !showModal);
 
@@ -59,7 +58,6 @@ export default async function Entry({ entry }: { entry: IEntries }) {
         const { fields, description, height, width } = node.data.target;
 
         if (height > 3500 && width < 4700) {
-          console.log("between 3500 and 4700", width, height);
           // Portrait
           return (
             <Image
@@ -74,7 +72,6 @@ export default async function Entry({ entry }: { entry: IEntries }) {
           );
         } else if (width > 7000) {
           // Panorama
-          console.log("panoramas");
           return (
             <Image
               className="mb-2 w-full cursor-pointer border-2 mx-auto"
@@ -87,7 +84,6 @@ export default async function Entry({ entry }: { entry: IEntries }) {
             />
           );
         } else {
-          console.log("big landscape");
           // Landscape
           return (
             <Image
@@ -151,7 +147,6 @@ export default async function Entry({ entry }: { entry: IEntries }) {
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   const entry: IEntries = await getBlogEntryBySlug(params.slug);
-
   return {
     props: {
       entry,
