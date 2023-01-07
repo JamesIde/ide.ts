@@ -7,6 +7,7 @@ import { getRecordBySlug, getRecordSlugs } from "../../lib/contentful";
 import { useState } from "react";
 import { Asset } from "contentful-management/dist/typings/entities/asset";
 import { ModalImage } from "../../@types/modals";
+import Modal from "../../components/Modal/Modal";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);
@@ -425,26 +426,7 @@ export default function Record({ record }: { record: IThumbnail }) {
               <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>
             </div>
           </div>
-          {modal && (
-            <div className="fixed flex justify-center items-center h-screen w-in top-0 left-0 bg-blurred flex-col">
-              <div>
-                <Image
-                  src={currImage.url}
-                  className="cursor-pointer  h-[96vh] object-contain"
-                  alt={record.sys.id}
-                  key={record.sys.id}
-                  width={parseInt(currImage.width)}
-                  height={parseInt(currImage.height)}
-                  loading="eager"
-                />
-              </div>
-              <div>
-                <p className="text-white text-center ">
-                  {currImage.description}
-                </p>
-              </div>
-            </div>
-          )}
+          {modal && <Modal currImage={currImage} id={record.sys.id} />}
         </div>
       </Layout>
     </>

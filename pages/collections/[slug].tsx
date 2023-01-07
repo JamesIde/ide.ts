@@ -10,13 +10,12 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import Image from "next/image";
 import { useState } from "react";
 import { ModalImage } from "../../@types/modals";
+import Modal from "../../components/Modal/Modal";
 export default function Collection({
   collection,
 }: {
   collection: IPhotoCollection;
 }) {
-  collection.fields?.photos.slice(2, 3).map((item) => {});
-
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -119,26 +118,7 @@ export default function Collection({
               }
             })}
           </div>
-          {modal && (
-            <div className="fixed flex justify-center items-center h-screen top-0 left-0 bg-blurred flex-col">
-              <div>
-                <Image
-                  src={currImage.url}
-                  className="cursor-pointer  h-[96vh] object-contain"
-                  alt={collection.sys.id}
-                  key={collection.sys.id}
-                  width={parseInt(currImage.width)}
-                  height={parseInt(currImage.height)}
-                  loading="eager"
-                />
-              </div>
-              <div>
-                <p className="text-white text-center ">
-                  {currImage.description}
-                </p>
-              </div>
-            </div>
-          )}
+          {modal && <Modal currImage={currImage} id={collection.sys.id} />}
         </div>
       </div>
     </Layout>
