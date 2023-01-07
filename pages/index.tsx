@@ -4,13 +4,12 @@ import {
   IThumbnail,
 } from "../@types/generated/contentful";
 import Navigation from "../components/Navigation/Navigation";
-import Records from "../components/Records/Records";
+import Records from "../components/Records/records";
 import { getContentfulEntries } from "../lib/contentful";
 import Entries from "../components/Entries/entries";
-import PhotoCollection from "../components/PhotoCollection/PhotoCollection";
+import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 export async function getStaticProps() {
-  // const cBanner = await getContentfulEntries("banner");
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");

@@ -1,5 +1,5 @@
 import { IThumbnail } from "../../@types/generated/contentful";
-import RecordThumbnail from "./RecordThumbnail";
+import RecordThumbnail from "./recordThumbnail";
 
 export default function Records({ records }: { records: IThumbnail[] }) {
   records.sort((a, b) => {
