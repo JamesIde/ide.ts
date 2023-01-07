@@ -18,7 +18,7 @@ function RecordThumbnail({ record }: { record: IThumbnail }) {
             />
           </Link>
           <div className="px-6 py-4 max-w-fit mx-auto ">
-            <div className="mb-1 max-w-fit mx-auto heading text-[1.5rem] text-[#343a40] leading-6 font-semibold text-center hover:text-orange-500">
+            <div className="mb-1 max-w-fit mx-auto thumbnail-title text-[1.5rem] text-[#343a40] leading-6 font-semibold text-center hover:text-orange-500">
               <Link href={`records/${record.fields.slug}`}>
                 {record.fields.title}
               </Link>
