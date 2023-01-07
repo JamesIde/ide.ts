@@ -6,7 +6,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <GoogleAnalytics
         trackPageViews
-        gaMeasurementId={process.env.GOOGLE_GTAG}
+        gaMeasurementId={process.env.NEXT_PUBLIC_GOOGLE_GTAG}
       />
       <Component {...pageProps} />
     </>
