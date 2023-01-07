@@ -30,7 +30,6 @@ export default function PhotoCollectionThumbnail({
           <Image
             alt={collection.fields.title!}
             src={`https:${collection.fields.featuredImage?.fields.file.url}`}
-            loading="lazy"
             width={1200}
             height={800}
             className="flex mx-auto"

@@ -1,18 +1,14 @@
 import {
-  IBanner,
   IEntries,
   IPhotoCollection,
   IThumbnail,
 } from "../@types/generated/contentful";
-import Layout from "../components/navigation-seo/layout";
 import Navigation from "../components/navigation-seo/navigation";
 import Records from "../components/Records/records";
 import { getContentfulEntries } from "../lib/contentful";
-import Image from "next/image";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/navigation-seo/helmet";
-
 export async function getStaticProps() {
   // const cBanner = await getContentfulEntries("banner");
   const cEntries = await getContentfulEntries("entries");

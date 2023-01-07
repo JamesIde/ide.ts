@@ -13,7 +13,6 @@ function RecordThumbnail({ record }: { record: IThumbnail }) {
             <Image
               alt={record.fields?.description!}
               src={`https:${record.fields.featuredImage?.fields.file.url}`}
-              loading="lazy"
               width={1200}
               height={800}
             />
