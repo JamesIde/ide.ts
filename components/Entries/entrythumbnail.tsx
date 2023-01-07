@@ -11,7 +11,7 @@ export default function EntryThumbnail({ entry }: { entry: IEntries }) {
             </h4>
           </Link>
           <p className="w-32 mb-4 text-left text-gray-500 md:text-right md:mb-0">
-            {new Date(entry?.fields?.date).toLocaleDateString("en-AU", {
+            {new Date(entry?.fields?.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",

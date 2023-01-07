@@ -72,7 +72,7 @@ export default function Collection({
             {collection.fields.title}
           </div>
           <p className="text-center text-sm text-gray-600 mb-1">
-            {new Date(collection.fields.date!).toLocaleDateString("en-AU", {
+            {new Date(collection.fields.date!).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",

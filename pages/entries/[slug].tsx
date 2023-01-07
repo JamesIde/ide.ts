@@ -7,6 +7,7 @@ import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useState } from "react";
 import { ModalImage } from "../../@types/modals";
+import Test from "../../components/Comments/Test";
 export default function Entry({ entry }: { entry: IEntries }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
@@ -109,6 +110,7 @@ export default function Entry({ entry }: { entry: IEntries }) {
           <div className="mb-1 mx-auto font-playfair text-[20px] text-black font-semibold text-center ">
             {entry.fields.title}
           </div>
+          <Test />
           <p className="text-center text-sm text-gray-600">
             {new Date(entry.fields.date!).toLocaleDateString("en-AU", {
               year: "numeric",

@@ -89,10 +89,18 @@
 /* Home Page Heading (LATEST) */
 .heading {
   font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #343a40;
+  font-weight: 400;
+}
+
+.thumbnail-title {
+  font-family: "Playfair Display", serif;
   font-size: 1.5rem;
   line-height: 1.2;
   color: #343a40;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .playfair {
