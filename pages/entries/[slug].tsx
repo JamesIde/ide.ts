@@ -7,7 +7,7 @@ import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useState } from "react";
 import { ModalImage } from "../../@types/modals";
-export default function Entry({ entry }: { entry: IEntries }) {
+export default async function Entry({ entry }: { entry: IEntries }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -151,6 +151,7 @@ export default function Entry({ entry }: { entry: IEntries }) {
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   const entry: IEntries = await getBlogEntryBySlug(params.slug);
+
   return {
     props: {
       entry,

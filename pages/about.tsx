@@ -15,7 +15,7 @@ function about() {
           </p>
           <h1 className="font-bold text-xl mb-3 mt-4">Contact</h1>
           <p className="text-gray-600">
-            Want to reach out? Contact me by{" "}
+            Want to reach out? Contact me by
             <a
               href="mailto:james.ide775@gmail.com"
               target="_#"
@@ -23,7 +23,7 @@ function about() {
             >
               Email
             </a>
-            ,{" "}
+            ,
             <a
               href="https://www.linkedin.com/in/james-ide-a92368180/"
               target="_#"
@@ -31,7 +31,7 @@ function about() {
             >
               LinkedIn
             </a>
-            , or{" "}
+            , or
             <a
               href="https://github.com/JamesIde"
               target="_#"
@@ -39,7 +39,7 @@ function about() {
             >
               Github
             </a>
-            {""}.
+            .
           </p>
           <p className="text-gray-600 mt-5 text-sm">
             Built with NextJS, Markdown, Contentful and TailwindCSS

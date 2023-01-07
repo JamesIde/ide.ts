@@ -85,6 +85,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -104,6 +105,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -120,6 +122,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -152,6 +155,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -171,6 +175,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -187,6 +192,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -219,6 +225,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -238,6 +245,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -254,6 +262,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -286,6 +295,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -305,6 +315,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -321,6 +332,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -353,6 +365,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -372,6 +385,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );
@@ -388,6 +402,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                               height: "100%",
                               width: "100%",
                             }}
+                            key={photo.sys.id}
                             onClick={(e) => imageModal(e, photo)}
                           />
                         );

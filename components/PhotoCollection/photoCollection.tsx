@@ -6,7 +6,6 @@ export default function PhotoCollection({
 }: {
   photos: IPhotoCollection[];
 }) {
-  console.log("photos", photos);
   return (
     <>
       <h1 className="text-center text-3xl mb-1 mt-3 nav-center text-bold heading">
