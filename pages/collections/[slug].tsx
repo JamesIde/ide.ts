@@ -15,6 +15,9 @@ export default function Collection({
 }: {
   collection: IPhotoCollection;
 }) {
+  collection.fields?.photos.slice(2, 3).map((item) => {
+    console.log(JSON.stringify(item.fields));
+  });
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
