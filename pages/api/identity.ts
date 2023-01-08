@@ -138,6 +138,7 @@ async function generateTokens(profile: IdpUser) {
       process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET,
       {
         algorithm: "HS256",
+        expiresIn: "15m",
       }
     );
     const refreshToken = jwt.sign(
@@ -145,6 +146,7 @@ async function generateTokens(profile: IdpUser) {
       process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET,
       {
         algorithm: "HS256",
+        expiresIn: "7d",
       }
     );
     return { ok: true, accessToken, refreshToken };
