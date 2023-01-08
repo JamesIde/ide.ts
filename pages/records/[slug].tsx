@@ -6,7 +6,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/contentful";
 import { useState } from "react";
 import { Asset } from "contentful-management/dist/typings/entities/asset";
-import { ModalImage } from "../../@types/modals";
+import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
 
 export default function Record({ record }: { record: IThumbnail }) {

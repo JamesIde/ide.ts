@@ -6,7 +6,7 @@ import Image from "next/image";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useState } from "react";
-import { ModalImage } from "../../@types/modals";
+import { ModalImage } from "../../@types/Modal";
 export default function Entry({ entry }: { entry: IEntries }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({

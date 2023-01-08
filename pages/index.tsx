@@ -9,6 +9,7 @@ import { getContentfulEntries } from "../lib/contentful";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
+import GoogleLoginButton from "../components/Google/GoogleLoginButton";
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -34,6 +35,7 @@ export default function Home({
 }) {
   return (
     <>
+      <GoogleLoginButton />
       <Helmet title="Home" />
       <Navigation />
       <Records records={records} />
