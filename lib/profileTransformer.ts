@@ -1,4 +1,4 @@
-import { IdpUser, OAuthToken, User } from "../@types/Profile";
+import { IdpUser, User } from "../@types/Profile";
 
 export class ProfileTransformer {
   public static transformTokenToIdpUser(
