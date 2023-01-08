@@ -1,6 +1,6 @@
 # ide.ts
 
-View it here @ [jamesaide.com](https://github.com/JamesIde/jamesaide.com)
+View it here @ [jamesaide.com](https://jamesaide.com/)
 
 A place to store hiking trips, photo collections and the occasional blog entry.
 
