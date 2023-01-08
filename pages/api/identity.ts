@@ -4,9 +4,13 @@ import jwt_decode from "jwt-decode";
 import prisma from "../../lib/prisma";
 import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/profileTransformer";
+import { JWTPayload } from "../../@types/Token";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     handleIdentityToken(req, res);
+  }
+  if (req.method === "GET") {
+    handleTokenRefresh(req, res);
   }
 }
 
@@ -114,32 +118,45 @@ async function loginUser(profile: OAuthToken) {
     },
   });
 }
-
+// Abstract to seperate token gen functions
 async function generateTokens(profile: IdpUser) {
-  let payload = {
+  let expiration = 15 * 60 * 1000;
+  let ATime = new Date(Date.now() + expiration);
+  let ATPayload: JWTPayload = {
     id: profile.id,
     name: profile.name,
     email_verified: profile.email_verified,
     providerId: profile.providerId,
     picture: profile.picture,
     sub: profile.email,
-    iat: Date.now(),
+    QcP: ATime,
+    tokenVersion: profile.tokenVersion,
+    exp: ATime.getTime(),
+  };
+
+  // Different payloads for different tokens
+  expiration = 365 * 24 * 60 * 60 * 1000;
+  let RTime = new Date(Date.now() + expiration);
+
+  let RTPayload: JWTPayload = {
+    id: profile.id,
+    name: profile.name,
+    email_verified: profile.email_verified,
+    providerId: profile.providerId,
+    picture: profile.picture,
+    sub: profile.email,
+    QcP: RTime,
+    tokenVersion: profile.tokenVersion,
   };
 
   try {
     const accessToken = jwt.sign(
-      { ...payload, exp: Math.floor(Date.now() / 1000) + 60 * 15 },
-      process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET,
-      {
-        algorithm: "HS256",
-      }
+      ATPayload,
+      process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET
     );
     const refreshToken = jwt.sign(
-      { ...payload, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7 },
-      process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET,
-      {
-        algorithm: "HS256",
-      }
+      RTPayload,
+      process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET
     );
     return { ok: true, accessToken, refreshToken };
   } catch (error) {
@@ -148,4 +165,33 @@ async function generateTokens(profile: IdpUser) {
       ok: false,
     };
   }
+}
+
+async function handleTokenRefresh(req: NextApiRequest, res: NextApiResponse) {
+  const { jid } = req.cookies;
+  if (!jid) {
+    return res.status(200).send({ ok: false, accessToken: "" });
+  }
+  console.log(jid);
+  let payload: any = null;
+  try {
+    payload = jwt.verify(jid, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET);
+  } catch (err) {
+    console.log(err);
+    return res.status(200).send({ ok: false, accessToken: "" });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      providerId: payload.providerId,
+    },
+  });
+  if (!user) {
+    return res.send({ ok: false, accessToken: "" });
+  }
+  // Prevent session manipulation
+  if (user.tokenVersion !== payload.tokenVersion)
+    return res.send({ ok: false, accessToken: "" });
+  const tokens = await generateTokens(user);
+  return res.status(200).json({ token: tokens.accessToken });
 }

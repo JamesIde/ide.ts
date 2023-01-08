@@ -1,11 +1,37 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import wretch from "wretch";
+import { User } from "../../@types/Profile";
+import { getTokenFromStorage } from "../../lib/auth";
 export default function GoogleLoginButton() {
   async function handleLogin(credential: CredentialResponse) {
     wretch("/api/identity")
+      // .auth(`Bearer $`)
       .post({
         OAuthToken: credential.credential,
       })
+      // shrink this down lol
+      .unauthorized((err) => {
+        console.log(err.message);
+      })
+      .internalError((err) => {
+        console.log(err.message);
+      })
+      .forbidden((err) => {
+        console.log(err);
+      })
+      .fetchError((err) => {
+        console.log(err);
+      })
+      .json((data: User) => {
+        localStorage.setItem("user", JSON.stringify(data));
+      });
+  }
+
+  async function createComment() {
+    const token = getTokenFromStorage();
+    wretch("/api/comments?contentfulId=3zsIHczhEyQ3OdCfxxlve6")
+      .auth(`Bearer ${token ? token : ""}`)
+      .post()
       // shrink this down lol
       .unauthorized((err) => {
         console.log(err.message);
@@ -34,6 +60,9 @@ export default function GoogleLoginButton() {
         }}
         shape="rectangular"
       />
+      <button onClick={() => createComment()}>
+        Send Mock Comment To Backend
+      </button>
     </div>
   );
 }

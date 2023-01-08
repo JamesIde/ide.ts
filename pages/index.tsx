@@ -18,6 +18,7 @@ export async function getStaticProps() {
   try {
     await seedContentfulRecords(cRecords.items as IThumbnail[]);
   } catch (error) {
+    console.log("System error occured during build time. Exiting...");
     // Hard fail if we can't seed the database at build time
     process.exit(1);
   }
@@ -42,11 +43,11 @@ export default function Home({
   return (
     <>
       <GoogleLoginButton />
-      <Helmet title="Home" />
+      {/* <Helmet title="Home" />
       <Navigation />
       <Records records={records} />
       <PhotoCollection photos={photos} />
-      <Entries entries={entries} />
+      <Entries entries={entries} /> */}
     </>
   );
 }
