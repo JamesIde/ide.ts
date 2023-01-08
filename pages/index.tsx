@@ -15,8 +15,12 @@ export async function getStaticProps() {
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
 
-  // Seed the database with the data
-  await seedContentfulRecords(cRecords.items as IThumbnail[]);
+  try {
+    await seedContentfulRecords(cRecords.items as IThumbnail[]);
+  } catch (error) {
+    // Hard fail if we can't seed the database at build time
+    process.exit(1);
+  }
   return {
     props: {
       entries: cEntries.items,

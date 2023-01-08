@@ -17,6 +17,11 @@ export const getContentfulEntries = async (contentType: string) => {
   return entries;
 };
 
+/**
+ * This seeds the database with new records if they are published on Contentful.
+ *  The Vercel buildhook is triggered when pushing new records, so this function is called at build time
+ * @param records
+ */
 export const seedContentfulRecords = async (records: IThumbnail[]) => {
   records.forEach(async (record) => {
     try {
@@ -26,8 +31,8 @@ export const seedContentfulRecords = async (records: IThumbnail[]) => {
           contentfulId: record.sys.id,
         },
       });
+      console.log(`found --> ${existingRecord.id}`);
       if (existingRecord) {
-        console.log("Record already exists");
         return;
       } else {
         const seededRecord = await prisma.record.create({
@@ -37,7 +42,7 @@ export const seedContentfulRecords = async (records: IThumbnail[]) => {
             contentfulId: record.sys.id,
           },
         });
-        console.log("Record seeded", seededRecord);
+        console.log("seeded -->", seededRecord.id);
       }
     } catch (error) {
       process.exit(1);
