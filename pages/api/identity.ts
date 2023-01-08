@@ -5,15 +5,9 @@ import prisma from "../../lib/prisma";
 import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/profileTransformer";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    handleGetUser(req, res);
-  } else if (req.method === "POST") {
+  if (req.method === "POST") {
     handleIdentityToken(req, res);
   }
-}
-
-function handleGetUser(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ message: "Hit helloTestRoute" });
 }
 
 /**

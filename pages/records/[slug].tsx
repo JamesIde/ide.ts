@@ -10,6 +10,7 @@ import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
 
 export default function Record({ record }: { record: IThumbnail }) {
+  console.log(JSON.stringify(record.sys));
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",

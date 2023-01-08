@@ -24,17 +24,6 @@ export default function GoogleLoginButton() {
       });
   }
 
-  function handleClick() {
-    const resp = wretch("/api/hello")
-      .get()
-      .json((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   return (
     <div className="w-2/12">
       {/* TODO Styling and hide this component if user in LS */}

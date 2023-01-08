@@ -5,7 +5,7 @@ import {
 } from "../@types/generated/contentful";
 import Navigation from "../components/Navigation/Navigation";
 import Records from "../components/Records/records";
-import { getContentfulEntries } from "../lib/contentful";
+import { getContentfulEntries, seedContentfulRecords } from "../lib/contentful";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
@@ -15,6 +15,8 @@ export async function getStaticProps() {
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
 
+  // Seed the database with the data
+  await seedContentfulRecords(cRecords.items as IThumbnail[]);
   return {
     props: {
       entries: cEntries.items,

@@ -4,7 +4,7 @@ import {
   IPhotoCollection,
   IThumbnail,
 } from "../@types/generated/contentful";
-
+import prisma from "./prisma";
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID as string,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN as string,
@@ -15,6 +15,34 @@ export const getContentfulEntries = async (contentType: string) => {
     content_type: contentType,
   });
   return entries;
+};
+
+export const seedContentfulRecords = async (records: IThumbnail[]) => {
+  records.forEach(async (record) => {
+    try {
+      // Check if exists
+      const existingRecord = await prisma.record.findUnique({
+        where: {
+          contentfulId: record.sys.id,
+        },
+      });
+      if (existingRecord) {
+        console.log("Record already exists");
+        return;
+      } else {
+        const seededRecord = await prisma.record.create({
+          data: {
+            title: record.fields.title,
+            slug: record.fields.slug,
+            contentfulId: record.sys.id,
+          },
+        });
+        console.log("Record seeded", seededRecord);
+      }
+    } catch (error) {
+      process.exit(1);
+    }
+  });
 };
 
 /**
