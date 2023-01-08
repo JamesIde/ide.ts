@@ -12,6 +12,7 @@
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.16.2",
     "@next/font": "^13.1.1",
+    "@react-oauth/google": "^0.5.1",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
