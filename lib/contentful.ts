@@ -24,31 +24,23 @@ export const getContentfulEntries = async (contentType: string) => {
  */
 export const seedContentfulRecords = async (records: IThumbnail[]) => {
   records.forEach(async (record) => {
-    try {
-      // Check if exists
-      const existingRecord = await prisma.record.findUnique({
-        where: {
-          contentfulId: record.sys.id,
+    const existingRecord = await prisma.record.findUnique({
+      where: {
+        id: record.sys.id,
+      },
+    });
+
+    if (!existingRecord) {
+      const seededRecord = await prisma.record.create({
+        data: {
+          id: record.sys.id,
+          title: record.fields.title,
+          slug: record.fields.slug,
         },
       });
-
+      console.log("seeded -->", seededRecord.id);
+    } else {
       console.log(`found --> ${existingRecord.id}`);
-      if (existingRecord) {
-        return;
-      } else {
-        const seededRecord = await prisma.record.create({
-          data: {
-            // id: record.sys.id,
-            title: record.fields.title,
-            slug: record.fields.slug,
-            contentfulId: record.sys.id,
-          },
-        });
-        console.log("seeded -->", seededRecord.id);
-      }
-    } catch (error) {
-      console.log("Fatal error seeding the database");
-      process.exit(1);
     }
   }); // Probably remove the try catch. Have a validator call to check if we've got records. if not, process.exit (1)
 };

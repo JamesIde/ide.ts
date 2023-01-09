@@ -15,9 +15,9 @@ export async function getStaticProps() {
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
 
-  // need a global connector to the prisma database
-
-  await seedContentfulRecords(cRecords.items as IThumbnail[]);
+  if (process.env.NODE_ENV === "production") {
+    await seedContentfulRecords(cRecords.items as IThumbnail[]);
+  }
 
   return {
     props: {
@@ -47,22 +47,4 @@ export default function Home({
       <Entries entries={entries} /> */}
     </>
   );
-}
-
-{
-  /* <p className="font-bold text-red-500">Hello World</p>
-      {entries.map((banner) => {
-        return (
-          <>
-            <Image
-              src={`https:${banner.fields.Banner?.fields.file?.url}`}
-              width={1920}
-              height={1080}
-              alt={banner.fields.bannerDescription!}
-              loading="lazy"
-              key={banner.fields.bannerDescription}
-            />
-          </>
-        );
-      })} */
 }
