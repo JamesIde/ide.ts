@@ -15,3 +15,8 @@ export interface JWTPayload {
   tokenVersion: number;
   exp?: number;
 }
+
+export interface AccessTokenSuccess {
+  ok: true;
+  token: string;
+}

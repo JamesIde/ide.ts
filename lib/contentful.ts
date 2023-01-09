@@ -31,12 +31,14 @@ export const seedContentfulRecords = async (records: IThumbnail[]) => {
           contentfulId: record.sys.id,
         },
       });
+
       console.log(`found --> ${existingRecord.id}`);
       if (existingRecord) {
         return;
       } else {
         const seededRecord = await prisma.record.create({
           data: {
+            // id: record.sys.id,
             title: record.fields.title,
             slug: record.fields.slug,
             contentfulId: record.sys.id,
@@ -45,9 +47,10 @@ export const seedContentfulRecords = async (records: IThumbnail[]) => {
         console.log("seeded -->", seededRecord.id);
       }
     } catch (error) {
+      console.log("Fatal error seeding the database");
       process.exit(1);
     }
-  });
+  }); // Probably remove the try catch. Have a validator call to check if we've got records. if not, process.exit (1)
 };
 
 /**

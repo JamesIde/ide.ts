@@ -5,6 +5,7 @@ import prisma from "../../lib/prisma";
 import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/profileTransformer";
 import { JWTPayload } from "../../@types/Token";
+import { generateAccessToken, generateRefreshToken } from "../../lib/auth";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     handleIdentityToken(req, res);
@@ -30,6 +31,7 @@ async function handleIdentityToken(req: NextApiRequest, res: NextApiResponse) {
     const user = await validateUserIdentity(res, decoded);
 
     const tokens = await generateTokens(user);
+
     if (!tokens.ok) {
       res
         .status(500)
@@ -48,7 +50,7 @@ async function handleIdentityToken(req: NextApiRequest, res: NextApiResponse) {
     res.status(200).json(transformedUser);
   } catch (error) {
     res
-      .status(401)
+      .status(403)
       .send("Invalid identity presented. This attempt has been logged.");
   }
 }
@@ -118,53 +120,12 @@ async function loginUser(profile: OAuthToken) {
     },
   });
 }
-// Abstract to seperate token gen functions
 async function generateTokens(profile: IdpUser) {
-  let expiration = 15 * 60 * 1000;
-  let ATime = new Date(Date.now() + expiration);
-  let ATPayload: JWTPayload = {
-    id: profile.id,
-    name: profile.name,
-    email_verified: profile.email_verified,
-    providerId: profile.providerId,
-    picture: profile.picture,
-    sub: profile.email,
-    QcP: ATime,
-    tokenVersion: profile.tokenVersion,
-    exp: ATime.getTime(),
+  return {
+    ok: true,
+    accessToken: generateAccessToken(profile),
+    refreshToken: generateRefreshToken(profile),
   };
-
-  // Different payloads for different tokens
-  expiration = 365 * 24 * 60 * 60 * 1000;
-  let RTime = new Date(Date.now() + expiration);
-
-  let RTPayload: JWTPayload = {
-    id: profile.id,
-    name: profile.name,
-    email_verified: profile.email_verified,
-    providerId: profile.providerId,
-    picture: profile.picture,
-    sub: profile.email,
-    QcP: RTime,
-    tokenVersion: profile.tokenVersion,
-  };
-
-  try {
-    const accessToken = jwt.sign(
-      ATPayload,
-      process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET
-    );
-    const refreshToken = jwt.sign(
-      RTPayload,
-      process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET
-    );
-    return { ok: true, accessToken, refreshToken };
-  } catch (error) {
-    console.log("err", error);
-    return {
-      ok: false,
-    };
-  }
 }
 
 async function handleTokenRefresh(req: NextApiRequest, res: NextApiResponse) {

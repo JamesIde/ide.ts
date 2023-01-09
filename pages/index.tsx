@@ -15,13 +15,10 @@ export async function getStaticProps() {
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
 
-  try {
-    await seedContentfulRecords(cRecords.items as IThumbnail[]);
-  } catch (error) {
-    console.log("System error occured during build time. Exiting...");
-    // Hard fail if we can't seed the database at build time
-    process.exit(1);
-  }
+  // need a global connector to the prisma database
+
+  await seedContentfulRecords(cRecords.items as IThumbnail[]);
+
   return {
     props: {
       entries: cEntries.items,

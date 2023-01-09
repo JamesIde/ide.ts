@@ -40,22 +40,24 @@ export async function retrieveRecord(
   res: NextApiResponse
 ) {
   const contentfulId = req.query.contentfulId as string;
+  console.log(contentfulId);
   try {
     const record = await prisma.record.findUnique({
       where: {
         contentfulId: contentfulId,
       },
-      include: {
-        comments: {
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            ...COMMENT_SELECT_FIELDS,
-          },
-        },
-      },
+      // include: {
+      //   comments: {
+      //     orderBy: {
+      //       createdAt: "desc",
+      //     },
+      //     // select: {
+      //     //   ...COMMENT_SELECT_FIELDS,
+      //     // },
+      //   },
+      // },
     });
+    console.log(record);
     res.status(200).json(record);
   } catch (error) {
     res

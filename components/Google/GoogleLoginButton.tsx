@@ -1,53 +1,37 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import wretch from "wretch";
-import { User } from "../../@types/Profile";
+import { useState } from "react";
 import { getTokenFromStorage } from "../../lib/auth";
+import baseClient from "../../lib/baseClient";
 export default function GoogleLoginButton() {
+  const [error, setError] = useState(null);
   async function handleLogin(credential: CredentialResponse) {
-    wretch("/api/identity")
-      // .auth(`Bearer $`)
-      .post({
+    try {
+      const response = await baseClient.post("/api/identity", {
         OAuthToken: credential.credential,
-      })
-      // shrink this down lol
-      .unauthorized((err) => {
-        console.log(err.message);
-      })
-      .internalError((err) => {
-        console.log(err.message);
-      })
-      .forbidden((err) => {
-        console.log(err);
-      })
-      .fetchError((err) => {
-        console.log(err);
-      })
-      .json((data: User) => {
-        localStorage.setItem("user", JSON.stringify(data));
       });
+      localStorage.setItem("user", JSON.stringify(response.data));
+    } catch (error) {
+      console.log(error);
+      setError(error.response.data);
+    }
   }
 
   async function createComment() {
     const token = getTokenFromStorage();
-    wretch("/api/comments?contentfulId=3zsIHczhEyQ3OdCfxxlve6")
-      .auth(`Bearer ${token ? token : ""}`)
-      .post()
-      // shrink this down lol
-      .unauthorized((err) => {
-        console.log(err.message);
-      })
-      .internalError((err) => {
-        console.log(err.message);
-      })
-      .forbidden((err) => {
-        console.log(err);
-      })
-      .fetchError((err) => {
-        console.log(err);
-      })
-      .json((data) => {
-        console.log(data);
-      });
+    try {
+      const response = await baseClient.post(
+        "/api/comments?contentfulId=c23812d0-b298-4fc1-b1b2-b380fc371418",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token ? token : ""}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      setError(error.response.data);
+    }
   }
 
   return (
@@ -63,6 +47,7 @@ export default function GoogleLoginButton() {
       <button onClick={() => createComment()}>
         Send Mock Comment To Backend
       </button>
+      {error ? <p>{error}</p> : null}
     </div>
   );
 }

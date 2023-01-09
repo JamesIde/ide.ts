@@ -23,7 +23,7 @@ function about() {
             >
               Email
             </a>
-            ,
+            ,{" "}
             <a
               href="https://www.linkedin.com/in/james-ide-a92368180/"
               target="_#"
