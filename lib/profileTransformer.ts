@@ -1,10 +1,7 @@
 import { IdpUser, User } from "../@types/Profile";
 
 export class ProfileTransformer {
-  public static transformTokenToIdpUser(
-    idpUser: IdpUser,
-    accessToken: string
-  ): User {
+  public static transformProfile(idpUser: IdpUser, accessToken: string): User {
     return {
       id: idpUser.id,
       email: idpUser.email,

@@ -18,7 +18,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 /**
  * Public method for handling the OAuth Token returned from Google
  */
-async function handleIdentityToken(req: NextApiRequest, res: NextApiResponse) {
+export async function handleIdentityToken(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { OAuthToken } = req.body;
 
   if (!OAuthToken) {
@@ -43,7 +46,7 @@ async function handleIdentityToken(req: NextApiRequest, res: NextApiResponse) {
       "set-cookie",
       "jid=" + tokens.accessToken + "; path=/; HttpOnly"
     );
-    const transformedUser = ProfileTransformer.transformTokenToIdpUser(
+    const transformedUser = ProfileTransformer.transformProfile(
       user,
       tokens.accessToken
     );
@@ -59,7 +62,10 @@ async function handleIdentityToken(req: NextApiRequest, res: NextApiResponse) {
  * Public method for validating the users identity based on the decoded token
  * It either registers or logs in the user
  */
-async function validateUserIdentity(res: NextApiResponse, decoded: OAuthToken) {
+export async function validateUserIdentity(
+  res: NextApiResponse,
+  decoded: OAuthToken
+) {
   let user: IdpUser;
 
   const userExists = await checkIfUserExists(decoded);
@@ -80,7 +86,7 @@ async function validateUserIdentity(res: NextApiResponse, decoded: OAuthToken) {
   return user;
 }
 
-async function checkIfUserExists(decoded: OAuthToken) {
+export async function checkIfUserExists(decoded: OAuthToken) {
   const user = await prisma.user.findUnique({
     where: {
       providerId: decoded.sub,
@@ -95,7 +101,7 @@ async function checkIfUserExists(decoded: OAuthToken) {
 /**
  *  Public method for registering user based on the decoded token
  */
-async function registerUser(profile: OAuthToken) {
+export async function registerUser(profile: OAuthToken) {
   return await prisma.user.create({
     data: {
       email: profile.email,
@@ -113,14 +119,14 @@ async function registerUser(profile: OAuthToken) {
 /**
  * Public method for logging in user based on the decoded token
  */
-async function loginUser(profile: OAuthToken) {
+export async function loginUser(profile: OAuthToken) {
   return await prisma.user.findUnique({
     where: {
       providerId: profile.sub,
     },
   });
 }
-async function generateTokens(profile: IdpUser) {
+export async function generateTokens(profile: IdpUser) {
   return {
     ok: true,
     accessToken: generateAccessToken(profile),

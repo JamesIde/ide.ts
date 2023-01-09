@@ -42,22 +42,26 @@ export async function retrieveRecord(
   const contentfulId = req.query.contentfulId as string;
   console.log(contentfulId);
   try {
-    const record = await prisma.record.findUnique({
+    const record = await prisma.record.findFirst({
       where: {
-        contentfulId: contentfulId,
+        id: contentfulId,
       },
-      // include: {
-      //   comments: {
-      //     orderBy: {
-      //       createdAt: "desc",
-      //     },
-      //     // select: {
-      //     //   ...COMMENT_SELECT_FIELDS,
-      //     // },
-      //   },
-      // },
+      include: {
+        comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          select: {
+            ...COMMENT_SELECT_FIELDS,
+          },
+        },
+      },
     });
-    console.log(record);
+    if (!record) {
+      res
+        .status(500)
+        .send(`No record found with contentfulId: ${contentfulId}`);
+    }
     res.status(200).json(record);
   } catch (error) {
     res

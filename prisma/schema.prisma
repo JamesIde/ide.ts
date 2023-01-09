@@ -21,7 +21,7 @@ model User {
   tokenVersion   Int       @default(0)
   given_name     String
   family_name    String
-  Comment        Comment[]
+  comments       Comment[]
 }
 
 model Record {
