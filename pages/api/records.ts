@@ -15,6 +15,7 @@ const COMMENT_SELECT_FIELDS = {
     select: {
       id: true,
       name: true,
+      picture: true,
     },
   },
 };
@@ -40,7 +41,6 @@ export async function retrieveRecord(
   res: NextApiResponse
 ) {
   const contentfulId = req.query.contentfulId as string;
-  console.log(contentfulId);
   try {
     const record = await prisma.record.findFirst({
       where: {

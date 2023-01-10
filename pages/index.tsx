@@ -5,11 +5,16 @@ import {
 } from "../@types/generated/contentful";
 import Navigation from "../components/Navigation/Navigation";
 import Records from "../components/Records/records";
-import { getContentfulEntries, seedContentfulRecords } from "../lib/contentful";
+import {
+  getContentfulEntries,
+  seedContentfulRecords,
+} from "../lib/api/contentful";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import GoogleLoginButton from "../components/Google/GoogleLoginButton";
+import CommentWrapper from "../components/Comments/CommentWrapper";
+// import Comments from "../components/Comments/Comments";
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -39,12 +44,11 @@ export default function Home({
 }) {
   return (
     <>
-      <GoogleLoginButton />
-      {/* <Helmet title="Home" />
+      <Helmet title="Home" />
       <Navigation />
       <Records records={records} />
       <PhotoCollection photos={photos} />
-      <Entries entries={entries} /> */}
+      <Entries entries={entries} />
     </>
   );
 }

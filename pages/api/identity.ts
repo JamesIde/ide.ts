@@ -3,9 +3,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt_decode from "jwt-decode";
 import prisma from "../../lib/prisma";
 import * as jwt from "jsonwebtoken";
-import { ProfileTransformer } from "../../lib/profileTransformer";
+import { ProfileTransformer } from "../../lib/transformer/profileTransformer";
 import { JWTPayload } from "../../@types/Token";
-import { generateAccessToken, generateRefreshToken } from "../../lib/auth";
+import { generateAccessToken, generateRefreshToken } from "../../lib/jwt/auth";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     handleIdentityToken(req, res);
@@ -75,7 +75,6 @@ export async function validateUserIdentity(
   }
 
   user = await loginUser(decoded);
-
   if (!user) {
     res
       .status(500)
@@ -139,12 +138,10 @@ async function handleTokenRefresh(req: NextApiRequest, res: NextApiResponse) {
   if (!jid) {
     return res.status(200).send({ ok: false, accessToken: "" });
   }
-  console.log(jid);
   let payload: any = null;
   try {
     payload = jwt.verify(jid, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET);
   } catch (err) {
-    console.log(err);
     return res.status(200).send({ ok: false, accessToken: "" });
   }
 

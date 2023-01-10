@@ -1,4 +1,4 @@
-import { IdpUser, User } from "../@types/Profile";
+import { IdpUser, User } from "../../@types/Profile";
 
 export class ProfileTransformer {
   public static transformProfile(idpUser: IdpUser, accessToken: string): User {

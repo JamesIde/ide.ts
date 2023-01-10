@@ -1,15 +1,18 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { getTokenFromStorage } from "../../lib/auth";
-import baseClient from "../../lib/baseClient";
+import { getTokenFromStorage } from "../../lib/jwt/auth";
+import { useStore } from "../../lib/store/userStore";
+import baseClient from "../../lib/api/baseClient";
 export default function GoogleLoginButton() {
   const [error, setError] = useState(null);
+  const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   async function handleLogin(credential: CredentialResponse) {
     try {
       const response = await baseClient.post("/api/identity", {
         OAuthToken: credential.credential,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
     } catch (error) {
       console.log(error);
       setError(error.response.data);
@@ -35,7 +38,7 @@ export default function GoogleLoginButton() {
   }
 
   return (
-    <div className="w-2/12">
+    <div className="w-full p-2">
       {/* TODO Styling and hide this component if user in LS */}
       <GoogleLogin
         text={"continue_with"}
@@ -44,9 +47,6 @@ export default function GoogleLoginButton() {
         }}
         shape="rectangular"
       />
-      <button onClick={() => createComment()}>
-        Send Mock Comment To Backend
-      </button>
       {error ? <p>{error}</p> : null}
     </div>
   );

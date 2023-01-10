@@ -1,6 +1,6 @@
-import { IdpUser, User } from "../@types/Profile";
+import { IdpUser, User } from "../../@types/Profile";
 import * as jwt from "jsonwebtoken";
-import { JWTPayload } from "../@types/Token";
+import { JWTPayload } from "../../@types/Token";
 export function getTokenFromStorage() {
   const user: User = JSON.parse(localStorage.getItem("user"));
   if (!user) {

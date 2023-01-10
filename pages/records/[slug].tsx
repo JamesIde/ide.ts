@@ -3,14 +3,14 @@ import Image from "next/image";
 import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { getRecordBySlug, getRecordSlugs } from "../../lib/contentful";
+import { getRecordBySlug, getRecordSlugs } from "../../lib/api/contentful";
 import { useState } from "react";
 import { Asset } from "contentful-management/dist/typings/entities/asset";
 import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
+import CommentWrapper from "../../components/Comments/CommentWrapper";
 
 export default function Record({ record }: { record: IThumbnail }) {
-  console.log(JSON.stringify(record.sys));
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -37,7 +37,9 @@ export default function Record({ record }: { record: IThumbnail }) {
   };
   return (
     <>
+      {/* <GoogleLoginButton /> */}
       <Layout>
+        <CommentWrapper />
         <Helmet title={record.fields.title!} />
         <div id="global-wrapper" onClick={closeModal}>
           <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3 p-2">
