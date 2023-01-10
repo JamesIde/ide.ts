@@ -22,8 +22,16 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
     const comment = await prisma.comment.create({
       data: {
         message: message,
-        recordId: contentfulId,
-        userId: user,
+        record: {
+          connect: {
+            id: contentfulId,
+          },
+        },
+        user: {
+          connect: {
+            id: user,
+          },
+        },
       },
     });
     res.status(200).json(comment);
@@ -53,9 +61,21 @@ export async function replyToComment(
     const comment = await prisma.comment.create({
       data: {
         message: message,
-        recordId: contentfulId,
-        userId: user,
-        parentId: commentId,
+        user: {
+          connect: {
+            id: user,
+          },
+        },
+        record: {
+          connect: {
+            id: contentfulId,
+          },
+        },
+        parent: {
+          connect: {
+            id: commentId,
+          },
+        },
       },
     });
     res.status(200).json(comment);

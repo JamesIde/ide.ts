@@ -1,3 +1,4 @@
+import { Comment } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -42,30 +43,36 @@ export async function retrieveRecord(
 ) {
   const contentfulId = req.query.contentfulId as string;
   try {
-    const record = await prisma.record.findFirst({
+    const rootComments = await prisma.comment.findMany({
       where: {
-        id: contentfulId,
-      },
-      include: {
-        comments: {
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            ...COMMENT_SELECT_FIELDS,
-          },
+        record: {
+          id: contentfulId,
         },
       },
     });
-    if (!record) {
-      res
-        .status(500)
-        .send(`No record found with contentfulId: ${contentfulId}`);
-    }
-    res.status(200).json(record);
+
+    const commentTree = createNestedStructure(rootComments);
+    res.status(200).json(commentTree);
   } catch (error) {
+    console.log("error is ", error);
     res
       .status(500)
       .send(`Error retrieving record with contentfulId: ${contentfulId}`);
   }
+}
+
+function createNestedStructure(comments, parentId = null) {
+  let nestedComments = [];
+
+  for (const comment of comments) {
+    if (comment.parentId === parentId) {
+      const children = createNestedStructure(comments, comment.id);
+      if (children.length > 0) {
+        comment.children = children;
+      }
+      nestedComments.push(comment);
+    }
+  }
+
+  return nestedComments;
 }
