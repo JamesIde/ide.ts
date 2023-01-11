@@ -1,10 +1,9 @@
 import { IdpUser, OAuthToken } from "../../@types/Profile";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt_decode from "jwt-decode";
-import prisma from "../../lib/prisma";
+import prisma from "../../config/prisma";
 import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/transformer/profileTransformer";
-import { JWTPayload } from "../../@types/Token";
 import { generateAccessToken, generateRefreshToken } from "../../lib/jwt/auth";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {

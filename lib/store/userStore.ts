@@ -1,6 +1,5 @@
 import create from "zustand";
 import { User } from "../../@types/Profile";
-import { useEffect } from "react";
 
 type State = {
   user: User;
@@ -12,12 +11,14 @@ type Action = {
 };
 
 export const useStore = create<State & Action>()((set) => ({
-  user: handleTest(),
+  user: getUserFromStorage(),
+  // Set user in local storage too
   setUser: (user: User) => set(() => ({ user: user })),
   removeUser: () => set(() => ({ user: null })),
 }));
 
-export function handleTest() {
+export function getUserFromStorage() {
+  // Wait until client and window object have been rendered. Next renders server content first..
   if (typeof window !== "undefined") {
     // Perform localStorage action
     const user = localStorage.getItem("user")

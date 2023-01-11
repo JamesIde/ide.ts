@@ -1,6 +1,6 @@
 function CommentForm() {
   return (
-    <div className="flex flex-row p-2">
+    <div className="flex flex-row p-2 justify-center">
       <div className="mt-2 rounded-full w-[85%]">
         <textarea
           name=""

@@ -37,7 +37,6 @@ export interface User {
   email: string;
   name: string;
   email_verified: boolean;
-  providerId: string;
   picture: string;
   given_name: string;
   family_name: string;

@@ -1,53 +1,41 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { getTokenFromStorage } from "../../lib/jwt/auth";
+import { ProcessGoogleLogin } from "../../lib/api/api";
 import { useStore } from "../../lib/store/userStore";
-import baseClient from "../../lib/api/baseClient";
+import { useMutation } from "@tanstack/react-query";
+import axios, { Axios, AxiosError } from "axios";
 export default function GoogleLoginButton() {
-  const [error, setError] = useState(null);
+  const [loginError, setLoginError] = useState<any>();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  async function handleLogin(credential: CredentialResponse) {
-    try {
-      const response = await baseClient.post("/api/identity", {
-        OAuthToken: credential.credential,
-      });
-      localStorage.setItem("user", JSON.stringify(response.data));
-      setUser(response.data);
-    } catch (error) {
-      console.log(error);
-      setError(error.response.data);
-    }
-  }
-
-  async function createComment() {
-    const token = getTokenFromStorage();
-    try {
-      const response = await baseClient.post(
-        "/api/comments?contentfulId=c23812d0-b298-4fc1-b1b2-b380fc371418",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token ? token : ""}`,
-          },
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      setError(error.response.data);
-    }
-  }
-
+  const { isLoading, isError, mutate } = useMutation({
+    mutationFn: ProcessGoogleLogin, // Axios call
+    onSuccess: (data) => {
+      localStorage.setItem("user", JSON.stringify(data));
+      setUser(data);
+    },
+    onError: (error: AxiosError | Error) => {
+      if (axios.isAxiosError(error)) {
+        setLoginError(error.response.data);
+      } else {
+        setLoginError(error);
+      }
+    },
+  });
   return (
     <div className="w-full p-2">
-      {/* TODO Styling and hide this component if user in LS */}
+      {isLoading && <p className="mt-2 mb-2">Validating your identity...</p>}
       <GoogleLogin
         text={"continue_with"}
         onSuccess={(credentialResponse) => {
-          handleLogin(credentialResponse);
+          mutate(credentialResponse);
         }}
         shape="rectangular"
       />
-      {error ? <p>{error}</p> : null}
+      {isError && (
+        <p className="text-red-500 mt-3 text-sm mx-auto text-center">
+          {loginError}
+        </p>
+      )}
     </div>
   );
 }

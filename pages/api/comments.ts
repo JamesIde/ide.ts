@@ -1,23 +1,32 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../lib/prisma";
+import prisma from "../../config/prisma";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
-    console.log("ihere");
     createComment(req, res);
   }
   if (req.method === "PUT" && req.query.contentfulId && req.query.commentId) {
-    console.log("Asd");
     replyToComment(req, res);
   }
 }
-
+/**
+ * A public function to create a comment for a record.
+ */
 export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   const user = req.headers.user as string;
   const contentfulId = req.query.contentfulId as string;
   if (!contentfulId) {
     res.status(400).send("No contentfulId provided");
   }
+
+  if (!user) {
+    res.status(400).send("No user provided");
+  }
+
   const { message } = req.body;
+  if (!message) {
+    res.status(400).send("No message provided");
+  }
+
   try {
     const comment = await prisma.comment.create({
       data: {
@@ -42,7 +51,9 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
       .send("An error occured processing your comment. Please try again later");
   }
 }
-
+/**
+ * A public function to reply to a comment
+ */
 export async function replyToComment(
   req: NextApiRequest,
   res: NextApiResponse
@@ -50,13 +61,24 @@ export async function replyToComment(
   const user = req.headers.user as string;
   const contentfulId = req.query.contentfulId as string;
   const commentId = req.query.commentId as string;
-  console.log("commentId", commentId);
-  // if (!user || !contentfulId || !commentId) {
-  //   res.status(400).send("Invalid request");
-  // }
+
+  if (!contentfulId) {
+    res.status(400).send("No contentfulId provided");
+  }
+
+  if (!user) {
+    res.status(400).send("No user provided");
+  }
+
+  if (!commentId) {
+    res.status(400).send("No commentId provided");
+  }
 
   const { message } = req.body;
 
+  if (!message) {
+    res.status(400).send("No message provided");
+  }
   try {
     const comment = await prisma.comment.create({
       data: {

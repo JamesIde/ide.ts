@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt_decode from "jwt-decode";
 import { JWTPayload } from "./@types/Token";
-import prisma from "./lib/prisma";
+import prisma from "./config/prisma";
 export const config = {
   matcher: "/api/comments/:path",
 };

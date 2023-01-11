@@ -4,7 +4,7 @@ import {
   IPhotoCollection,
   IThumbnail,
 } from "../../@types/generated/contentful";
-import prisma from "../prisma";
+import prisma from "../../config/prisma";
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID as string,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN as string,
