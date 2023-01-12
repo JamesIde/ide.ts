@@ -1,14 +1,14 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { ProcessGoogleLogin } from "../../lib/api/api";
+import { handleGoogleLogin } from "../../lib/api/api";
 import { useStore } from "../../lib/store/userStore";
 import { useMutation } from "@tanstack/react-query";
 import axios, { Axios, AxiosError } from "axios";
 export default function GoogleLoginButton() {
   const [loginError, setLoginError] = useState<any>();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  const { isLoading, isError, mutate } = useMutation({
-    mutationFn: ProcessGoogleLogin, // Axios call
+  const { isLoading, mutate } = useMutation({
+    mutationFn: handleGoogleLogin, // Axios call
     onSuccess: (data) => {
       localStorage.setItem("user", JSON.stringify(data));
       setUser(data);
@@ -31,7 +31,7 @@ export default function GoogleLoginButton() {
         }}
         shape="rectangular"
       />
-      {isError && (
+      {loginError && (
         <p className="text-red-500 mt-3 text-sm mx-auto text-center">
           {loginError}
         </p>

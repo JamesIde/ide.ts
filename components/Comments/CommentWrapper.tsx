@@ -1,13 +1,12 @@
 import CommentForm from "./CommentForm";
 import { useStore } from "../../lib/store/userStore";
-import { RetrieveRecordComments } from "../../lib/api/api";
+import { retrieveAllRecordComments } from "../../lib/api/api";
 import GoogleLoginButton from "../Google/GoogleLoginButton";
 import { useQuery } from "@tanstack/react-query";
 import { CommentType } from "../../@types/Comment";
 import axios, { AxiosError } from "axios";
 import Comments from "./Comments";
 function CommentWrapper({ contentfulId }: { contentfulId: string }) {
-  console.log(contentfulId);
   const user = useStore((state) => state.user);
   const {
     data: comments,
@@ -17,27 +16,37 @@ function CommentWrapper({ contentfulId }: { contentfulId: string }) {
     error = {} as AxiosError,
   } = useQuery<CommentType[], AxiosError>(
     ["comments"],
-    () => RetrieveRecordComments(contentfulId),
+    () => retrieveAllRecordComments(contentfulId),
     {
       onSuccess: (data) => {
         console.log(data);
       },
+      refetchOnWindowFocus: false,
     }
   );
 
   return (
-    <div className="xl:w-2/5 md:w-3/5 w-full mx-auto">
+    <div className="xl:w-2/5 md:w-3/5 w-full mx-auto p-2">
       <div>
-        <h5 className="font-playfair text-xl p-2">Comments</h5>
+        <h5 className="font-playfair text-xl">Comments</h5>
       </div>
-      {user ? <CommentForm /> : <GoogleLoginButton />}
+      {user ? (
+        <CommentForm contentfulId={contentfulId} />
+      ) : (
+        <GoogleLoginButton />
+      )}
+      <hr className="mt-4 mb-4" />
       {isLoading && <p>Fetching comments</p>}
-      {isError && <>{error.response.data}</>}
+      {isError && (
+        <p className="text-red-500 mx-auto text-sm">
+          <>{error.response.data}</>
+        </p>
+      )}
       {isSuccess &&
         (comments.length > 0 ? (
           <Comments comments={comments} />
         ) : (
-          <p>No comments found</p>
+          <p className="p-2">No comments found</p>
         ))}
     </div>
   );

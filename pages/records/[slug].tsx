@@ -37,7 +37,6 @@ export default function Record({ record }: { record: IThumbnail }) {
   };
   return (
     <>
-      {/* <GoogleLoginButton /> */}
       <Layout>
         <CommentWrapper contentfulId={record.sys.id} />
         <Helmet title={record.fields.title!} />

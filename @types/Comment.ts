@@ -23,3 +23,18 @@ export interface CommentType {
   user: User;
   children: Child[];
 }
+
+export interface CommentSuccess {
+  id: string;
+  message: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  recordId: string;
+  parentId?: any;
+}
+
+export interface NewComment {
+  contentfulId: string;
+  message: string;
+}

@@ -15,16 +15,16 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   const user = req.headers.user as string;
   const contentfulId = req.query.contentfulId as string;
   if (!contentfulId) {
-    res.status(400).send("No contentfulId provided");
+    return res.status(400).send("No contentfulId provided");
   }
 
   if (!user) {
-    res.status(400).send("No user provided");
+    return res.status(400).send("No user provided");
   }
 
   const { message } = req.body;
   if (!message) {
-    res.status(400).send("No message provided");
+    return res.status(400).send("No message provided");
   }
 
   try {
@@ -43,10 +43,10 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
         },
       },
     });
-    res.status(200).json(comment);
+    return res.status(200).json(comment);
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(400)
       .send("An error occured processing your comment. Please try again later");
   }
