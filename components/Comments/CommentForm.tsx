@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { addCommentToRecord } from "../../lib/api/api";
+
 function CommentForm({ contentfulId }: { contentfulId: string }) {
   const queryClient = useQueryClient();
   const ref = useRef(null);
@@ -10,6 +11,7 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
   const { mutate, isLoading } = useMutation({
     mutationFn: addCommentToRecord,
     onSuccess: (data) => {
+      ref.current.value = "";
       queryClient.refetchQueries(["comments"]);
     },
     onError: (error: AxiosError | Error) => {
@@ -22,6 +24,7 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
   });
 
   const handleClick = () => {
+    // TODO proper validation here
     mutate({ contentfulId, message: ref.current.value });
   };
 
