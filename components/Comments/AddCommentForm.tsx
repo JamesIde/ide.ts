@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRef } from "react";
 import { addCommentToRecord } from "../../lib/api/api";
-import { notify } from "../../lib/toastr/Notify";
+import { notify, validateComment } from "../../lib/toastr/Notify";
 import AddCommentLoader from "../Misc/AddCommentLoader";
 
 function CommentForm({ contentfulId }: { contentfulId: string }) {
@@ -26,8 +26,10 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
   });
 
   function handleNewComment() {
-    // TODO validation && length
-    mutate({ contentfulId, message: ref.current.value });
+    const isValid = validateComment(ref.current.value);
+    if (isValid) {
+      mutate({ contentfulId, message: ref.current.value });
+    }
   }
 
   return (

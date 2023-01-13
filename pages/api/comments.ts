@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../config/prisma";
 import wash from "washyourmouthoutwithsoap";
-import emojiStrip  from "emoji-strip";
+import emojiStrip from "emoji-strip";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
@@ -31,6 +31,39 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
 
   if (!user) {
     return res.status(400).send("No user provided");
+  }
+
+  // Check how many comments the user has made for this record, but don't include the ADMIN user
+  const commentCount = await prisma.comment.count({
+    where: {
+      AND: [
+        {
+          record: {
+            id: contentfulId,
+          },
+        },
+        {
+          user: {
+            id: user,
+          },
+        },
+        {
+          user: {
+            id: {
+              not: process.env.NEXT_PUBLIC_ADMIN_ID,
+            },
+          },
+        },
+      ],
+    },
+  });
+
+  // If the user has reached the maximum comments per record, return an error
+
+  if (commentCount >= 10) {
+    return res
+      .status(400)
+      .send("You have reached the maximum comments per record");
   }
 
   const { message } = req.body;

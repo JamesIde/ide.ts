@@ -2,7 +2,7 @@ import { CommentType } from "../../@types/Comment";
 import { useState } from "react";
 import { commentStore } from "../../lib/store/commentStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { notify } from "../../lib/toastr/Notify";
+import { notify, validateComment } from "../../lib/toastr/Notify";
 import { updateComment } from "../../lib/api/api";
 import axios, { AxiosError } from "axios";
 import AddCommentLoader from "../Misc/AddCommentLoader";
@@ -40,12 +40,8 @@ function UpdateCommentForm({ comment }: { comment: CommentType }) {
 
   // Handle update
   function handleUpdate() {
-    if (fields.message.length < 10) {
-      notify(
-        "error",
-        "New comment cannot be empty. Please ensure it is a minimum 10 characters long."
-      );
-    } else {
+    const isValid = validateComment(fields.message);
+    if (isValid) {
       mutate({ commentId: comment.id, message: fields.message });
     }
   }

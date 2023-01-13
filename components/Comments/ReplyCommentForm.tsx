@@ -2,7 +2,7 @@ import { CommentType } from "../../@types/Comment";
 import { useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { replyToComment } from "../../lib/api/api";
-import { notify } from "../../lib/toastr/Notify";
+import { notify, validateComment } from "../../lib/toastr/Notify";
 import axios, { AxiosError } from "axios";
 import AddCommentLoader from "../Misc/AddCommentLoader";
 import { commentStore } from "../../lib/store/commentStore";
@@ -29,6 +29,18 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
       }
     },
   });
+
+  function handleReply() {
+    const isValid = validateComment(ref.current.value);
+    if (isValid) {
+      mutate({
+        contentfulId: comment.recordId,
+        message: ref.current.value,
+        commentId: comment.id,
+      });
+    }
+  }
+
   return (
     <div className="ml-2 border-l-2 p-2 mb-4">
       <div className="flex flex-row justify-center">
@@ -46,13 +58,7 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
           <button
             type="submit"
             className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-700 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg"
-            onClick={() =>
-              mutate({
-                contentfulId: comment.recordId,
-                message: ref.current.value,
-                commentId: comment.id,
-              })
-            }
+            onClick={handleReply}
           >
             {isLoading ? <AddCommentLoader /> : "Reply"}
           </button>
