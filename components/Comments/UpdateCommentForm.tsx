@@ -2,9 +2,9 @@ import { CommentType } from "../../@types/Comment";
 import { useState } from "react";
 import { commentStore } from "../../lib/store/commentStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import { notify } from "../../lib/toastr/Notify";
 import { updateComment } from "../../lib/api/api";
+import axios, { AxiosError } from "axios";
 import AddCommentLoader from "../Misc/AddCommentLoader";
 function UpdateCommentForm({ comment }: { comment: CommentType }) {
   const queryClient = useQueryClient();

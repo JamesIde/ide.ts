@@ -2,20 +2,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../config/prisma";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
-    console.log("creating");
     createComment(req, res);
   } else if (
     req.method === "PUT" &&
     req.query.contentfulId &&
     req.query.commentId
   ) {
-    console.log("replying");
     replyToComment(req, res);
   } else if (req.method === "PATCH" && req.query.commentId) {
-    console.log("updating");
     updateComment(req, res);
   } else if (req.method === "DELETE" && req.query.commentId) {
-    console.log("deleting");
     deleteComment(req, res);
   } else {
     res.status(405).send("Method not allowed");

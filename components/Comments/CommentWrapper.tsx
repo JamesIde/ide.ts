@@ -1,12 +1,12 @@
-import CommentForm from "./AddCommentForm";
 import { useStore } from "../../lib/store/userStore";
 import { retrieveAllRecordComments } from "../../lib/api/api";
-import GoogleLoginButton from "../Google/GoogleLoginButton";
 import { useQuery } from "@tanstack/react-query";
-import { CommentRetrievalSuccess, CommentType } from "../../@types/Comment";
-import axios, { AxiosError } from "axios";
-import Comments from "./Comments";
+import { CommentRetrievalSuccess } from "../../@types/Comment";
 import { notify } from "../../lib/toastr/Notify";
+import axios, { AxiosError } from "axios";
+import GoogleLoginButton from "./GoogleLoginButton";
+import CommentForm from "./AddCommentForm";
+import Comments from "./Comments";
 function CommentWrapper({
   contentfulId,
   recordTitle,
@@ -40,12 +40,23 @@ function CommentWrapper({
   function handleSignout() {
     setUser(null);
     localStorage.removeItem("user");
+    notify("success", "Signout successfully");
   }
 
   return (
-    <div className="xl:w-2/5 md:w-3/5 w-full mx-auto p-2">
+    <div className="xl:w-[50%] md:w-4/5 w-full mx-auto p-2">
       <div>
-        <h5 className="font-playfair text-xl">Comments</h5>
+        <h5 className="font-playfair text-xl">Leave a comment</h5>
+        <p className="mt-1 text-sm text-gray-500 italic">
+          {!user ? (
+            <> Sign in through Google to comment. </>
+          ) : (
+            <>Signed in as {user.email}. </>
+          )}
+        </p>
+        <p className="mt-1 text-sm text-gray-500 italic">
+          Your email address will not be published.
+        </p>
       </div>
       {user ? (
         <CommentForm contentfulId={contentfulId} />
@@ -81,7 +92,7 @@ function CommentWrapper({
       <hr />
       {user && (
         <div
-          className=" mt-4 text-right bg-red-500 hover:cursor-pointer hover:bg-red-900 w-max flex ml-auto p-2 text-white text-semibold rounded duration-500"
+          className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold"
           onClick={() => handleSignout()}
         >
           Signout

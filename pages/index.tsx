@@ -12,9 +12,7 @@ import {
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
-import GoogleLoginButton from "../components/Google/GoogleLoginButton";
-import CommentWrapper from "../components/Comments/CommentWrapper";
-// import Comments from "../components/Comments/Comments";
+
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");

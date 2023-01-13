@@ -8,7 +8,7 @@ function HandleCommentDate({
   return (
     <>
       {createdAt === updatedAt ? (
-        <p className="text-xs text-gray-400">
+        <p className="xl:text-sm text-xs text-gray-400">
           Posted:{" "}
           {new Date(createdAt).toLocaleDateString("en-AU", {
             year: "numeric",

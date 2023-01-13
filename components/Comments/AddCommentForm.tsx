@@ -1,11 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { addCommentToRecord } from "../../lib/api/api";
-import toast from "react-hot-toast";
-import { useStore } from "../../lib/store/userStore";
 import { notify } from "../../lib/toastr/Notify";
-import Loading from "../Misc/IconLoader";
 import AddCommentLoader from "../Misc/AddCommentLoader";
 
 function CommentForm({ contentfulId }: { contentfulId: string }) {
@@ -42,7 +39,7 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
             id=""
             className="w-full h-24 border-[1px] rounded-md pl-2"
             rows={10}
-            placeholder="Leave a comment..."
+            placeholder=""
             ref={ref}
           />
         </div>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { CommentType } from "../../@types/Comment";
 import { HiPencilAlt } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -8,13 +7,15 @@ import { useStore } from "../../lib/store/userStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCommentFromRecord } from "../../lib/api/api";
 import { useEffect, useState } from "react";
+import { notify } from "../../lib/toastr/Notify";
+import { commentStore } from "../../lib/store/commentStore";
 import axios, { AxiosError } from "axios";
 import ReplyCommentForm from "./ReplyCommentForm";
 import IconLoader from "../Misc/IconLoader";
-import { notify } from "../../lib/toastr/Notify";
-import { commentStore } from "../../lib/store/commentStore";
 import UpdateCommentForm from "./UpdateCommentForm";
 import HandleCommentDate from "./HandleCommentDate";
+import Image from "next/image";
+
 function Comment({
   comment,
   hasChildren,
@@ -90,14 +91,14 @@ function Comment({
         {" "}
         {/*Do the main styling on this div */}
         <div className="border-[1px] border-grey-200 p-2 pt-3 pb-3 mb-4 rounded">
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row">
+          <div className="flex flex-row justify-between ">
+            <div className="flex flex-row ">
               <Image
                 src={comment.user.picture}
-                width={50}
-                height={50}
+                width={40}
+                height={40}
                 alt={comment.user.id}
-                style={{ borderRadius: "50%" }}
+                style={{ objectFit: "contain" }}
               />
               <div className="flex flex-col pl-2">
                 <p className="font-semibold">{comment.user.name} </p>
@@ -131,7 +132,7 @@ function Comment({
                         {!toggleUpdate ? (
                           <HiPencilAlt
                             className="cursor-pointer"
-                            color="blue"
+                            color="green"
                             onClick={() => toggleUpdateEditor()}
                           />
                         ) : (

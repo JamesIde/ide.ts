@@ -35,6 +35,9 @@ export async function retrieveRecordComments(
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const commentTree = createNestedStructure(rootComments);
