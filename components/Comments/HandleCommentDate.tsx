@@ -19,7 +19,7 @@ function HandleCommentDate({
           })}
         </p>
       ) : (
-        <p className="text-xs text-gray-400">
+        <p className="xl:text-sm text-xs text-gray-400">
           Updated:{" "}
           {new Date(updatedAt).toLocaleDateString("en-AU", {
             year: "numeric",
