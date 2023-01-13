@@ -46,6 +46,18 @@ export async function replyToComment(
   return res.data;
 }
 
+export async function updateComment(
+  comment: NewComment
+): Promise<CommentSuccess> {
+  const res = await baseClient.patch(
+    `/api/comments?commentId=${comment.commentId}`,
+    {
+      message: comment.message,
+    }
+  );
+  return res.data;
+}
+
 export async function deleteCommentFromRecord(
   commentId: string
 ): Promise<CommentSuccess> {

@@ -31,7 +31,6 @@ export async function isAuthenticated(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
     // Sets new headers
     requestHeaders.set("user", decoded.id);
-    console.log("user in header", decoded.id);
     const response = NextResponse.next({
       request: {
         headers: requestHeaders,

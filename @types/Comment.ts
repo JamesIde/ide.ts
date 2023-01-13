@@ -40,7 +40,7 @@ export interface CommentSuccess {
 }
 
 export interface NewComment {
-  contentfulId: string;
+  contentfulId?: string;
   message: string;
   commentId?: string;
 }

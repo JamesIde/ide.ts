@@ -4,7 +4,8 @@ const nextConfig = {
   images: {
     domains: [
       "images.ctfassets.net",
-      "downloads.ctfassets.net, lh3.googleusercontent.com",
+      "downloads.ctfassets.net",
+      "lh3.googleusercontent.com",
       "static.productionready.io",
     ],
   },

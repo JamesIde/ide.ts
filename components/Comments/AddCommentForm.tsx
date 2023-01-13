@@ -27,6 +27,12 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
       }
     },
   });
+
+  function handleNewComment() {
+    // TODO validation && length
+    mutate({ contentfulId, message: ref.current.value });
+  }
+
   return (
     <>
       <div className="flex flex-row justify-center">
@@ -44,7 +50,7 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
           <button
             type="submit"
             className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-500 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg"
-            onClick={() => mutate({ contentfulId, message: ref.current.value })}
+            onClick={handleNewComment}
           >
             {isLoading ? <AddCommentLoader /> : "Post"}
           </button>

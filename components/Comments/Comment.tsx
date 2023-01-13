@@ -12,7 +12,9 @@ import axios, { AxiosError } from "axios";
 import ReplyCommentForm from "./ReplyCommentForm";
 import IconLoader from "../Misc/IconLoader";
 import { notify } from "../../lib/toastr/Notify";
-import { editStore } from "../../lib/store/editStore";
+import { commentStore } from "../../lib/store/commentStore";
+import UpdateCommentForm from "./UpdateCommentForm";
+import HandleCommentDate from "./HandleCommentDate";
 function Comment({
   comment,
   hasChildren,
@@ -20,19 +22,21 @@ function Comment({
   comment: CommentType;
   hasChildren: boolean;
 }) {
-  const [isReplying, setIsReplying] = editStore((state) => [
-    state.isReplying,
-    state.setIsReplying,
+  const [isActionCompleted, setIsActionCompleted] = commentStore((state) => [
+    state.isActionCompleted,
+    state.setIsActionCompleted,
   ]);
-  const [editToggled, setEditToggled] = useState(false);
+  const [toggleReply, setToggleReply] = useState(false);
+  const [toggleUpdate, setToggleUpdate] = useState(false);
   const user = useStore((state) => state.user);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!isReplying) {
-      setEditToggled(false);
+    if (!isActionCompleted) {
+      setToggleReply(false);
+      setToggleUpdate(false);
     }
-  }, [isReplying]);
+  }, [isActionCompleted]);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: deleteCommentFromRecord,
@@ -59,9 +63,16 @@ function Comment({
     }
   }
 
-  function toggleChildEditor() {
-    setEditToggled(!editToggled);
-    setIsReplying(!isReplying);
+  function toggleReplyEditor() {
+    setToggleReply(!toggleReply);
+    setIsActionCompleted(!isActionCompleted);
+    setToggleUpdate(false);
+  }
+
+  function toggleUpdateEditor() {
+    setToggleUpdate(!toggleUpdate);
+    setIsActionCompleted(!isActionCompleted);
+    setToggleReply(false);
   }
 
   return (
@@ -82,9 +93,7 @@ function Comment({
           <div className="flex flex-row justify-between">
             <div className="flex flex-row">
               <Image
-                src={
-                  "https://static.productionready.io/images/smiley-cyrus.jpg"
-                }
+                src={comment.user.picture}
                 width={50}
                 height={50}
                 alt={comment.user.id}
@@ -92,41 +101,48 @@ function Comment({
               />
               <div className="flex flex-col pl-2">
                 <p className="font-semibold">{comment.user.name} </p>
-                {/* Date */}
-                <p className="text-sm text-gray-400">
-                  {new Date(comment.createdAt).toLocaleDateString("en-AU", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+                <HandleCommentDate
+                  createdAt={comment.createdAt}
+                  updatedAt={comment.updatedAt}
+                />
               </div>
             </div>
             <div>
               {user && (
                 <div className="flex flex-row justify-end">
                   <div className="p-1">
-                    {!editToggled ? (
+                    {!toggleReply ? (
                       <FaReply
                         className="cursor-pointer"
                         color="blue"
-                        onClick={() => toggleChildEditor()}
+                        onClick={() => toggleReplyEditor()}
                       />
                     ) : (
                       <AiOutlineCloseCircle
                         color="red"
                         className="cursor-pointer"
-                        onClick={() => toggleChildEditor()}
+                        onClick={() => toggleReplyEditor()}
                       />
                     )}
                   </div>
                   {user.id === comment.user.id && (
                     <>
                       <div className="p-1">
-                        <HiPencilAlt className="cursor-pointer" color="blue" />
+                        {!toggleUpdate ? (
+                          <HiPencilAlt
+                            className="cursor-pointer"
+                            color="blue"
+                            onClick={() => toggleUpdateEditor()}
+                          />
+                        ) : (
+                          <AiOutlineCloseCircle
+                            color="red"
+                            className="cursor-pointer"
+                            onClick={() => toggleUpdateEditor()}
+                          />
+                        )}
                       </div>
+
                       <div
                         className="p-1"
                         onClick={() => handleDeleteClick(comment.id)}
@@ -150,7 +166,8 @@ function Comment({
             <p className="pt-2 pl-2">{comment.message}</p>
           </div>
         </div>
-        {editToggled && <ReplyCommentForm comment={comment} />}
+        {toggleUpdate && <UpdateCommentForm comment={comment} />}
+        {toggleReply && <ReplyCommentForm comment={comment} />}
         {comment.children &&
           comment.children.map((child) => {
             return (
