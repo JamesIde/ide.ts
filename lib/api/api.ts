@@ -34,6 +34,18 @@ export async function addCommentToRecord(
   return res.data;
 }
 
+export async function replyToComment(
+  comment: NewComment
+): Promise<CommentSuccess> {
+  const res = await baseClient.put(
+    `/api/comments?contentfulId=${comment.contentfulId}&commentId=${comment.commentId}`,
+    {
+      message: comment.message,
+    }
+  );
+  return res.data;
+}
+
 export async function deleteCommentFromRecord(
   commentId: string
 ): Promise<CommentSuccess> {

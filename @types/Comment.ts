@@ -42,4 +42,5 @@ export interface CommentSuccess {
 export interface NewComment {
   contentfulId: string;
   message: string;
+  commentId?: string;
 }

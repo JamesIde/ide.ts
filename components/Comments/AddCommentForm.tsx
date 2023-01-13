@@ -11,14 +11,12 @@ import AddCommentLoader from "../Misc/AddCommentLoader";
 function CommentForm({ contentfulId }: { contentfulId: string }) {
   const queryClient = useQueryClient();
   const ref = useRef(null);
-  const [commentError, setCommentError] = useState<any>();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: addCommentToRecord,
     onSuccess: () => {
       ref.current.value = "";
       queryClient.refetchQueries(["comments"]);
-      setCommentError(null);
       notify("success", "Comment posted successfully");
     },
     onError: (error: AxiosError | Error) => {

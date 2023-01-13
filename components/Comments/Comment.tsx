@@ -141,6 +141,7 @@ function Comment({
             <p className="pt-2 pl-2">{comment.message}</p>
           </div>
         </div>
+        {editToggled && <ReplyCommentForm comment={comment} />}
         {comment.children &&
           comment.children.map((child) => {
             return (
@@ -148,7 +149,6 @@ function Comment({
             );
           })}
       </div>
-      {editToggled && <ReplyCommentForm comment={comment} />}
     </div>
   );
 }
