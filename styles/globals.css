@@ -259,3 +259,55 @@ ul > li > a {
   font-weight: 500;
   padding-top: 25px;
 }
+
+/* Icon Loader Spinner */
+.lds-dual-ring {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: rgb(255, 0, 0) transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Add Comment Spinner */
+.add-comment-spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  padding-left: 2px;
+}
+.add-comment-spinner:after {
+  content: " ";
+  display: block;
+  width: 25px;
+  height: 25px;
+
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: add-comment-spinner 1.2s linear infinite;
+}
+@keyframes add-comment-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

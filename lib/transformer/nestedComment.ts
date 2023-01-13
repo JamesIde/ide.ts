@@ -4,8 +4,9 @@
  */
 export default function createNestedStructure(comments, parentId = null) {
   let nestedComments = [];
-
+  let commentCount = 0;
   for (const comment of comments) {
+    commentCount++;
     if (comment.parentId === parentId) {
       const children = createNestedStructure(comments, comment.id);
       if (children.length > 0) {

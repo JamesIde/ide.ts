@@ -1,8 +1,18 @@
-import { CommentType } from "../../@types/Comment";
 import Image from "next/image";
+import { CommentType } from "../../@types/Comment";
 import { HiPencilAlt } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
+import { FaReply } from "react-icons/fa";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useStore } from "../../lib/store/userStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCommentFromRecord } from "../../lib/api/api";
+import { useState } from "react";
+import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import ReplyCommentForm from "./ReplyCommentForm";
+import IconLoader from "../Misc/IconLoader";
+import { notify } from "../../lib/toastr/Notify";
 function Comment({
   comment,
   hasChildren,
@@ -10,7 +20,39 @@ function Comment({
   comment: CommentType;
   hasChildren: boolean;
 }) {
+  const [editToggled, setEditToggled] = useState(false);
   const user = useStore((state) => state.user);
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: deleteCommentFromRecord,
+    onSuccess: (data) => {
+      queryClient.refetchQueries(["comments"]);
+      notify("success", "Comment deleted successfully");
+    },
+    onError: (error: AxiosError | Error) => {
+      if (axios.isAxiosError(error)) {
+        notify("error", error.response?.data);
+      } else {
+        notify("error", error.message);
+      }
+    },
+  });
+
+  function handleDeleteClick(commentId: string) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this comment? Deleting a comment will delete any replies too."
+      )
+    ) {
+      mutate(commentId);
+    }
+  }
+
+  function toggleChildEditor() {
+    setEditToggled(!editToggled);
+  }
+
   return (
     <div
       style={{
@@ -42,7 +84,7 @@ function Comment({
                 <p className="font-semibold">{comment.user.name} </p>
                 {/* Date */}
                 <p className="text-sm text-gray-400">
-                  {new Date(comment.createdAt).toLocaleDateString("en-US", {
+                  {new Date(comment.createdAt).toLocaleDateString("en-AU", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -53,14 +95,44 @@ function Comment({
               </div>
             </div>
             <div>
-              {user && user.id === comment.user.id && (
+              {user && (
                 <div className="flex flex-row justify-end">
                   <div className="p-1">
-                    <HiPencilAlt className="cursor-pointer" color="blue" />
+                    {!editToggled && (
+                      <FaReply
+                        className="cursor-pointer"
+                        color="blue"
+                        onClick={() => setEditToggled((editMode) => !editMode)}
+                      />
+                    )}
+                    {editToggled && (
+                      <AiOutlineCloseCircle
+                        color="red"
+                        className="cursor-pointer"
+                        onClick={() => setEditToggled((editMode) => !editMode)}
+                      />
+                    )}
                   </div>
-                  <div className="p-1">
-                    <MdDeleteOutline className="cursor-pointer" color="red" />
-                  </div>
+                  {user.id === comment.user.id && (
+                    <>
+                      <div className="p-1">
+                        <HiPencilAlt className="cursor-pointer" color="blue" />
+                      </div>
+                      <div
+                        className="p-1"
+                        onClick={() => handleDeleteClick(comment.id)}
+                      >
+                        {!isLoading ? (
+                          <MdDeleteOutline
+                            className="cursor-pointer"
+                            color="red"
+                          />
+                        ) : (
+                          <IconLoader />
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -76,6 +148,7 @@ function Comment({
             );
           })}
       </div>
+      {editToggled && <ReplyCommentForm comment={comment} />}
     </div>
   );
 }

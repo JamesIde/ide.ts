@@ -5,8 +5,9 @@ import createNestedStructure from "../../lib/transformer/nestedComment";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET" && req.query.contentfulId) {
     retrieveRecordComments(req, res);
+  } else {
+    res.status(405).send("Method not allowed");
   }
-  // TODO add catch all bad route
 }
 
 /**
@@ -35,8 +36,11 @@ export async function retrieveRecordComments(
         },
       },
     });
+
     const commentTree = createNestedStructure(rootComments);
-    res.status(200).json(commentTree);
+    res
+      .status(200)
+      .json({ commentCount: rootComments.length, comments: commentTree });
   } catch (error) {
     console.log("error is ", error);
     res

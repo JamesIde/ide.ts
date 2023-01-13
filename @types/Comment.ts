@@ -24,6 +24,11 @@ export interface CommentType {
   children: Child[];
 }
 
+export interface CommentRetrievalSuccess {
+  commentCount: number;
+  comments: CommentType[];
+}
+
 export interface CommentSuccess {
   id: string;
   message: string;

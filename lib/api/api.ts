@@ -1,6 +1,11 @@
 import { CredentialResponse } from "@react-oauth/google";
 import { User } from "../../@types/Profile";
-import { CommentSuccess, CommentType, NewComment } from "../../@types/Comment";
+import {
+  CommentRetrievalSuccess,
+  CommentSuccess,
+  CommentType,
+  NewComment,
+} from "../../@types/Comment";
 import baseClient from "../../config/baseClient";
 export async function handleGoogleLogin(credential: CredentialResponse) {
   const res = await baseClient.post<User>("/api/identity", {
@@ -10,7 +15,7 @@ export async function handleGoogleLogin(credential: CredentialResponse) {
 }
 
 export async function retrieveAllRecordComments(contentfulId: string) {
-  const res = await baseClient.get<CommentType[]>(
+  const res = await baseClient.get<CommentRetrievalSuccess>(
     `/api/records?contentfulId=${contentfulId}`
   );
 
@@ -26,5 +31,12 @@ export async function addCommentToRecord(
       message: comment.message,
     }
   );
+  return res.data;
+}
+
+export async function deleteCommentFromRecord(
+  commentId: string
+): Promise<CommentSuccess> {
+  const res = await baseClient.delete(`/api/comments?commentId=${commentId}`);
   return res.data;
 }
