@@ -5,7 +5,12 @@ import { replyToComment } from "../../lib/api/api";
 import { notify } from "../../lib/toastr/Notify";
 import axios, { AxiosError } from "axios";
 import AddCommentLoader from "../Misc/AddCommentLoader";
+import { editStore } from "../../lib/store/editStore";
 function ReplyCommentForm({ comment }: { comment: CommentType }) {
+  const [isReplying, setIsReplying] = editStore((state) => [
+    state.isReplying,
+    state.setIsReplying,
+  ]);
   const ref = useRef(null);
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation({
@@ -14,6 +19,7 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
       ref.current.value = "";
       queryClient.refetchQueries(["comments"]);
       notify("success", "Comment posted successfully");
+      setIsReplying(false);
     },
     onError: (error: AxiosError | Error) => {
       if (axios.isAxiosError(error)) {

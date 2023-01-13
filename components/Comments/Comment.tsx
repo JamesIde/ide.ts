@@ -7,12 +7,12 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useStore } from "../../lib/store/userStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCommentFromRecord } from "../../lib/api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import toast from "react-hot-toast";
 import ReplyCommentForm from "./ReplyCommentForm";
 import IconLoader from "../Misc/IconLoader";
 import { notify } from "../../lib/toastr/Notify";
+import { editStore } from "../../lib/store/editStore";
 function Comment({
   comment,
   hasChildren,
@@ -20,9 +20,19 @@ function Comment({
   comment: CommentType;
   hasChildren: boolean;
 }) {
+  const [isReplying, setIsReplying] = editStore((state) => [
+    state.isReplying,
+    state.setIsReplying,
+  ]);
   const [editToggled, setEditToggled] = useState(false);
   const user = useStore((state) => state.user);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!isReplying) {
+      setEditToggled(false);
+    }
+  }, [isReplying]);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: deleteCommentFromRecord,
@@ -51,6 +61,7 @@ function Comment({
 
   function toggleChildEditor() {
     setEditToggled(!editToggled);
+    setIsReplying(!isReplying);
   }
 
   return (
@@ -60,7 +71,6 @@ function Comment({
       }}
     >
       {" "}
-      {/*Apply a border to this class if there are children passed down */}
       <div
         style={{
           marginLeft: hasChildren ? "1rem" : "0",
@@ -98,18 +108,17 @@ function Comment({
               {user && (
                 <div className="flex flex-row justify-end">
                   <div className="p-1">
-                    {!editToggled && (
+                    {!editToggled ? (
                       <FaReply
                         className="cursor-pointer"
                         color="blue"
-                        onClick={() => setEditToggled((editMode) => !editMode)}
+                        onClick={() => toggleChildEditor()}
                       />
-                    )}
-                    {editToggled && (
+                    ) : (
                       <AiOutlineCloseCircle
                         color="red"
                         className="cursor-pointer"
-                        onClick={() => setEditToggled((editMode) => !editMode)}
+                        onClick={() => toggleChildEditor()}
                       />
                     )}
                   </div>
