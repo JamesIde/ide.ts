@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../config/prisma";
+import wash from "washyourmouthoutwithsoap";
+import emojiStrip  from "emoji-strip";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
@@ -32,14 +34,24 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { message } = req.body;
+
   if (!message) {
     return res.status(400).send("No message provided");
   }
 
+  // Returns true if the message contains profanity
+  if (wash.check("en", message)) {
+    return res
+      .status(400)
+      .send("Your comment contains profanity. Please remove it and try again.");
+  }
+
+  const cleanedMessage = emojiStrip(message);
+
   try {
     const comment = await prisma.comment.create({
       data: {
-        message: message,
+        message: cleanedMessage,
         record: {
           connect: {
             id: contentfulId,
