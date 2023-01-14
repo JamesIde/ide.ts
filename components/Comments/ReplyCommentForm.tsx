@@ -42,7 +42,7 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
   }
 
   return (
-    <div className="ml-2 border-l-2 p-2 mb-4">
+    <div className="ml-2 border-l-2 p-2 mb-2">
       <div className="flex flex-row justify-center">
         <div className="mt-2 rounded-full w-full">
           <textarea
@@ -54,15 +54,15 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
             ref={ref}
           />
         </div>
-        <div className="w-max pl-2">
-          <button
-            type="submit"
-            className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-700 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg text-sm"
-            onClick={handleReply}
-          >
-            {isLoading ? <AddCommentLoader /> : "Reply"}
-          </button>
-        </div>
+      </div>
+      <div className="w-max">
+        <button
+          type="submit"
+          className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-700 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg text-sm"
+          onClick={handleReply}
+        >
+          {isLoading ? <AddCommentLoader /> : "Reply"}
+        </button>
       </div>
     </div>
   );
