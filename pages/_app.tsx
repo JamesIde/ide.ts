@@ -1,10 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Script from "next/script";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
+
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (
@@ -26,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </Script>
           <Toaster />
           <Component {...pageProps} />
+          <Analytics />
           <ReactQueryDevtools initialIsOpen={false} />
         </GoogleOAuthProvider>
       </QueryClientProvider>
