@@ -12,9 +12,9 @@ The biggest change is the integration of a nested client-side rendered comments 
 - Google OAuth for authorization and own JWT integration with cookies. 
 - SMTP service with Nodemailer for email notifications (comment post/reply).
 - A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
-- Postgresql database for data storage managed by ElephantSQL
+- PostgreSQL database managed by ElephantSQL
 
-Other technology used: Zustand, React-Toast, washyourmouthoutwithsoap, Prisma 2.0.
+Other technology used: Zustand, React-Toast and Prisma.
 
 ## original resources
 
