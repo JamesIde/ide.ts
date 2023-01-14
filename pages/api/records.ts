@@ -2,6 +2,10 @@ import { Comment } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../config/prisma";
 import createNestedStructure from "../../lib/transformer/nestedComment";
+
+export const config = {
+  runtime: "edge",
+};
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET" && req.query.contentfulId) {
     retrieveRecordComments(req, res);

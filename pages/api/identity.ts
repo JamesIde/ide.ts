@@ -6,6 +6,11 @@ import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/transformer/profileTransformer";
 import { generateAccessToken, generateRefreshToken } from "../../lib/jwt/auth";
 import { sendNewUserEmailToAdmin } from "../../lib/nodemailer/email";
+
+export const config = {
+  runtime: "edge",
+};
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     handleIdentityToken(req, res);

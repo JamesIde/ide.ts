@@ -10,6 +10,11 @@ import {
 } from "../../lib/nodemailer/email";
 import { ReplyCommentPayload } from "../../@types/Comment";
 import { validateToken } from "../../lib/jwt/auth";
+
+export const config = {
+  runtime: "edge",
+};
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
