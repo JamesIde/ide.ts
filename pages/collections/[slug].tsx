@@ -4,12 +4,12 @@ import Layout from "../../components/Navigation/Layout";
 import {
   getPhotoCollectionBySlug,
   getPhotoCollectionSlugs,
-} from "../../lib/contentful";
+} from "../../lib/api/contentful";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import Image from "next/image";
 import { useState } from "react";
-import { ModalImage } from "../../@types/modals";
+import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
 export default function Collection({
   collection,

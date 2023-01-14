@@ -5,14 +5,22 @@ import {
 } from "../@types/generated/contentful";
 import Navigation from "../components/Navigation/Navigation";
 import Records from "../components/Records/records";
-import { getContentfulEntries } from "../lib/contentful";
+import {
+  getContentfulEntries,
+  seedContentfulRecords,
+} from "../lib/api/contentful";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
+
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
+
+  if (process.env.NODE_ENV === "production") {
+    await seedContentfulRecords(cRecords.items as IThumbnail[]);
+  }
 
   return {
     props: {
@@ -41,22 +49,4 @@ export default function Home({
       <Entries entries={entries} />
     </>
   );
-}
-
-{
-  /* <p className="font-bold text-red-500">Hello World</p>
-      {entries.map((banner) => {
-        return (
-          <>
-            <Image
-              src={`https:${banner.fields.Banner?.fields.file?.url}`}
-              width={1920}
-              height={1080}
-              alt={banner.fields.bannerDescription!}
-              loading="lazy"
-              key={banner.fields.bannerDescription}
-            />
-          </>
-        );
-      })} */
 }

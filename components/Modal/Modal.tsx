@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ModalImage } from "../../@types/modals";
+import { ModalImage } from "../../@types/Modal";
 export default function Modal({
   currImage,
   id,
