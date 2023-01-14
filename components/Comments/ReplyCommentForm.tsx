@@ -48,7 +48,7 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
           <textarea
             name=""
             id=""
-            className="w-full h-24 border-[1px] rounded-md pl-2"
+            className="w-full h-24 border-[1px] rounded-md pl-2 p-2"
             rows={10}
             placeholder={`Reply to ${comment.user.name}...`}
             ref={ref}

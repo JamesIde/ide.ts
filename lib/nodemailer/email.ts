@@ -1,3 +1,4 @@
+import { ReplyCommentPayload } from "../../@types/Comment";
 import { EmailAdminPayload } from "../../@types/Email";
 import { IdpUser } from "../../@types/Profile";
 import emailSender from "./transporter";
@@ -33,3 +34,22 @@ export async function sendNewUserEmailToAdmin(user: IdpUser) {
     }</strong> on ${new Date(Date.now()).toString()}</p>`,
   });
 }
+
+export async function sendCommentReplyEmail(payload: ReplyCommentPayload) {
+  await emailSender().sendMail({
+    from: process.env.SMPT_USERNAME,
+    to: process.env.ADMIN_EMAIL,
+    subject: `Reply to your comment on ${payload.recordTitle}`,
+    html: `<p>Reply to your comment on ${payload.recordTitle}. See below <br/>
+    ${payload.replyCommentUser} replied: <strong>${
+      payload.replyCommentMessage
+    }</strong> on ${new Date(Date.now()).toString()}</p>
+    <br/>
+    <p> View it here: <a href="https://jamesaide.com/records/${
+      payload.recordSlug
+    }></a></p>
+    `,
+  });
+}
+
+// You've received a reply to your comment.

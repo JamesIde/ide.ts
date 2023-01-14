@@ -52,3 +52,12 @@ export interface NewComment {
   commentId?: string;
   emailNotify?: boolean;
 }
+
+export interface ReplyCommentPayload {
+  recordTitle: string;
+  recordSlug: string;
+  rootCommentUser: string;
+  replyCommentUser: string;
+  replyCommentMessage: string;
+  replyCommentDate: string;
+}

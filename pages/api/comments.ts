@@ -6,7 +6,9 @@ import emojiStrip from "emoji-strip";
 import {
   sendNewCommentEmailToAdmin,
   sendDeleteEmailToAdmin,
+  sendCommentReplyEmail,
 } from "../../lib/nodemailer/email";
+import { ReplyCommentPayload } from "../../@types/Comment";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
@@ -166,6 +168,22 @@ export async function replyToComment(
   if (!message) {
     res.status(400).send("No message provided");
   }
+
+  // Find the comment to check if it exists and has email notifications enabled
+  const commentToReplyTo = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+    include: {
+      user: true,
+      record: true,
+    },
+  });
+
+  if (!commentToReplyTo) {
+    res.status(400).send("Comment not found");
+  }
+
   try {
     const comment = await prisma.comment.create({
       data: {
@@ -186,7 +204,31 @@ export async function replyToComment(
           },
         },
       },
+      include: {
+        user: true,
+      },
     });
+
+    if (commentToReplyTo.emailNotify) {
+      const replyToCommentPayload: ReplyCommentPayload = {
+        recordTitle: commentToReplyTo.record?.title,
+        recordSlug: commentToReplyTo.record?.slug,
+        rootCommentUser: commentToReplyTo.user?.name,
+        replyCommentUser: comment.user?.name,
+        replyCommentMessage: comment.message,
+        replyCommentDate: new Date(comment.createdAt)
+          .toLocaleDateString("en-AU", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+          })
+          .toString(),
+      };
+
+      await sendCommentReplyEmail(replyToCommentPayload);
+    }
+
     res.status(200).json(comment);
   } catch (error) {
     console.log(error);
