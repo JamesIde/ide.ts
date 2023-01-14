@@ -14,17 +14,15 @@ The biggest change is the integration of a nested client-side rendered comments 
 - A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
 - PostgreSQL database managed by ElephantSQL
 
-Other technology used: Zustand, React-Toast and Prisma.
+## techy resources
+- [Contentful interface generator](https://github.com/intercom/contentful-typescript-codegen) to generate typings for the environment 
 
-## original resources
+## original resources and inspiration
 
 - Harmen Hoek's [travel itinerary](https://harmenhoek.com/) for inspiration to create, design and document my adventures.
 - Jamie Barnes' [website](https://www.jamiebarnesoutdoors.co.uk/) for further design inspiration.
 - Max Mitchell's [video](https://www.youtube.com/watch?v=m6vxzu95sOI) on building his website with Gatsby and using Contentful. This was my first exposure to the world of content management systems in a well-layed out video with a tangible result at the end.
 
-## new resources
-- [Contentful interface generator](https://github.com/intercom/contentful-typescript-codegen) to generate typings for the environment 
-- [React Markdown](https://github.com/remarkjs/react-markdown) to render all text fron Contentful
 
 ## re: closing thoughts
 original:: For a long time I have wanted to create a site capable of supporting the material (primarily images) I've gathered on my travels. Eventually, this cultivated itself as the website you see today. The challenge of building a website like this presented itself as an ample opportunity to use technologies that were previously unknown to me, and allow me to creatively express myself in a manner I have never done before. Ultimately, the content on this website is for myself to look back at the adventures I've been on, and for those who are interested in seeing what I've been up to.
