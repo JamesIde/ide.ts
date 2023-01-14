@@ -1,18 +1,10 @@
 import { IdpUser, User } from "../../@types/Profile";
 import * as jwt from "jsonwebtoken";
 import { JWTPayload } from "../../@types/Token";
-export function getTokenFromStorage() {
-  const user: User = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    return null;
-  }
-  const token = user.token;
-  return token;
-}
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "../../config/prisma";
 
 export function generateAccessToken(profile: IdpUser) {
-  let expiration = 15 * 60 * 1000;
-  let ATime = new Date(Date.now() + expiration);
   let ATPayload: JWTPayload = {
     id: profile.id,
     name: profile.name,
@@ -20,19 +12,15 @@ export function generateAccessToken(profile: IdpUser) {
     providerId: profile.providerId,
     picture: profile.picture,
     sub: profile.email,
-    QcP: ATime,
     tokenVersion: profile.tokenVersion,
-    exp: ATime.getTime(),
   };
 
-  return jwt.sign(ATPayload, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET);
+  return jwt.sign(ATPayload, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET, {
+    expiresIn: "15min",
+  });
 }
 
 export function generateRefreshToken(profile: IdpUser) {
-  // Different payloads for different tokens
-  let expiration = 365 * 24 * 60 * 60 * 1000;
-  let RTime = new Date(Date.now() + expiration);
-
   let RTPayload: JWTPayload = {
     id: profile.id,
     name: profile.name,
@@ -40,9 +28,42 @@ export function generateRefreshToken(profile: IdpUser) {
     providerId: profile.providerId,
     picture: profile.picture,
     sub: profile.email,
-    QcP: RTime,
     tokenVersion: profile.tokenVersion,
   };
 
-  return jwt.sign(RTPayload, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET);
+  return jwt.sign(RTPayload, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
+}
+
+export async function validateToken(req: NextApiRequest, res: NextApiResponse) {
+  const token = req.headers["authorization"].split(" ")[1];
+  if (!token) {
+    return res
+      .status(403)
+      .send({ ok: false, message: "No identity presented" });
+  }
+  let decoded: any = null;
+  try {
+    decoded = jwt.verify(token, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET);
+  } catch (err) {
+    return res
+      .status(401)
+      .send({ ok: false, message: "Expired identity presented" });
+  }
+  const token_payload = decoded as JWTPayload;
+
+  const user = await prisma.user.findFirst({
+    where: {
+      providerId: token_payload.providerId,
+    },
+  });
+
+  if (!user) {
+    return res
+      .status(403)
+      .send({ ok: false, message: "Invalid identity presented" });
+  }
+
+  return user.id;
 }
