@@ -44,7 +44,7 @@ export async function handleIdentityToken(
     }
     res.setHeader(
       "set-cookie",
-      "jid=" + tokens.accessToken + "; path=/; HttpOnly"
+      "jid=" + tokens.refreshToken + "; path=/; HttpOnly"
     );
     const transformedUser = ProfileTransformer.transformProfile(
       user,
