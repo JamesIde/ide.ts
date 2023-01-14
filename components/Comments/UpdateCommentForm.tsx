@@ -52,7 +52,7 @@ function UpdateCommentForm({ comment }: { comment: CommentType }) {
         <div className="mt-2 rounded-full w-full">
           <textarea
             id=""
-            className="w-full h-24 border-[1px] rounded-md pl-2"
+            className="w-full h-24 border-[1px] rounded-md pl-2 p-2"
             rows={10}
             name="message"
             value={fields.message}

@@ -77,7 +77,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                         <p className="text-sm text-blue-500 pr-1">
                           {commentCount}
                         </p>
-                        <p className="text-sm text-blue-500">
+                        <p className="text-sm text-[#6060FF]">
                           {commentCount === 1 ? "Comment" : "Comments"}
                         </p>
                       </div>
