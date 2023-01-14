@@ -73,11 +73,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                       <div className="mt-[6px] mr-[3px]">
                         <BiCommentDetail color="blue" />
                       </div>
-                      <div className="flex flex-row">
-                        <p className="text-sm text-blue-500 mt-[2px] pr-1">
+                      <div className="flex flex-row mt-[3px]">
+                        <p className="text-sm text-blue-500 pr-1">
                           {commentCount}
                         </p>
-                        <p className="text-sm text-blue-500 mt-[2px]">
+                        <p className="text-sm text-blue-500">
                           {commentCount === 1 ? "Comment" : "Comments"}
                         </p>
                       </div>
