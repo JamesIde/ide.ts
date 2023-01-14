@@ -45,9 +45,10 @@ export async function sendCommentReplyEmail(payload: ReplyCommentPayload) {
       payload.replyCommentMessage
     }</strong> on ${new Date(Date.now()).toString()}</p>
     <br/>
-    <p> View it here: <a href="https://jamesaide.com/records/${
-      payload.recordSlug
-    }></a></p>
+    <p>
+      View it
+      <a href="https://jamesaide.com/records/${payload.recordSlug}">here</a>
+    </p>
     `,
   });
 }
