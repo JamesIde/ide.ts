@@ -137,7 +137,7 @@ export async function generateTokens(profile: IdpUser) {
 async function handleTokenRefresh(req: NextApiRequest, res: NextApiResponse) {
   const { jid } = req.cookies;
   if (!jid) {
-    return res.status(200).send({ ok: false, accessToken: "" });
+    return res.status(400).send({ ok: false, accessToken: "" });
   }
   let payload: any = null;
   try {
@@ -158,5 +158,5 @@ async function handleTokenRefresh(req: NextApiRequest, res: NextApiResponse) {
   if (user.tokenVersion !== payload.tokenVersion)
     return res.send({ ok: false, accessToken: "" });
   const tokens = await generateTokens(user);
-  return res.status(200).json({ token: tokens.accessToken });
+  return res.status(200).json({ ok: true, token: tokens.accessToken });
 }

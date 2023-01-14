@@ -30,17 +30,14 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 const onResponseError = async (error: AxiosError) => {
   const originalConfig = error.config;
   if (error.response) {
-    if (error.response.status == 401) {
-      console.log("invalid token status");
+    if (error.response.status === 401) {
       try {
         axios.defaults.withCredentials = true;
-        console.log("attempting token refresh");
-        const { data } = await baseClient.get("/api/identity");
-        const rs = data as AccessTokenSuccess;
+        const token = await baseClient.get("/api/identity");
+        const rs = token.data as AccessTokenSuccess;
         const user: User = JSON.parse(localStorage.getItem("user"));
         user.token = rs.token;
         localStorage.setItem("user", JSON.stringify(user));
-        console.log("token refresh success");
         //Return the original request with new token
         return baseClient(originalConfig);
       } catch (_error) {

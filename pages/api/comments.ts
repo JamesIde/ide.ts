@@ -9,6 +9,7 @@ import {
   sendCommentReplyEmail,
 } from "../../lib/nodemailer/email";
 import { ReplyCommentPayload } from "../../@types/Comment";
+import { validateToken } from "../../lib/jwt/auth";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
@@ -33,14 +34,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
  * A public function to create a comment for a record.
  */
 export async function createComment(req: NextApiRequest, res: NextApiResponse) {
-  const user = req.headers.user as string;
+  const user = await validateToken(req, res);
   const contentfulId = req.query.contentfulId as string;
   if (!contentfulId) {
     return res.status(400).send("No contentfulId provided");
   }
 
   if (!user) {
-    return res.status(400).send("No user provided");
+    return res
+      .status(400)
+      .send("Error occured validating your identity. Please try again later");
   }
 
   // Check how many comments the user has made for this record, but don't include the ADMIN user
@@ -77,7 +80,6 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { message, emailNotify } = req.body;
-  console.log(req.body);
 
   if (!message) {
     return res.status(400).send("No message provided");
@@ -134,7 +136,6 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
     await sendNewCommentEmailToAdmin(notifyAdminPayload);
     return res.status(200).json({ ok: true });
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .send("An error occured processing your comment. Please try again later");
@@ -147,7 +148,7 @@ export async function replyToComment(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const user = req.headers.user as string;
+  const user = await validateToken(req, res);
   const contentfulId = req.query.contentfulId as string;
   const commentId = req.query.commentId as string;
 
@@ -156,7 +157,9 @@ export async function replyToComment(
   }
 
   if (!user) {
-    res.status(400).send("No user provided");
+    return res
+      .status(400)
+      .send("Error occured validating your identity. Please try again later");
   }
 
   if (!commentId) {
@@ -231,7 +234,7 @@ export async function replyToComment(
 
     res.status(200).json(comment);
   } catch (error) {
-    console.log(error);
+    error;
     res
       .status(400)
       .send("An error occured processing your comment. Please try again later");
@@ -242,11 +245,14 @@ export async function replyToComment(
  * A public function to update a comment
  */
 export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
-  const user = req.headers.user as string;
+  const user = await validateToken(req, res);
+
   const commentId = req.query.commentId as string;
 
   if (!user) {
-    res.status(400).send("No user provided");
+    return res
+      .status(400)
+      .send("Error occured validating your identity. Please try again later");
   }
 
   if (!commentId) {
@@ -292,7 +298,6 @@ export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(200).json({ ok: true });
   } catch (error) {
-    console.log(error);
     res
       .status(400)
       .send("An error occured processing your comment. Please try again later");
@@ -303,11 +308,14 @@ export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
  * A public function to delete a comment
  */
 export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
-  const user = req.headers.user as string;
+  const user = await validateToken(req, res);
+
   const commentId = req.query.commentId as string;
 
   if (!user) {
-    res.status(400).send("No user provided");
+    return res
+      .status(400)
+      .send("Error occured validating your identity. Please try again later");
   }
 
   if (!commentId) {
