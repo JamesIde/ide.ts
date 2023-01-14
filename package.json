@@ -30,6 +30,7 @@
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "next": "13.1.1",
+    "nodemailer": "^6.9.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropdown": "^1.11.0",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8",
     "@types/jsonwebtoken": "^9.0.0",
+    "@types/nodemailer": "^6.4.7",
     "autoprefixer": "^10.4.13",
     "contentful-management": "^10.26.0",
     "contentful-typescript-codegen": "^3.4.0",

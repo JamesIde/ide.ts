@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../config/prisma";
 import wash from "washyourmouthoutwithsoap";
 import emojiStrip from "emoji-strip";
+import sendEmailToAdmin from "../../lib/nodemailer/email";
+import { EmailAdminPayload } from "../../@types/Email";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
@@ -19,6 +21,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(405).send("Method not allowed");
   }
 }
+
+// Nodemailer config
+
 /**
  * A public function to create a comment for a record.
  */
@@ -50,7 +55,7 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
         {
           user: {
             id: {
-              not: process.env.NEXT_PUBLIC_ADMIN_ID,
+              not: process.env.ADMIN_ID,
             },
           },
         },
@@ -96,8 +101,31 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
           },
         },
       },
+      include: {
+        user: true,
+        record: true,
+      },
     });
-    return res.status(200).json(comment);
+
+    const notifyAdminPayload: EmailAdminPayload = {
+      recordTitle: comment.record?.title,
+      recordId: comment.record?.id,
+      commentId: comment.id,
+      commentMessage: cleanedMessage,
+      commentUser: comment.user?.name,
+      commentUserId: comment.user?.id,
+      commentUserEmail: comment.user?.email,
+      commentUserDate: new Date(comment.createdAt).toLocaleDateString("en-AU", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    await sendEmailToAdmin(notifyAdminPayload);
+    return res.status(200).json({ ok: true });
   } catch (error) {
     console.log(error);
     return res

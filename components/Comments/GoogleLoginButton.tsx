@@ -21,7 +21,7 @@ export default function GoogleLoginButton() {
     onSuccess: (data) => {
       localStorage.setItem("user", JSON.stringify(data));
       setUser(data);
-      notify("success", "Signin successful!");
+      notify("success", "Login successful!");
     },
     onError: (error: AxiosError | Error) => {
       if (axios.isAxiosError(error)) {

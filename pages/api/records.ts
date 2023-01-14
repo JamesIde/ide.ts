@@ -45,7 +45,6 @@ export async function retrieveRecordComments(
       .status(200)
       .json({ commentCount: rootComments.length, comments: commentTree });
   } catch (error) {
-    console.log("error is ", error);
     res
       .status(500)
       .send(`Error retrieving comments for record: ${contentfulId}`);

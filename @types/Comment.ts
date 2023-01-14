@@ -12,6 +12,12 @@ export interface Child {
   children: Child[];
 }
 
+export interface Record {
+  id: string;
+  title: string;
+  slug: string;
+}
+
 export interface CommentType {
   id: string;
   message: string;
@@ -22,6 +28,7 @@ export interface CommentType {
   parentId?: any;
   user: User;
   children: Child[];
+  record?: Record;
 }
 
 export interface CommentRetrievalSuccess {

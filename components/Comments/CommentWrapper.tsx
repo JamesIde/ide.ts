@@ -40,7 +40,7 @@ function CommentWrapper({
   function handleSignout() {
     setUser(null);
     localStorage.removeItem("user");
-    notify("success", "Signout successfully");
+    notify("success", "Logout successfully");
   }
 
   return (
@@ -95,7 +95,7 @@ function CommentWrapper({
           className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold"
           onClick={() => handleSignout()}
         >
-          Signout
+          Logout
         </div>
       )}
     </div>
