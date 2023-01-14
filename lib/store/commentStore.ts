@@ -9,7 +9,7 @@ type Action = {
 };
 
 export const commentStore = create<State & Action>((set) => ({
-  isActionCompleted: true,
+  isActionCompleted: false,
   setIsActionCompleted: (isActionCompleted: boolean) =>
     set(() => ({ isActionCompleted: isActionCompleted })),
 }));
