@@ -71,13 +71,13 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {commentCount > 0 && (
                     <div className="flex flex-row hover:cursor-pointer">
                       <div className="mt-[6px] mr-[3px]">
-                        <BiCommentDetail color="blue" />
+                        <BiCommentDetail color="#6060FF" />
                       </div>
                       <div className="flex flex-row mt-[3px]">
-                        <p className="text-sm text-[#6060FF] pr-1">
+                        <p className="text-sm text-rich-indigo pr-1">
                           {commentCount}
                         </p>
-                        <p className="text-sm text-[#6060FF]">
+                        <p className="text-sm text-rich-indigo">
                           {commentCount === 1 ? "Comment" : "Comments"}
                         </p>
                       </div>

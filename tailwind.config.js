@@ -9,6 +9,9 @@ module.exports = {
       fontFamily: {
         playfair: ["Playfair Display"],
       },
+      colors: {
+        "rich-indigo": "#6060FF",
+      },
     },
   },
   plugins: [
