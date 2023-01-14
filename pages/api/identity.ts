@@ -5,6 +5,7 @@ import prisma from "../../config/prisma";
 import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/transformer/profileTransformer";
 import { generateAccessToken, generateRefreshToken } from "../../lib/jwt/auth";
+import { sendNewUserEmailToAdmin } from "../../lib/nodemailer/email";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     handleIdentityToken(req, res);
@@ -71,6 +72,7 @@ export async function validateUserIdentity(
 
   if (!userExists) {
     user = await registerUser(decoded);
+    await sendNewUserEmailToAdmin(user);
   }
 
   user = await loginUser(decoded);

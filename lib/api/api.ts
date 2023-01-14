@@ -29,6 +29,7 @@ export async function addCommentToRecord(
     `/api/comments?contentfulId=${comment.contentfulId}`,
     {
       message: comment.message,
+      emailNotify: comment.emailNotify,
     }
   );
   return res.data;

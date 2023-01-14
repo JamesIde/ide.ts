@@ -57,7 +57,7 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
         <div className="w-max pl-2">
           <button
             type="submit"
-            className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-700 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg"
+            className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-700 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg text-sm"
             onClick={handleReply}
           >
             {isLoading ? <AddCommentLoader /> : "Reply"}

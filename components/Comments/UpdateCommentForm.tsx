@@ -65,7 +65,11 @@ function UpdateCommentForm({ comment }: { comment: CommentType }) {
             className="mx-auto flex items-center mt-2 pl-4 pr-4 pt-2 pb-2 text-white font-semibold bg-blue-700 hover:bg-blue-900 hover:cursor-pointer duration-500 rounded-lg"
             onClick={handleUpdate}
           >
-            {isLoading ? <AddCommentLoader /> : "Update"}
+            {isLoading ? (
+              <AddCommentLoader />
+            ) : (
+              <p className="text-sm">Update</p>
+            )}
           </button>
         </div>
       </div>

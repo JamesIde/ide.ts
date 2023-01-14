@@ -50,4 +50,5 @@ export interface NewComment {
   contentfulId?: string;
   message: string;
   commentId?: string;
+  emailNotify?: boolean;
 }

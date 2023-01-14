@@ -1,9 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { EmailAdminPayload } from "../../@types/Email";
 import prisma from "../../config/prisma";
 import wash from "washyourmouthoutwithsoap";
 import emojiStrip from "emoji-strip";
-import sendEmailToAdmin from "../../lib/nodemailer/email";
-import { EmailAdminPayload } from "../../@types/Email";
+import {
+  sendNewCommentEmailToAdmin,
+  sendDeleteEmailToAdmin,
+} from "../../lib/nodemailer/email";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST" && req.query.contentfulId) {
     createComment(req, res);
@@ -71,7 +74,8 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
       .send("You have reached the maximum comments per record");
   }
 
-  const { message } = req.body;
+  const { message, emailNotify } = req.body;
+  console.log(req.body);
 
   if (!message) {
     return res.status(400).send("No message provided");
@@ -90,6 +94,7 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
     const comment = await prisma.comment.create({
       data: {
         message: cleanedMessage,
+        emailNotify: emailNotify,
         record: {
           connect: {
             id: contentfulId,
@@ -124,7 +129,7 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
       }),
     };
 
-    await sendEmailToAdmin(notifyAdminPayload);
+    await sendNewCommentEmailToAdmin(notifyAdminPayload);
     return res.status(200).json({ ok: true });
   } catch (error) {
     console.log(error);
@@ -272,12 +277,9 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
     where: {
       id: commentId,
     },
-    select: {
-      user: {
-        select: {
-          id: true,
-        },
-      },
+    include: {
+      user: true,
+      record: true,
     },
   });
 
@@ -289,6 +291,18 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).send("You are not the owner of this comment");
   }
 
+  const deleteEmailPayload: EmailAdminPayload = {
+    recordTitle: comment.record?.title,
+    recordId: comment.record?.id,
+    commentId: comment.id,
+    commentMessage: comment.message,
+    commentUser: comment.user?.name,
+    commentUserId: comment.user?.id,
+    commentUserEmail: comment.user?.email,
+    commentUserDate: new Date(Date.now()).toString(),
+  };
+
+  await sendDeleteEmailToAdmin(deleteEmailPayload);
   try {
     await prisma.comment.delete({
       where: {

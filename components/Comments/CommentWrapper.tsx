@@ -92,7 +92,7 @@ function CommentWrapper({
       <hr />
       {user && (
         <div
-          className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold"
+          className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold text-sm"
           onClick={() => handleSignout()}
         >
           Logout
