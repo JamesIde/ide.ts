@@ -7,6 +7,7 @@ import axios, { AxiosError } from "axios";
 import GoogleLoginButton from "./GoogleLoginButton";
 import CommentForm from "./AddCommentForm";
 import Comments from "./Comments";
+import { commentStore } from "../../lib/store/commentStore";
 function CommentWrapper({
   contentfulId,
   recordTitle,
@@ -15,6 +16,10 @@ function CommentWrapper({
   recordTitle: string;
 }) {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+  const [commentCount, setCommentCount] = commentStore((state) => [
+    state.commentCount,
+    state.setCommentCount,
+  ]);
   const {
     data: comments,
     isLoading,
@@ -25,7 +30,9 @@ function CommentWrapper({
     ["comments"],
     () => retrieveAllRecordComments(contentfulId),
     {
-      onSuccess: () => {},
+      onSuccess: (data) => {
+        setCommentCount(data.commentCount);
+      },
       onError: (error: AxiosError | Error) => {
         if (axios.isAxiosError(error)) {
           notify("error", error.response?.data);

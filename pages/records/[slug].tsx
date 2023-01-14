@@ -1,16 +1,19 @@
 import { IThumbnail } from "../../@types/generated/contentful";
-import Image from "next/image";
-import Helmet from "../../components/Navigation/Helmet";
-import Layout from "../../components/Navigation/Layout";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/api/contentful";
 import { useState } from "react";
-import { Asset } from "contentful-management/dist/typings/entities/asset";
 import { ModalImage } from "../../@types/Modal";
+import { BiCommentDetail } from "react-icons/bi";
+import { Link } from "react-scroll";
+import { commentStore } from "../../lib/store/commentStore";
+import Image from "next/image";
+import Helmet from "../../components/Navigation/Helmet";
+import Layout from "../../components/Navigation/Layout";
 import Modal from "../../components/Modal/Modal";
 import CommentWrapper from "../../components/Comments/CommentWrapper";
 
 export default function Record({ record }: { record: IThumbnail }) {
+  const commentCount = commentStore((state) => state.commentCount);
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -48,7 +51,6 @@ export default function Record({ record }: { record: IThumbnail }) {
                 height={1080}
                 alt={record.fields.title!}
                 loading="eager"
-                // onClick={(e) => imageModal(e, record.fields.featuredImage)}
               />{" "}
               <h1 className="text-2xl text-center nav-title mt-4">
                 {record.fields.title}
@@ -57,7 +59,35 @@ export default function Record({ record }: { record: IThumbnail }) {
                 [{record.fields.location}]
               </p>
               <p>{record.fields.description}</p>
-              <p className="text-right">{record.fields.date}</p>
+              <div className="flex justify-between mt-1">
+                <Link
+                  activeClass="active"
+                  to="comments"
+                  spy={true}
+                  smooth={true}
+                  offset={-100}
+                  duration={500}
+                >
+                  {commentCount > 0 && (
+                    <div className="flex flex-row hover:cursor-pointer">
+                      <div className="mt-[6px] mr-[3px]">
+                        <BiCommentDetail color="blue" />
+                      </div>
+                      <div className="flex flex-row">
+                        <p className="text-sm text-blue-500 mt-[2px] pr-1">
+                          {commentCount}
+                        </p>
+                        <p className="text-sm text-blue-500 mt-[2px]">
+                          {commentCount === 1 ? "Comment" : "Comments"}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </Link>
+                <div>
+                  <p className="text-right">{record.fields.date}</p>
+                </div>
+              </div>
               <hr className="mb-2 mt-2" />
             </section>
 
@@ -429,10 +459,12 @@ export default function Record({ record }: { record: IThumbnail }) {
           </div>
           {modal && <Modal currImage={currImage} id={record.sys.id} />}
         </div>
-        <CommentWrapper
-          contentfulId={record.sys.id}
-          recordTitle={record.fields.title}
-        />
+        <div id="comments">
+          <CommentWrapper
+            contentfulId={record.sys.id}
+            recordTitle={record.fields.title}
+          />
+        </div>
       </Layout>
     </>
   );
