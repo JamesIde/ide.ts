@@ -1,15 +1,6 @@
-import { Comment } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
 import { BadRequestException } from "next-api-decorators";
 import prisma from "../../config/prisma";
 import createNestedStructure from "../../lib/transformer/nestedComment";
-// export default function handler(req: NextApiRequest, res: NextApiResponse) {
-//   if (req.method === "GET" && req.query.contentfulId) {
-//     retrieveRecordComments(req, res);
-//   } else {
-//     res.status(405).send("Method not allowed");
-//   }
-// }
 
 /**
  * Public method to retrieve a single record and all its comments

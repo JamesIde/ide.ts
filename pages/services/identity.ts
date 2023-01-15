@@ -6,41 +6,35 @@ import * as jwt from "jsonwebtoken";
 import { ProfileTransformer } from "../../lib/transformer/profileTransformer";
 import { generateAccessToken, generateRefreshToken } from "../../lib/jwt/auth";
 import { sendNewUserEmailToAdmin } from "../../lib/nodemailer/email";
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
-    handleIdentityToken(req, res);
-  }
-  if (req.method === "GET") {
-    handleTokenRefresh(req, res);
-  }
-}
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  Req,
+  Res,
+} from "next-api-decorators";
 
 /**
  * Public method for handling the OAuth Token returned from Google
  */
 export async function handleIdentityToken(
-  req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
+  OAuthToken: string
 ) {
-  const { OAuthToken } = req.body;
-
   if (!OAuthToken) {
-    res.status(500).send("No identity presented");
+    throw new BadRequestException("No identity presented");
   }
 
   let decoded: OAuthToken;
   try {
     decoded = jwt_decode(OAuthToken);
-    const user = await validateUserIdentity(res, decoded);
+    const user = await validateUserIdentity(decoded);
 
     const tokens = await generateTokens(user);
 
     if (!tokens.ok) {
-      res
-        .status(500)
-        .send(
-          "Something went estabishing a connection to the server. Please try again later."
-        );
+      throw new InternalServerErrorException(
+        "Something went estabishing a connection to the server. Please try again later."
+      );
     }
     res.setHeader(
       "set-cookie",
@@ -50,11 +44,11 @@ export async function handleIdentityToken(
       user,
       tokens.accessToken
     );
-    res.status(200).json(transformedUser);
+    return transformedUser;
   } catch (error) {
-    res
-      .status(403)
-      .send("Invalid identity presented. This attempt has been logged.");
+    throw new BadRequestException(
+      "Invalid identity presented. This attempt has been logged."
+    );
   }
 }
 
@@ -62,10 +56,7 @@ export async function handleIdentityToken(
  * Public method for validating the users identity based on the decoded token
  * It either registers or logs in the user
  */
-export async function validateUserIdentity(
-  res: NextApiResponse,
-  decoded: OAuthToken
-) {
+export async function validateUserIdentity(decoded: OAuthToken) {
   let user: IdpUser;
 
   const userExists = await checkIfUserExists(decoded);
@@ -77,11 +68,9 @@ export async function validateUserIdentity(
 
   user = await loginUser(decoded);
   if (!user) {
-    res
-      .status(500)
-      .send(
-        "Something went wrong validating your identity. Please try again later."
-      );
+    throw new InternalServerErrorException(
+      "Something went wrong validating your identity. Please try again later."
+    );
   }
   return user;
 }
@@ -134,7 +123,10 @@ export async function generateTokens(profile: IdpUser) {
   };
 }
 
-async function handleTokenRefresh(req: NextApiRequest, res: NextApiResponse) {
+export async function handleTokenRefresh(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { jid } = req.cookies;
   if (!jid) {
     return res.status(400).send({ ok: false, accessToken: "" });
