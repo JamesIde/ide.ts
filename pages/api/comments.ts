@@ -35,110 +35,114 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
  */
 export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   const user = await validateToken(req, res);
-  const contentfulId = req.query.contentfulId as string;
-  if (!contentfulId) {
-    return res.status(400).send("No contentfulId provided");
-  }
 
-  if (!user) {
-    return res
-      .status(400)
-      .send("Error occured validating your identity. Please try again later");
-  }
+  if (user) {
+    const contentfulId = req.query.contentfulId as string;
+    if (!contentfulId) {
+      return res.status(400).send("No contentfulId provided");
+    }
 
-  // Check how many comments the user has made for this record, but don't include the ADMIN user
-  const commentCount = await prisma.comment.count({
-    where: {
-      AND: [
-        {
-          record: {
-            id: contentfulId,
-          },
-        },
-        {
-          user: {
-            id: user,
-          },
-        },
-        {
-          user: {
-            id: {
-              not: process.env.ADMIN_ID,
+    // Check how many comments the user has made for this record, but don't include the ADMIN user
+    const commentCount = await prisma.comment.count({
+      where: {
+        AND: [
+          {
+            record: {
+              id: contentfulId,
             },
           },
-        },
-      ],
-    },
-  });
-
-  // If the user has reached the maximum comments per record, return an error
-
-  if (commentCount >= 10) {
-    return res
-      .status(400)
-      .send("You have reached the maximum comments per record");
-  }
-
-  const { message, emailNotify } = req.body;
-
-  if (!message) {
-    return res.status(400).send("No message provided");
-  }
-
-  // Returns true if the message contains profanity
-  if (wash.check("en", message)) {
-    return res
-      .status(400)
-      .send("Your comment contains profanity. Please remove it and try again.");
-  }
-
-  const cleanedMessage = emojiStrip(message);
-
-  try {
-    const comment = await prisma.comment.create({
-      data: {
-        message: cleanedMessage,
-        emailNotify: emailNotify,
-        record: {
-          connect: {
-            id: contentfulId,
+          {
+            user: {
+              id: user,
+            },
           },
-        },
-        user: {
-          connect: {
-            id: user,
+          {
+            user: {
+              id: {
+                not: process.env.ADMIN_ID,
+              },
+            },
           },
-        },
-      },
-      include: {
-        user: true,
-        record: true,
+        ],
       },
     });
 
-    const notifyAdminPayload: EmailAdminPayload = {
-      recordTitle: comment.record?.title,
-      recordId: comment.record?.id,
-      commentId: comment.id,
-      commentMessage: cleanedMessage,
-      commentUser: comment.user?.name,
-      commentUserId: comment.user?.id,
-      commentUserEmail: comment.user?.email,
-      commentUserDate: new Date(comment.createdAt).toLocaleDateString("en-AU", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
+    // If the user has reached the maximum comments per record, return an error
 
-    await sendNewCommentEmailToAdmin(notifyAdminPayload);
-    return res.status(200).json({ ok: true });
-  } catch (error) {
-    return res
-      .status(400)
-      .send("An error occured processing your comment. Please try again later");
+    if (commentCount >= 10) {
+      return res
+        .status(400)
+        .send("You have reached the maximum comments per record");
+    }
+
+    const { message, emailNotify } = req.body;
+
+    if (!message) {
+      return res.status(400).send("No message provided");
+    }
+
+    // Returns true if the message contains profanity
+    if (wash.check("en", message)) {
+      return res
+        .status(400)
+        .send(
+          "Your comment contains profanity. Please remove it and try again."
+        );
+    }
+
+    const cleanedMessage = emojiStrip(message);
+
+    try {
+      const comment = await prisma.comment.create({
+        data: {
+          message: cleanedMessage,
+          emailNotify: emailNotify,
+          record: {
+            connect: {
+              id: contentfulId,
+            },
+          },
+          user: {
+            connect: {
+              id: user,
+            },
+          },
+        },
+        include: {
+          user: true,
+          record: true,
+        },
+      });
+
+      const notifyAdminPayload: EmailAdminPayload = {
+        recordTitle: comment.record?.title,
+        recordId: comment.record?.id,
+        commentId: comment.id,
+        commentMessage: cleanedMessage,
+        commentUser: comment.user?.name,
+        commentUserId: comment.user?.id,
+        commentUserEmail: comment.user?.email,
+        commentUserDate: new Date(comment.createdAt).toLocaleDateString(
+          "en-AU",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }
+        ),
+      };
+
+      await sendNewCommentEmailToAdmin(notifyAdminPayload);
+      return res.status(200).json({ ok: true });
+    } catch (error) {
+      return res
+        .status(400)
+        .send(
+          "An error occured processing your comment. Please try again later"
+        );
+    }
   }
 }
 /**
@@ -149,95 +153,94 @@ export async function replyToComment(
   res: NextApiResponse
 ) {
   const user = await validateToken(req, res);
-  const contentfulId = req.query.contentfulId as string;
-  const commentId = req.query.commentId as string;
 
-  if (!contentfulId) {
-    res.status(400).send("No contentfulId provided");
-  }
+  if (user) {
+    const contentfulId = req.query.contentfulId as string;
+    const commentId = req.query.commentId as string;
 
-  if (!user) {
-    return res
-      .status(400)
-      .send("Error occured validating your identity. Please try again later");
-  }
+    if (!contentfulId) {
+      res.status(400).send("No contentfulId provided");
+    }
 
-  if (!commentId) {
-    res.status(400).send("No commentId provided");
-  }
+    if (!commentId) {
+      res.status(400).send("No commentId provided");
+    }
 
-  const { message } = req.body;
+    const { message } = req.body;
 
-  if (!message) {
-    res.status(400).send("No message provided");
-  }
+    if (!message) {
+      res.status(400).send("No message provided");
+    }
 
-  // Find the comment to check if it exists and has email notifications enabled
-  const commentToReplyTo = await prisma.comment.findUnique({
-    where: {
-      id: commentId,
-    },
-    include: {
-      user: true,
-      record: true,
-    },
-  });
-
-  if (!commentToReplyTo) {
-    res.status(400).send("Comment not found");
-  }
-
-  try {
-    const comment = await prisma.comment.create({
-      data: {
-        message: message,
-        user: {
-          connect: {
-            id: user,
-          },
-        },
-        record: {
-          connect: {
-            id: contentfulId,
-          },
-        },
-        parent: {
-          connect: {
-            id: commentId,
-          },
-        },
+    // Find the comment to check if it exists and has email notifications enabled
+    const commentToReplyTo = await prisma.comment.findUnique({
+      where: {
+        id: commentId,
       },
       include: {
         user: true,
+        record: true,
       },
     });
 
-    if (commentToReplyTo.emailNotify) {
-      const replyToCommentPayload: ReplyCommentPayload = {
-        recordTitle: commentToReplyTo.record?.title,
-        recordSlug: commentToReplyTo.record?.slug,
-        rootCommentUser: commentToReplyTo.user?.name,
-        replyCommentUser: comment.user?.name,
-        replyCommentMessage: comment.message,
-        replyCommentDate: new Date(comment.createdAt)
-          .toLocaleDateString("en-AU", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-          })
-          .toString(),
-      };
-
-      await sendCommentReplyEmail(replyToCommentPayload);
+    if (!commentToReplyTo) {
+      res.status(400).send("Comment not found");
     }
 
-    res.status(200).json(comment);
-  } catch (error) {
-    error;
-    res
-      .status(400)
-      .send("An error occured processing your comment. Please try again later");
+    try {
+      const comment = await prisma.comment.create({
+        data: {
+          message: message,
+          user: {
+            connect: {
+              id: user,
+            },
+          },
+          record: {
+            connect: {
+              id: contentfulId,
+            },
+          },
+          parent: {
+            connect: {
+              id: commentId,
+            },
+          },
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      if (commentToReplyTo.emailNotify) {
+        const replyToCommentPayload: ReplyCommentPayload = {
+          recordTitle: commentToReplyTo.record?.title,
+          recordSlug: commentToReplyTo.record?.slug,
+          rootCommentUser: commentToReplyTo.user?.name,
+          replyCommentUser: comment.user?.name,
+          replyCommentMessage: comment.message,
+          replyCommentDate: new Date(comment.createdAt)
+            .toLocaleDateString("en-AU", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+            })
+            .toString(),
+        };
+
+        await sendCommentReplyEmail(replyToCommentPayload);
+      }
+
+      res.status(200).json(comment);
+    } catch (error) {
+      error;
+      res
+        .status(400)
+        .send(
+          "An error occured processing your comment. Please try again later"
+        );
+    }
   }
 }
 
@@ -247,60 +250,58 @@ export async function replyToComment(
 export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
   const user = await validateToken(req, res);
 
-  const commentId = req.query.commentId as string;
+  if (user) {
+    const commentId = req.query.commentId as string;
 
-  if (!user) {
-    return res
-      .status(400)
-      .send("Error occured validating your identity. Please try again later");
-  }
+    if (!commentId) {
+      res.status(400).send("No commentId provided");
+    }
 
-  if (!commentId) {
-    res.status(400).send("No commentId provided");
-  }
+    const { message } = req.body;
 
-  const { message } = req.body;
+    if (!message) {
+      res.status(400).send("No message provided");
+    }
 
-  if (!message) {
-    res.status(400).send("No message provided");
-  }
-
-  // Check if the user created the comment first
-  const comment = await prisma.comment.findUnique({
-    where: {
-      id: commentId,
-    },
-    select: {
-      user: {
-        select: {
-          id: true,
-        },
-      },
-    },
-  });
-
-  if (!comment) {
-    res.status(400).send("No comment found");
-  }
-
-  if (comment.user.id !== user) {
-    res.status(400).send("You are not the owner of this comment");
-  }
-
-  try {
-    await prisma.comment.update({
+    // Check if the user created the comment first
+    const comment = await prisma.comment.findUnique({
       where: {
         id: commentId,
       },
-      data: {
-        message: message,
+      select: {
+        user: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
-    res.status(200).json({ ok: true });
-  } catch (error) {
-    res
-      .status(400)
-      .send("An error occured processing your comment. Please try again later");
+
+    if (!comment) {
+      res.status(400).send("No comment found");
+    }
+
+    if (comment.user.id !== user) {
+      res.status(400).send("You are not the owner of this comment");
+    }
+
+    try {
+      await prisma.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          message: message,
+        },
+      });
+      res.status(200).json({ ok: true });
+    } catch (error) {
+      res
+        .status(400)
+        .send(
+          "An error occured processing your comment. Please try again later"
+        );
+    }
   }
 }
 
@@ -310,60 +311,60 @@ export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
 export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
   const user = await validateToken(req, res);
 
-  const commentId = req.query.commentId as string;
+  console.log;
 
-  if (!user) {
-    return res
-      .status(400)
-      .send("Error occured validating your identity. Please try again later");
-  }
+  if (user) {
+    const commentId = req.query.commentId as string;
 
-  if (!commentId) {
-    res.status(400).send("No commentId provided");
-  }
+    if (!commentId) {
+      return res.status(400).send("No commentId provided");
+    }
 
-  // Check if the user created the comment first
-  const comment = await prisma.comment.findUnique({
-    where: {
-      id: commentId,
-    },
-    include: {
-      user: true,
-      record: true,
-    },
-  });
-
-  if (!comment) {
-    res.status(400).send("No comment found");
-  }
-
-  if (comment.user.id !== user) {
-    res.status(400).send("You are not the owner of this comment");
-  }
-
-  const deleteEmailPayload: EmailAdminPayload = {
-    recordTitle: comment.record?.title,
-    recordId: comment.record?.id,
-    commentId: comment.id,
-    commentMessage: comment.message,
-    commentUser: comment.user?.name,
-    commentUserId: comment.user?.id,
-    commentUserEmail: comment.user?.email,
-    commentUserDate: new Date(Date.now()).toString(),
-  };
-
-  await sendDeleteEmailToAdmin(deleteEmailPayload);
-  try {
-    await prisma.comment.delete({
+    // Check if the user created the comment first
+    const comment = await prisma.comment.findUnique({
       where: {
         id: commentId,
       },
+      include: {
+        user: true,
+        record: true,
+      },
     });
-    res.status(200).json({ ok: true });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(400)
-      .send("An error occured processing your comment. Please try again later");
+
+    if (!comment) {
+      return res.status(400).send("No comment found");
+    }
+
+    if (comment.user.id !== user) {
+      return res.status(400).send("You are not the owner of this comment");
+    }
+
+    const deleteEmailPayload: EmailAdminPayload = {
+      recordTitle: comment.record?.title,
+      recordId: comment.record?.id,
+      commentId: comment.id,
+      commentMessage: comment.message,
+      commentUser: comment.user?.name,
+      commentUserId: comment.user?.id,
+      commentUserEmail: comment.user?.email,
+      commentUserDate: new Date(Date.now()).toString(),
+    };
+
+    await sendDeleteEmailToAdmin(deleteEmailPayload);
+    try {
+      await prisma.comment.delete({
+        where: {
+          id: commentId,
+        },
+      });
+      return res.status(200).json({ ok: true });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(400)
+        .send(
+          "An error occured processing your comment. Please try again later"
+        );
+    }
   }
 }
