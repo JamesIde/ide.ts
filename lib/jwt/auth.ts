@@ -16,7 +16,7 @@ export function generateAccessToken(profile: IdpUser) {
   };
 
   return jwt.sign(ATPayload, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET, {
-    expiresIn: "10s",
+    expiresIn: "15min",
   });
 }
 
@@ -32,7 +32,7 @@ export function generateRefreshToken(profile: IdpUser) {
   };
 
   return jwt.sign(RTPayload, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "30d",
   });
 }
 
