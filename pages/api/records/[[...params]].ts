@@ -1,5 +1,5 @@
 import { createHandler, Get, Param, Req, Res } from "next-api-decorators";
-import { retrieveRecordComments } from "../../services/records";
+import { retrieveRecordComments } from "./records.service";
 
 class RecordHandler {
   @Get("/")

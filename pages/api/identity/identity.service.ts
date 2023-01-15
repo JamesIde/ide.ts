@@ -1,11 +1,14 @@
-import { IdpUser, OAuthToken } from "../../@types/Profile";
+import { IdpUser, OAuthToken } from "../../../@types/Profile";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt_decode from "jwt-decode";
-import prisma from "../../config/prisma";
+import prisma from "../../../config/prisma";
 import * as jwt from "jsonwebtoken";
-import { ProfileTransformer } from "../../lib/transformer/profileTransformer";
-import { generateAccessToken, generateRefreshToken } from "../../lib/jwt/auth";
-import { sendNewUserEmailToAdmin } from "../../lib/nodemailer/email";
+import { ProfileTransformer } from "../../../lib/transformer/profileTransformer";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../../lib/jwt/auth";
+import { sendNewUserEmailToAdmin } from "../../../lib/nodemailer/email";
 import {
   BadRequestException,
   InternalServerErrorException,

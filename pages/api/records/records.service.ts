@@ -1,6 +1,6 @@
 import { BadRequestException } from "next-api-decorators";
-import prisma from "../../config/prisma";
-import createNestedStructure from "../../lib/transformer/nestedComment";
+import prisma from "../../../config/prisma";
+import createNestedStructure from "../../../lib/transformer/nestedComment";
 
 /**
  * Public method to retrieve a single record and all its comments

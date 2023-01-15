@@ -9,10 +9,7 @@ import {
   Body,
 } from "next-api-decorators";
 import { GoogleOAuthResponse } from "./auth.dto";
-import {
-  handleIdentityToken,
-  handleTokenRefresh,
-} from "../../services/identity";
+import { handleIdentityToken, handleTokenRefresh } from "./identity.service";
 
 export class IdentityHandler {
   @Post("/")
