@@ -16,7 +16,7 @@ export function generateAccessToken(profile: IdpUser) {
   };
 
   return jwt.sign(ATPayload, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET, {
-    expiresIn: "15min",
+    expiresIn: "10s",
   });
 }
 
