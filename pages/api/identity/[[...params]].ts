@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse, NextApiRequest } from "next";
 import {
   createHandler,
   Get,

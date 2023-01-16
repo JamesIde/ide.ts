@@ -1,3 +1,4 @@
+import type { NextApiResponse, NextApiRequest } from "next";
 import { createHandler, Get, Param, Req, Res } from "next-api-decorators";
 import { retrieveRecordComments } from "./records.service";
 
