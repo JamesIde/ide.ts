@@ -1,45 +1,35 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { EmailAdminPayload } from "../../@types/Email";
-import prisma from "../../config/prisma";
+import { EmailAdminPayload } from "../../../@types/Email";
+import prisma from "../../../config/prisma";
 import wash from "washyourmouthoutwithsoap";
 import emojiStrip from "emoji-strip";
 import {
   sendNewCommentEmailToAdmin,
   sendDeleteEmailToAdmin,
   sendCommentReplyEmail,
-} from "../../lib/nodemailer/email";
-import { ReplyCommentPayload } from "../../@types/Comment";
-import { validateToken } from "../../lib/jwt/auth";
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST" && req.query.contentfulId) {
-    createComment(req, res);
-  } else if (
-    req.method === "PUT" &&
-    req.query.contentfulId &&
-    req.query.commentId
-  ) {
-    replyToComment(req, res);
-  } else if (req.method === "PATCH" && req.query.commentId) {
-    updateComment(req, res);
-  } else if (req.method === "DELETE" && req.query.commentId) {
-    deleteComment(req, res);
-  } else {
-    res.status(405).send("Method not allowed");
-  }
-}
-
-// Nodemailer config
-
+} from "../../../lib/nodemailer/email";
+import { ReplyCommentPayload } from "../../../@types/Comment";
+import { validateToken } from "../../../lib/jwt/auth";
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  ForbiddenException,
+} from "next-api-decorators";
+import { NewComment } from "./comment.dto";
 /**
  * A public function to create a comment for a record.
  */
-export async function createComment(req: NextApiRequest, res: NextApiResponse) {
+export async function createComment(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  newComment: NewComment,
+  contentfulId: string
+) {
   const user = await validateToken(req, res);
 
   if (user) {
-    const contentfulId = req.query.contentfulId as string;
     if (!contentfulId) {
-      return res.status(400).send("No contentfulId provided");
+      throw new BadRequestException("No contentfulId provided");
     }
 
     // Check how many comments the user has made for this record, but don't include the ADMIN user
@@ -70,33 +60,29 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
     // If the user has reached the maximum comments per record, return an error
 
     if (commentCount >= 10) {
-      return res
-        .status(400)
-        .send("You have reached the maximum comments per record");
+      throw new BadRequestException(
+        "You have reached the maximum comments per record"
+      );
     }
 
-    const { message, emailNotify } = req.body;
-
-    if (!message) {
-      return res.status(400).send("No message provided");
+    if (!newComment.message) {
+      throw new BadRequestException("No message provided");
     }
 
     // Returns true if the message contains profanity
-    if (wash.check("en", message)) {
-      return res
-        .status(400)
-        .send(
-          "Your comment contains profanity. Please remove it and try again."
-        );
+    if (wash.check("en", newComment.message)) {
+      throw new BadRequestException(
+        "Your comment contains profanity. Please remove it and try again."
+      );
     }
 
-    const cleanedMessage = emojiStrip(message);
+    const cleanedMessage = emojiStrip(newComment.message);
 
     try {
       const comment = await prisma.comment.create({
         data: {
           message: cleanedMessage,
-          emailNotify: emailNotify,
+          emailNotify: newComment.emailNotify,
           record: {
             connect: {
               id: contentfulId,
@@ -135,13 +121,11 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
       };
 
       await sendNewCommentEmailToAdmin(notifyAdminPayload);
-      return res.status(200).json({ ok: true });
+      return { ok: true };
     } catch (error) {
-      return res
-        .status(400)
-        .send(
-          "An error occured processing your comment. Please try again later"
-        );
+      throw new BadRequestException(
+        "An error occured processing your comment. Please try again later"
+      );
     }
   }
 }
@@ -150,26 +134,26 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
  */
 export async function replyToComment(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
+  contentfulId: string,
+  commentId: string,
+  replyCommentPayload: NewComment
 ) {
   const user = await validateToken(req, res);
 
   if (user) {
-    const contentfulId = req.query.contentfulId as string;
-    const commentId = req.query.commentId as string;
-
     if (!contentfulId) {
-      res.status(400).send("No contentfulId provided");
+      throw new BadRequestException("No contentfulId provided");
     }
 
     if (!commentId) {
-      res.status(400).send("No commentId provided");
+      throw new BadRequestException("No commentId provided");
     }
 
-    const { message } = req.body;
+    const message = replyCommentPayload.message;
 
     if (!message) {
-      res.status(400).send("No message provided");
+      throw new BadRequestException("No message provided");
     }
 
     // Find the comment to check if it exists and has email notifications enabled
@@ -184,7 +168,7 @@ export async function replyToComment(
     });
 
     if (!commentToReplyTo) {
-      res.status(400).send("Comment not found");
+      throw new BadRequestException("Comment not found");
     }
 
     try {
@@ -232,14 +216,12 @@ export async function replyToComment(
         await sendCommentReplyEmail(replyToCommentPayload);
       }
 
-      res.status(200).json(comment);
+      return comment;
     } catch (error) {
       error;
-      res
-        .status(400)
-        .send(
-          "An error occured processing your comment. Please try again later"
-        );
+      throw new BadRequestException(
+        "An error occured processing your comment. Please try again later"
+      );
     }
   }
 }
@@ -247,20 +229,23 @@ export async function replyToComment(
 /**
  * A public function to update a comment
  */
-export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
+export async function updateComment(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  commentId: string,
+  updateCommentPayload: NewComment
+) {
   const user = await validateToken(req, res);
 
   if (user) {
-    const commentId = req.query.commentId as string;
-
     if (!commentId) {
-      res.status(400).send("No commentId provided");
+      throw new BadRequestException("No commentId provided");
     }
 
-    const { message } = req.body;
+    const message = updateCommentPayload.message;
 
     if (!message) {
-      res.status(400).send("No message provided");
+      throw new BadRequestException("No message provided");
     }
 
     // Check if the user created the comment first
@@ -278,11 +263,11 @@ export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!comment) {
-      res.status(400).send("No comment found");
+      throw new BadRequestException("No comment found");
     }
 
     if (comment.user.id !== user) {
-      res.status(400).send("You are not the owner of this comment");
+      throw new ForbiddenException("You are not the owner of this comment");
     }
 
     try {
@@ -294,13 +279,12 @@ export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
           message: message,
         },
       });
-      res.status(200).json({ ok: true });
+
+      return { ok: true };
     } catch (error) {
-      res
-        .status(400)
-        .send(
-          "An error occured processing your comment. Please try again later"
-        );
+      throw new InternalServerErrorException(
+        "An error occured processing your comment. Please try again later"
+      );
     }
   }
 }
@@ -308,16 +292,18 @@ export async function updateComment(req: NextApiRequest, res: NextApiResponse) {
 /**
  * A public function to delete a comment
  */
-export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
+export async function deleteComment(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  commentId: string
+) {
   const user = await validateToken(req, res);
 
   console.log;
 
   if (user) {
-    const commentId = req.query.commentId as string;
-
     if (!commentId) {
-      return res.status(400).send("No commentId provided");
+      throw new BadRequestException("No commentId provided");
     }
 
     // Check if the user created the comment first
@@ -332,11 +318,11 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!comment) {
-      return res.status(400).send("No comment found");
+      throw new BadRequestException("No comment found");
     }
 
     if (comment.user.id !== user) {
-      return res.status(400).send("You are not the owner of this comment");
+      throw new ForbiddenException("You are not the owner of this comment");
     }
 
     const deleteEmailPayload: EmailAdminPayload = {
@@ -357,14 +343,12 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
           id: commentId,
         },
       });
-      return res.status(200).json({ ok: true });
+      return { ok: true };
     } catch (error) {
       console.log(error);
-      res
-        .status(400)
-        .send(
-          "An error occured processing your comment. Please try again later"
-        );
+      throw new InternalServerErrorException(
+        "An error occured deleting comment"
+      );
     }
   }
 }
