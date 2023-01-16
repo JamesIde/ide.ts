@@ -3,7 +3,7 @@ import { createHandler, Get, Param, Req, Res } from "next-api-decorators";
 import { retrieveRecordComments } from "./records.service";
 
 class RecordHandler {
-  @Get("/")
+  @Get("/:contentfulId")
   public retrieveAllRecordComments(
     @Param("contentfulId") contentfulId: string
   ) {

@@ -16,7 +16,7 @@ export async function handleGoogleLogin(credential: CredentialResponse) {
 
 export async function retrieveAllRecordComments(contentfulId: string) {
   const res = await baseClient.get<CommentRetrievalSuccess>(
-    `/api/records?contentfulId=${contentfulId}`
+    `/api/records/${contentfulId}`
   );
 
   return res.data;
