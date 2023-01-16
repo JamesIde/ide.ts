@@ -132,13 +132,13 @@ export async function handleTokenRefresh(
 ) {
   const { jid } = req.cookies;
   if (!jid) {
-    return res.status(400).send({ ok: false, accessToken: "" });
+    throw new BadRequestException("An error occured. Please login again.");
   }
   let payload: any = null;
   try {
     payload = jwt.verify(jid, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET);
   } catch (err) {
-    return res.status(200).send({ ok: false, accessToken: "" });
+    throw new BadRequestException("An error occured. Please login again.");
   }
 
   const user = await prisma.user.findUnique({
@@ -147,11 +147,13 @@ export async function handleTokenRefresh(
     },
   });
   if (!user) {
-    return res.send({ ok: false, accessToken: "" });
+    throw new BadRequestException(
+      "An error occured. No user found with presented identity"
+    );
   }
   // Prevent session manipulation
   if (user.tokenVersion !== payload.tokenVersion)
-    return res.send({ ok: false, accessToken: "" });
+    throw new BadRequestException("An error occured. Validating your identity");
   const tokens = await generateTokens(user);
-  return res.status(200).json({ ok: true, token: tokens.accessToken });
+  return { ok: true, token: tokens.accessToken };
 }

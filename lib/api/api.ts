@@ -16,7 +16,7 @@ export async function handleGoogleLogin(credential: CredentialResponse) {
 
 export async function retrieveAllRecordComments(contentfulId: string) {
   const res = await baseClient.get<CommentRetrievalSuccess>(
-    `/api/records/${contentfulId}`
+    `/api/records?contentfulId=${contentfulId}`
   );
 
   return res.data;
@@ -36,7 +36,7 @@ export async function replyToComment(
   comment: NewComment
 ): Promise<CommentSuccess> {
   const res = await baseClient.put(
-    `/api/comments?contentfulId=${comment.contentfulId}&commentId=${comment.commentId}`,
+    `/api/comments/${comment.contentfulId}/${comment.commentId}`,
     {
       message: comment.message,
     }
@@ -47,18 +47,15 @@ export async function replyToComment(
 export async function updateComment(
   comment: NewComment
 ): Promise<CommentSuccess> {
-  const res = await baseClient.patch(
-    `/api/comments?commentId=${comment.commentId}`,
-    {
-      message: comment.message,
-    }
-  );
+  const res = await baseClient.patch(`/api/comments/${comment.commentId}`, {
+    message: comment.message,
+  });
   return res.data;
 }
 
 export async function deleteCommentFromRecord(
   commentId: string
 ): Promise<CommentSuccess> {
-  const res = await baseClient.delete(`/api/comments?commentId=${commentId}`);
+  const res = await baseClient.delete(`/api/comments/${commentId}`);
   return res.data;
 }
