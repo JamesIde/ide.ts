@@ -15,6 +15,7 @@ import IconLoader from "../Misc/IconLoader";
 import UpdateCommentForm from "./UpdateCommentForm";
 import HandleCommentDate from "./HandleCommentDate";
 import Image from "next/image";
+import { getCookie, hasCookie } from "cookies-next";
 
 function Comment({
   comment,
@@ -31,8 +32,14 @@ function Comment({
   const [toggleUpdate, setToggleUpdate] = useState(false);
   const user = useStore((state) => state.user);
   const queryClient = useQueryClient();
-
   useEffect(() => {
+    const cookie = hasCookie("jid", {
+      domain:
+        process.env.NODE_ENV === "production"
+          ? "www.jamesaide.com"
+          : "localhost",
+    });
+    console.log("cookie status", cookie);
     if (!isActionCompleted) {
       setToggleReply(false);
       setToggleUpdate(false);
