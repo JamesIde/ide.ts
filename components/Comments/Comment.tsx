@@ -16,7 +16,6 @@ import IconLoader from "../Misc/IconLoader";
 import UpdateCommentForm from "./UpdateCommentForm";
 import HandleCommentDate from "./HandleCommentDate";
 import Image from "next/image";
-import { checkCookie } from "../../lib/jwt/cookie";
 
 function Comment({
   comment,
