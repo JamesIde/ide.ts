@@ -9,13 +9,14 @@ import { deleteCommentFromRecord } from "../../lib/api/api";
 import { useEffect, useState } from "react";
 import { notify } from "../../lib/toastr/Notify";
 import { commentStore } from "../../lib/store/commentStore";
+import { hasCookie } from "cookies-next";
 import axios, { AxiosError } from "axios";
 import ReplyCommentForm from "./ReplyCommentForm";
 import IconLoader from "../Misc/IconLoader";
 import UpdateCommentForm from "./UpdateCommentForm";
 import HandleCommentDate from "./HandleCommentDate";
 import Image from "next/image";
-import { getCookie, hasCookie } from "cookies-next";
+import { checkCookie } from "../../lib/jwt/cookie";
 
 function Comment({
   comment,
@@ -30,16 +31,21 @@ function Comment({
   ]);
   const [toggleReply, setToggleReply] = useState(false);
   const [toggleUpdate, setToggleUpdate] = useState(false);
-  const user = useStore((state) => state.user);
+  const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+
   const queryClient = useQueryClient();
   useEffect(() => {
     const cookie = hasCookie("jid", {
       domain:
         process.env.NODE_ENV === "production"
-          ? "www.jamesaide.com"
-          : "localhost",
+          ? process.env.NEXT_PUBLIC_PROD_COOKIE_DOMAIN
+          : process.env.NEXT_PUBLIC_DEV_COOKIE_DOMAIN,
     });
-    console.log("cookie status", cookie);
+
+    if (!cookie) {
+      setUser(null);
+      localStorage.removeItem("user");
+    }
     if (!isActionCompleted) {
       setToggleReply(false);
       setToggleUpdate(false);

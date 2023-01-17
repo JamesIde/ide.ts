@@ -44,7 +44,7 @@ export async function handleIdentityToken(
       "set-cookie",
       "jid=" +
         tokens.refreshToken +
-        "; path=/; HttpOnly" +
+        "; path=/;" +
         "; SameSite=none" +
         "; Secure" +
         `; Max-Age=${60 * 60 * 24 * 7}`
