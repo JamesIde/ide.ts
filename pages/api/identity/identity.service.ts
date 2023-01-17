@@ -39,9 +39,15 @@ export async function handleIdentityToken(
         "Something went estabishing a connection to the server. Please try again later."
       );
     }
+
     res.setHeader(
       "set-cookie",
-      "jid=" + tokens.refreshToken + "; path=/; HttpOnly"
+      "jid=" +
+        tokens.refreshToken +
+        "; path=/; HttpOnly" +
+        "; SameSite=none" +
+        "; Secure" +
+        `; Max-Age=${60 * 60 * 24 * 7}`
     );
     const transformedUser = ProfileTransformer.transformProfile(
       user,
