@@ -19,6 +19,7 @@ The biggest change is the integration of a nested client-side rendered comments 
 
 - [Contentful interface generator](https://github.com/intercom/contentful-typescript-codegen) to generate typings for the environment
 - [next-api-decorators](https://next-api-decorators.vercel.app/) for decorated and typed API routes
+- [tsyringe](https://github.com/microsoft/tsyringe) for lightweight dependency injection container for services
 
 ## original resources and inspiration
 
