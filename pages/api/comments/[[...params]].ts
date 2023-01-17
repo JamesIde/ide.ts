@@ -1,64 +1,77 @@
 import type { NextApiResponse, NextApiRequest } from "next";
-
 import {
-  createHandler,
-  Get,
   Post,
-  Param,
   Req,
   Res,
+  Param,
   Body,
   Put,
   Patch,
   Delete,
+  createHandler,
 } from "next-api-decorators";
-import {
-  createComment,
-  deleteComment,
-  replyToComment,
-  updateComment,
-} from "./comments.service";
+import { autoInjectable } from "tsyringe";
 import { NewComment } from "./comment.dto";
+import { CommentService } from "./comments.service";
 
+@autoInjectable()
 export class CommentHandler {
+  constructor(private commentService: CommentService) {}
+
   @Post("/:contentfulId")
-  public createComment(
+  public async createComment(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse,
     @Param("contentfulId") contentfulId: string,
     @Body() newComment: NewComment
   ) {
-    return createComment(req, res, newComment, contentfulId);
+    return await this.commentService.createComment(
+      req,
+      res,
+      newComment,
+      contentfulId
+    );
   }
 
   @Put("/:contentfulId/:commentId")
-  public replyToComment(
+  public async replyToComment(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse,
     @Param("contentfulId") contentfulId: string,
     @Param("commentId") commentId: string,
     @Body() newComment: NewComment
   ) {
-    return replyToComment(req, res, contentfulId, commentId, newComment);
+    return await this.commentService.replyToComment(
+      req,
+      res,
+      contentfulId,
+      commentId,
+      newComment
+    );
   }
 
   @Patch("/:commentId")
-  public updateComment(
+  public async updateComment(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse,
     @Param("commentId") commentId: string,
     @Body() updateCommentPayload: NewComment
   ) {
-    return updateComment(req, res, commentId, updateCommentPayload);
+    return await this.commentService.updateComment(
+      req,
+      res,
+      commentId,
+      updateCommentPayload
+    );
   }
 
   @Delete("/:commentId")
-  public deleteComment(
+  public async deleteComment(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse,
     @Param("commentId") commentId: string
   ) {
-    return deleteComment(req, res, commentId);
+    return await this.commentService.deleteComment(req, res, commentId);
   }
 }
 
