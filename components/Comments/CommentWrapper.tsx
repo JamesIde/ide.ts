@@ -52,7 +52,7 @@ function CommentWrapper({
 
   return (
     <div className="xl:w-[40%] md:w-4/5 w-full mx-auto p-2 mb-5">
-      <div>
+      <div className="pb-4">
         <h5 className="font-playfair text-xl">Leave a comment</h5>
         <p className="mt-1 text-sm text-gray-500 italic">
           {!user ? (

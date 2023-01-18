@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { addCommentToRecord } from "../../lib/api/api";
 import { notify, validateComment } from "../../lib/toastr/Notify";
 import AddCommentLoader from "../Misc/AddCommentLoader";
-
+import RichTextEditor from "../RichText/RichTextEditor";
 function CommentForm({ contentfulId }: { contentfulId: string }) {
   const queryClient = useQueryClient();
   const [fields, setFields] = useState({
@@ -48,7 +48,8 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
   }
   return (
     <>
-      <div className="flex flex-row justify-center">
+      <RichTextEditor />
+      {/* <div className="flex flex-row justify-center">
         <div className="mt-2 rounded-full w-full">
           <textarea
             id=""
@@ -87,7 +88,7 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
           />
           <p className="pl-1 mt-[1px]">Notify me of replies</p>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

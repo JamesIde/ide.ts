@@ -8,6 +8,7 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap"
         />
+        <meta charSet="utf-8" />
       </Head>
       <body>
         <Main />
