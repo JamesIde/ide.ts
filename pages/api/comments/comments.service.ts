@@ -201,7 +201,7 @@ export async function replyToComment(
           recordTitle: commentToReplyTo.record?.title,
           recordSlug: commentToReplyTo.record?.slug,
           rootCommentUser: commentToReplyTo.user?.name,
-          replyCommentUser: comment.user?.name,
+          replyCommentUser: comment.user?.email,
           replyCommentMessage: comment.message,
           replyCommentDate: new Date(comment.createdAt)
             .toLocaleDateString("en-AU", {

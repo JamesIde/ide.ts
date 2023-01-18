@@ -38,7 +38,7 @@ export async function sendNewUserEmailToAdmin(user: IdpUser) {
 export async function sendCommentReplyEmail(payload: ReplyCommentPayload) {
   await emailSender().sendMail({
     from: process.env.SMPT_USERNAME,
-    to: process.env.ADMIN_EMAIL,
+    to: payload.replyCommentUser,
     subject: `Reply to your comment on ${payload.recordTitle}`,
     html: `<p>Reply to your comment on ${payload.recordTitle}. See below <br/>
     ${payload.replyCommentUser} replied: <strong>${
