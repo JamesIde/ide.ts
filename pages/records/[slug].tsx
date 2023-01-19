@@ -41,6 +41,12 @@ export default function Record({ record }: { record: IThumbnail }) {
   return (
     <>
       <Layout>
+        <div id="comments">
+          <CommentWrapper
+            contentfulId={record.sys.id}
+            recordTitle={record.fields.title}
+          />
+        </div>
         <Helmet title={record.fields.title!} />
         <div id="global-wrapper" onClick={closeModal}>
           <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3 p-2">
@@ -458,12 +464,6 @@ export default function Record({ record }: { record: IThumbnail }) {
             </div>
           </div>
           {modal && <Modal currImage={currImage} id={record.sys.id} />}
-        </div>
-        <div id="comments">
-          <CommentWrapper
-            contentfulId={record.sys.id}
-            recordTitle={record.fields.title}
-          />
         </div>
       </Layout>
     </>
