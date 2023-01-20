@@ -1,27 +1,22 @@
 import { CommentType } from "../../@types/Comment";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { replyToComment } from "../../lib/api/api";
 import { notify, validateComment } from "../../lib/toastr/Notify";
-import { commentStore } from "../../lib/store/commentStore";
 import axios, { AxiosError } from "axios";
-import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from "draftail";
-import { convertToHTML } from "draft-convert";
-import { EditorState } from "draft-js";
 import AddCommentLoader from "../Misc/AddCommentLoader";
-
+import { commentStore } from "../../lib/store/commentStore";
 function ReplyCommentForm({ comment }: { comment: CommentType }) {
-  const queryClient = useQueryClient();
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [isActionCompleted, setIsActionCompleted] = commentStore((state) => [
     state.isActionCompleted,
     state.setIsActionCompleted,
   ]);
-
+  const ref = useRef(null);
+  const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation({
     mutationFn: replyToComment,
     onSuccess: () => {
-      setEditorState(EditorState.createEmpty());
+      ref.current.value = "";
       queryClient.refetchQueries(["comments"]);
       notify("success", "Reply posted successfully");
       setIsActionCompleted(false);
@@ -36,35 +31,30 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
   });
 
   function handleReply() {
-    const commentReply = convertToHTML(editorState.getCurrentContent());
-    const isValid = validateComment(commentReply);
+    const isValid = validateComment(ref.current.value);
     if (isValid) {
       mutate({
         contentfulId: comment.recordId,
-        message: commentReply,
+        message: ref.current.value,
         commentId: comment.id,
       });
     }
   }
 
-  const replyPlaceholder = `Reply to ${comment.user.name}...`;
   return (
     <div className="ml-2 border-l-2 p-2 mb-2">
-      <DraftailEditor
-        editorState={editorState}
-        onChange={setEditorState}
-        placeholder={replyPlaceholder}
-        blockTypes={[
-          { type: BLOCK_TYPE.HEADER_ONE },
-          { type: BLOCK_TYPE.HEADER_TWO },
-          { type: BLOCK_TYPE.UNORDERED_LIST_ITEM },
-          { type: BLOCK_TYPE.UNSTYLED },
-        ]}
-        inlineStyles={[
-          { type: INLINE_STYLE.BOLD },
-          { type: INLINE_STYLE.ITALIC },
-        ]}
-      />
+      <div className="flex flex-row justify-center">
+        <div className="mt-2 rounded-full w-full">
+          <textarea
+            name=""
+            id=""
+            className="w-full h-24 border-[1px] rounded-md pl-2 p-2"
+            rows={10}
+            placeholder={`Reply to ${comment.user.name}...`}
+            ref={ref}
+          />
+        </div>
+      </div>
       <div className="w-max">
         <button
           type="submit"
