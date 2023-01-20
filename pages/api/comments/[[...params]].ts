@@ -50,21 +50,6 @@ export class CommentHandler {
     );
   }
 
-  @Patch("/:commentId")
-  public async updateComment(
-    @Req() req: NextApiRequest,
-    @Res() res: NextApiResponse,
-    @Param("commentId") commentId: string,
-    @Body() updateCommentPayload: NewComment
-  ) {
-    return await this.commentService.updateComment(
-      req,
-      res,
-      commentId,
-      updateCommentPayload
-    );
-  }
-
   @Delete("/:commentId")
   public async deleteComment(
     @Req() req: NextApiRequest,

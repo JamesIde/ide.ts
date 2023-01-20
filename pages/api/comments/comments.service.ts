@@ -205,7 +205,7 @@ export class CommentService {
             recordTitle: commentToReplyTo.record?.title,
             recordSlug: commentToReplyTo.record?.slug,
             rootCommentUser: commentToReplyTo.user?.name,
-            replyCommentUser: comment.user?.name,
+            replyCommentUser: comment.user?.email,
             replyCommentMessage: comment.message,
             replyCommentDate: new Date(comment.createdAt)
               .toLocaleDateString("en-AU", {
@@ -224,87 +224,6 @@ export class CommentService {
       } catch (error) {
         error;
         throw new BadRequestException(
-          "An error occured processing your comment. Please try again later"
-        );
-      }
-    }
-  }
-
-  /**
-   * A public function to update a comment
-   */
-  public async updateComment(
-    req: NextApiRequest,
-    res: NextApiResponse,
-    commentId: string,
-    updateCommentPayload: NewComment
-  ) {
-    const user = await validateToken(req, res);
-
-    if (user) {
-      if (!commentId) {
-        throw new BadRequestException("No commentId provided");
-      }
-
-      const message = updateCommentPayload.message;
-
-      if (!message) {
-        throw new BadRequestException("No message provided");
-      }
-
-      // Check if the user created the comment first
-      const comment = await prisma.comment.findUnique({
-        where: {
-          id: commentId,
-        },
-        select: {
-          user: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      });
-
-      if (commentToReplyTo.emailNotify) {
-        const replyToCommentPayload: ReplyCommentPayload = {
-          recordTitle: commentToReplyTo.record?.title,
-          recordSlug: commentToReplyTo.record?.slug,
-          rootCommentUser: commentToReplyTo.user?.name,
-          replyCommentUser: comment.user?.email,
-          replyCommentMessage: comment.message,
-          replyCommentDate: new Date(comment.createdAt)
-            .toLocaleDateString("en-AU", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-            })
-            .toString(),
-        };
-
-        await sendCommentReplyEmail(replyToCommentPayload);
-        
-      if (!comment) {
-        throw new BadRequestException("No comment found");
-      }
-      if (comment.user.id !== user) {
-        throw new ForbiddenException("You are not the owner of this comment");
-      }
-
-      try {
-        await prisma.comment.update({
-          where: {
-            id: commentId,
-          },
-          data: {
-            message: message,
-          },
-        });
-
-        return { ok: true };
-      } catch (error) {
-        throw new InternalServerErrorException(
           "An error occured processing your comment. Please try again later"
         );
       }
@@ -339,32 +258,6 @@ export class CommentService {
         },
       });
 
-      return { ok: true };
-    } catch (error) {
-      throw new InternalServerErrorException(
-        "An error occured processing your comment. Please try again later"
-      );
-    }
-  }
-}
-
-/**
- * A public function to delete a comment
- */
-export async function deleteComment(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  commentId: string
-) {
-  const user = await validateToken(req, res);
-
-  console.log("here");
-
-  if (user) {
-    if (!commentId) {
-      throw new BadRequestException("No commentId provided");
-    }
-=======
       if (!comment) {
         throw new BadRequestException("No comment found");
       }
