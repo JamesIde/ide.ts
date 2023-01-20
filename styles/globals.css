@@ -147,13 +147,15 @@ h2 {
 .record-details > .record-stats > ul > li:nth-of-type(1) {
   list-style: none;
   font-family: monospace;
-  font-size: 15px;
   background-image: url("../public/camp.svg");
   background-repeat: no-repeat;
-  background-position: left center;
   background-size: 16px 16px;
+  background-position-y: 5px;
+  /* background-position: left center; */
   padding-left: 1px;
+  /* margin-top: 15px; */
   margin: 6px 0 0px 0px;
+  position: relative;
 }
 
 .record-details > .record-stats > ul > li:nth-of-type(1)::before {
