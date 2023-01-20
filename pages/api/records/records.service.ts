@@ -1,5 +1,6 @@
 import { BadRequestException } from "next-api-decorators";
 import { autoInjectable } from "tsyringe";
+import { Comment } from "../../../@types/Comment";
 import prisma from "../../../config/prisma";
 import createNestedStructure from "../../../lib/transformer/nestedComment";
 
@@ -33,7 +34,7 @@ export class RecordService {
         },
       });
 
-      const commentTree = createNestedStructure(rootComments);
+      const commentTree = createNestedStructure(rootComments as Comment[]);
       return {
         commentCount: rootComments.length,
         comments: commentTree,
