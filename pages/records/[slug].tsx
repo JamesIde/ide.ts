@@ -11,8 +11,10 @@ import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
 import Modal from "../../components/Modal/Modal";
 import CommentWrapper from "../../components/Comments/CommentWrapper";
-
+import Script from "next/script";
 export default function Record({ record }: { record: IThumbnail }) {
+  console.log("here", record.fields.lighterpackId);
+  console.log("here again ", record.fields.lighterpackLink);
   const commentCount = commentStore((state) => state.commentCount);
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
@@ -457,6 +459,10 @@ export default function Record({ record }: { record: IThumbnail }) {
               <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
               <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>
             </div>
+          </div>
+          <div>
+            <Script src={record.fields.lighterpackLink} />
+            <div id={record.fields.lighterpackId}></div>
           </div>
           <div id="comments">
             <CommentWrapper

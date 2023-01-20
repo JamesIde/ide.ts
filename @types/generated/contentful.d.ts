@@ -264,6 +264,12 @@ export interface IThumbnailFields {
 
   /** AboutDescription */
   aboutDescription?: string | undefined;
+
+  /** LighterPackLink */
+  lighterpackLink?: string | undefined;
+
+  /** LighterPackId */
+  lighterpackId?: string | undefined;
 }
 
 /** Long, detailed and sequenced day-by-day recounts of my hiking trips. */
