@@ -14,7 +14,13 @@ function RichTextEditor() {
   //     convertToHTML(exporterConfig)(convertFromRaw(raw))
 
   function toHtml(raw) {
-    console.log(convertToHTML(exporterConfig)(convertFromRaw(raw)));
+    raw ? convertToHTML(exporterConfig)(convertFromRaw(raw)) : "";
+
+    if (raw) {
+      console.log("raw");
+    } else {
+      console.log("no raw");
+    }
   }
   return (
     <div className="class w-3/4 mx-auto">
@@ -22,13 +28,12 @@ function RichTextEditor() {
         onSave={(raw) => {
           toHtml(raw);
         }}
+        // https://www.draftail.org/docs/entities for a tags :)
         blockTypes={[
           { type: BLOCK_TYPE.HEADER_ONE },
           { type: BLOCK_TYPE.HEADER_TWO },
           { type: BLOCK_TYPE.UNORDERED_LIST_ITEM },
-          {
-            type: BLOCK_TYPE.UNSTYLED,
-          },
+          { type: BLOCK_TYPE.UNSTYLED },
         ]}
         inlineStyles={[
           { type: INLINE_STYLE.BOLD },

@@ -7,8 +7,6 @@ import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 
-import "../node_modules/draft-js/dist/Draft.css";
-// import "../node_modules/draftail/dist/draftail.css";
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (
