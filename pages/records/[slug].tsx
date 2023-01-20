@@ -13,8 +13,6 @@ import Modal from "../../components/Modal/Modal";
 import CommentWrapper from "../../components/Comments/CommentWrapper";
 import Script from "next/script";
 export default function Record({ record }: { record: IThumbnail }) {
-  console.log("here", record.fields.lighterpackId);
-  console.log("here again ", record.fields.lighterpackLink);
   const commentCount = commentStore((state) => state.commentCount);
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
