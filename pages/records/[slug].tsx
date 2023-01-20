@@ -459,10 +459,12 @@ export default function Record({ record }: { record: IThumbnail }) {
               <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
               <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>
             </div>
-          </div>
-          <div>
-            <Script src={record.fields.lighterpackLink} />
-            <div id={record.fields.lighterpackId}></div>
+
+            <div className="record-details">
+              <h1 className="mb-3 mt-3">Gear</h1>
+              <Script src={record.fields.lighterpackLink} />
+              <div id={record.fields.lighterpackId}></div>
+            </div>
           </div>
           <div id="comments">
             <CommentWrapper
