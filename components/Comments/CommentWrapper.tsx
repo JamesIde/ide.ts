@@ -8,7 +8,6 @@ import GoogleLoginButton from "./GoogleLoginButton";
 import CommentForm from "./AddCommentForm";
 import Comments from "./Comments";
 import { commentStore } from "../../lib/store/commentStore";
-import RichTextEditor from "../RichText/RichTextEditor";
 function CommentWrapper({
   contentfulId,
   recordTitle,
