@@ -61,3 +61,19 @@ export interface ReplyCommentPayload {
   replyCommentMessage: string;
   replyCommentDate: string;
 }
+
+// For nested comment
+export interface Comment {
+  id: string;
+  message: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user: User;
+  userId: string;
+  emailNotify: boolean;
+  record: Record;
+  recordId: string;
+  parent: Comment | null;
+  children: Comment[];
+  parentId: string | null;
+}

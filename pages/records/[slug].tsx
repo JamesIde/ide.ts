@@ -92,6 +92,7 @@ export default function Record({ record }: { record: IThumbnail }) {
             </section>
 
             <div className="record-details">
+              <ReactMarkdown>{record.fields?.prefaceDescription}</ReactMarkdown>
               <div className="record-stats">
                 <ReactMarkdown>
                   {record.fields?.dayOneDescription!}
