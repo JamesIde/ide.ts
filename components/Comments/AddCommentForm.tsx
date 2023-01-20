@@ -1,29 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { addCommentToRecord } from "../../lib/api/api";
 import { notify, validateComment } from "../../lib/toastr/Notify";
+import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from "draftail";
+import { convertToHTML } from "draft-convert";
+import { EditorState } from "draft-js";
 import AddCommentLoader from "../Misc/AddCommentLoader";
 
 function CommentForm({ contentfulId }: { contentfulId: string }) {
   const queryClient = useQueryClient();
-  const [fields, setFields] = useState({
-    message: "",
-    emailNotify: false,
-  });
-
-  const handleUpdate = (e) => {
-    // Update the fields form state
-    setFields((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const [emailNotify, setEmailNotify] = useState(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const { mutate, isLoading } = useMutation({
     mutationFn: addCommentToRecord,
     onSuccess: () => {
-      setFields({ ...fields, message: "", emailNotify: false });
+      setEmailNotify(false);
+      setEditorState(EditorState.createEmpty());
       queryClient.refetchQueries(["comments"]);
       notify("success", "Comment posted successfully");
     },
@@ -37,29 +31,35 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
   });
 
   function handleNewComment() {
-    const isValid = validateComment(fields.message);
+    const comment = convertToHTML(editorState.getCurrentContent());
+    const isValid = validateComment(comment);
     if (isValid) {
       mutate({
         contentfulId,
-        message: fields.message,
-        emailNotify: fields.emailNotify,
+        message: comment,
+        emailNotify: emailNotify,
       });
     }
   }
+
   return (
     <>
-      <div className="flex flex-row justify-center">
-        <div className="mt-2 rounded-full w-full">
-          <textarea
-            id=""
-            className="w-full h-24 border-[1px] rounded-md pl-2 p-2"
-            rows={10}
-            placeholder="Add a comment"
-            onChange={handleUpdate}
-            value={fields.message}
-            name="message"
-          />
-        </div>
+      <div className="mt-4 mb-3">
+        <DraftailEditor
+          editorState={editorState}
+          onChange={setEditorState}
+          placeholder="Add a comment..."
+          blockTypes={[
+            { type: BLOCK_TYPE.HEADER_ONE },
+            { type: BLOCK_TYPE.HEADER_TWO },
+            { type: BLOCK_TYPE.UNORDERED_LIST_ITEM },
+            { type: BLOCK_TYPE.UNSTYLED },
+          ]}
+          inlineStyles={[
+            { type: INLINE_STYLE.BOLD },
+            { type: INLINE_STYLE.ITALIC },
+          ]}
+        />
       </div>
       <div className="flex flex-row">
         <div className="w-max">
@@ -81,9 +81,9 @@ function CommentForm({ contentfulId }: { contentfulId: string }) {
             name="notifications"
             id="notifications"
             onChange={() =>
-              setFields({ ...fields, emailNotify: !fields.emailNotify })
+              setEmailNotify((prevEmailNotify) => !prevEmailNotify)
             }
-            checked={fields.emailNotify}
+            checked={emailNotify}
           />
           <p className="pl-1 mt-[1px]">Notify me of replies</p>
         </div>

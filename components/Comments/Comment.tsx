@@ -16,7 +16,7 @@ import IconLoader from "../Misc/IconLoader";
 import UpdateCommentForm from "./UpdateCommentForm";
 import HandleCommentDate from "./HandleCommentDate";
 import Image from "next/image";
-
+import parse from "html-react-parser";
 function Comment({
   comment,
   hasChildren,
@@ -29,7 +29,6 @@ function Comment({
     state.setIsActionCompleted,
   ]);
   const [toggleReply, setToggleReply] = useState(false);
-  const [toggleUpdate, setToggleUpdate] = useState(false);
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
 
   const queryClient = useQueryClient();
@@ -47,7 +46,6 @@ function Comment({
     }
     if (!isActionCompleted) {
       setToggleReply(false);
-      setToggleUpdate(false);
     }
   }, [isActionCompleted]);
 
@@ -79,13 +77,6 @@ function Comment({
   function toggleReplyEditor() {
     setToggleReply(!toggleReply);
     setIsActionCompleted(!isActionCompleted);
-    setToggleUpdate(false);
-  }
-
-  function toggleUpdateEditor() {
-    setToggleUpdate(!toggleUpdate);
-    setIsActionCompleted(!isActionCompleted);
-    setToggleReply(false);
   }
 
   return (
@@ -140,22 +131,6 @@ function Comment({
                   </div>
                   {user.id === comment.user.id && (
                     <>
-                      <div className="p-1">
-                        {!toggleUpdate ? (
-                          <HiPencilAlt
-                            className="cursor-pointer"
-                            color="green"
-                            onClick={() => toggleUpdateEditor()}
-                          />
-                        ) : (
-                          <AiOutlineCloseCircle
-                            color="red"
-                            className="cursor-pointer"
-                            onClick={() => toggleUpdateEditor()}
-                          />
-                        )}
-                      </div>
-
                       <div
                         className="p-1"
                         onClick={() => handleDeleteClick(comment.id)}
@@ -175,11 +150,10 @@ function Comment({
               )}
             </div>
           </div>
-          <div>
-            <p className="pt-2 pl-2">{comment.message}</p>
+          <div className="comment-body">
+            <p className="pt-2 pl-2">{parse(comment.message)}</p>
           </div>
         </div>
-        {toggleUpdate && <UpdateCommentForm comment={comment} />}
         {toggleReply && <ReplyCommentForm comment={comment} />}
         {comment.children &&
           comment.children.map((child) => {

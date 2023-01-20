@@ -266,10 +266,28 @@ export class CommentService {
         },
       });
 
+      if (commentToReplyTo.emailNotify) {
+        const replyToCommentPayload: ReplyCommentPayload = {
+          recordTitle: commentToReplyTo.record?.title,
+          recordSlug: commentToReplyTo.record?.slug,
+          rootCommentUser: commentToReplyTo.user?.name,
+          replyCommentUser: comment.user?.email,
+          replyCommentMessage: comment.message,
+          replyCommentDate: new Date(comment.createdAt)
+            .toLocaleDateString("en-AU", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+            })
+            .toString(),
+        };
+
+        await sendCommentReplyEmail(replyToCommentPayload);
+        
       if (!comment) {
         throw new BadRequestException("No comment found");
       }
-
       if (comment.user.id !== user) {
         throw new ForbiddenException("You are not the owner of this comment");
       }
@@ -321,6 +339,32 @@ export class CommentService {
         },
       });
 
+      return { ok: true };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "An error occured processing your comment. Please try again later"
+      );
+    }
+  }
+}
+
+/**
+ * A public function to delete a comment
+ */
+export async function deleteComment(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  commentId: string
+) {
+  const user = await validateToken(req, res);
+
+  console.log("here");
+
+  if (user) {
+    if (!commentId) {
+      throw new BadRequestException("No commentId provided");
+    }
+=======
       if (!comment) {
         throw new BadRequestException("No comment found");
       }

@@ -8,6 +8,7 @@ import GoogleLoginButton from "./GoogleLoginButton";
 import CommentForm from "./AddCommentForm";
 import Comments from "./Comments";
 import { commentStore } from "../../lib/store/commentStore";
+import RichTextEditor from "../RichText/RichTextEditor";
 function CommentWrapper({
   contentfulId,
   recordTitle,
@@ -51,6 +52,9 @@ function CommentWrapper({
   }
 
   return (
+    // <div>
+    //   <RichTextEditor />
+    // </div>
     <div className="xl:w-[40%] md:w-4/5 w-full mx-auto p-2 mb-5">
       <div>
         <h5 className="font-playfair text-xl">Leave a comment</h5>

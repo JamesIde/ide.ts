@@ -15,6 +15,7 @@ function RecordThumbnail({ record }: { record: IThumbnail }) {
               src={`https:${record.fields.featuredImage?.fields.file.url}`}
               width={1200}
               height={800}
+              priority={true}
             />
           </Link>
           <div className="px-6 py-4 max-w-fit mx-auto ">
