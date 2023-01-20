@@ -8,24 +8,31 @@ import {
   Res,
   Body,
 } from "next-api-decorators";
+import { autoInjectable } from "tsyringe";
 import { GoogleOAuthResponse } from "./auth.dto";
-import { handleIdentityToken, handleTokenRefresh } from "./identity.service";
+import { IdentityService } from "./identity.service";
 
+@autoInjectable()
 export class IdentityHandler {
+  constructor(private identityService: IdentityService) {}
+
   @Post("/")
-  public handleIdentityToken(
+  public async handleIdentityToken(
     @Res() res: NextApiResponse,
     @Body() GoogleResponse: GoogleOAuthResponse
   ) {
-    return handleIdentityToken(res, GoogleResponse.OAuthToken);
+    return await this.identityService.handleIdentityToken(
+      res,
+      GoogleResponse.OAuthToken
+    );
   }
 
   @Get("/")
-  public handleAccessTokenRefresh(
+  public async handleAccessTokenRefresh(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse
   ) {
-    return handleTokenRefresh(req, res);
+    return await this.identityService.handleTokenRefresh(req, res);
   }
 }
 

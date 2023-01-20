@@ -16,83 +16,154 @@ import {
   ForbiddenException,
 } from "next-api-decorators";
 import { NewComment } from "./comment.dto";
-/**
- * A public function to create a comment for a record.
- */
-export async function createComment(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  newComment: NewComment,
-  contentfulId: string
-) {
-  const user = await validateToken(req, res);
+import { autoInjectable } from "tsyringe";
 
-  if (user) {
-    if (!contentfulId) {
-      throw new BadRequestException("No contentfulId provided");
-    }
+@autoInjectable()
+export class CommentService {
+  /**
+   * A public function to create a comment for a record.
+   */
+  public async createComment(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    newComment: NewComment,
+    contentfulId: string
+  ) {
+    const user = await validateToken(req, res);
 
-    // Check how many comments the user has made for this record, but don't include the ADMIN user
-    const commentCount = await prisma.comment.count({
-      where: {
-        AND: [
-          {
+    if (user) {
+      if (!contentfulId) {
+        throw new BadRequestException("No contentfulId provided");
+      }
+
+      // Check how many comments the user has made for this record, but don't include the ADMIN user
+      const commentCount = await prisma.comment.count({
+        where: {
+          AND: [
+            {
+              record: {
+                id: contentfulId,
+              },
+            },
+            {
+              user: {
+                id: user,
+              },
+            },
+            {
+              user: {
+                id: {
+                  not: process.env.ADMIN_ID,
+                },
+              },
+            },
+          ],
+        },
+      });
+
+      // If the user has reached the maximum comments per record, return an error
+
+      if (commentCount >= 10) {
+        throw new BadRequestException(
+          "You have reached the maximum comments per record"
+        );
+      }
+
+      if (!newComment.message) {
+        throw new BadRequestException("No message provided");
+      }
+
+      // Returns true if the message contains profanity
+      if (wash.check("en", newComment.message)) {
+        throw new BadRequestException(
+          "Your comment contains profanity. Please remove it and try again."
+        );
+      }
+
+      const cleanedMessage = emojiStrip(newComment.message);
+
+      try {
+        const comment = await prisma.comment.create({
+          data: {
+            message: cleanedMessage,
+            emailNotify: newComment.emailNotify,
             record: {
-              id: contentfulId,
+              connect: {
+                id: contentfulId,
+              },
             },
-          },
-          {
             user: {
-              id: user,
-            },
-          },
-          {
-            user: {
-              id: {
-                not: process.env.ADMIN_ID,
+              connect: {
+                id: user,
               },
             },
           },
-        ],
-      },
-    });
-
-    // If the user has reached the maximum comments per record, return an error
-
-    if (commentCount >= 10) {
-      throw new BadRequestException(
-        "You have reached the maximum comments per record"
-      );
-    }
-
-    if (!newComment.message) {
-      throw new BadRequestException("No message provided");
-    }
-
-    // Returns true if the message contains profanity
-    if (wash.check("en", newComment.message)) {
-      throw new BadRequestException(
-        "Your comment contains profanity. Please remove it and try again."
-      );
-    }
-
-    const cleanedMessage = emojiStrip(newComment.message);
-
-    try {
-      const comment = await prisma.comment.create({
-        data: {
-          message: cleanedMessage,
-          emailNotify: newComment.emailNotify,
-          record: {
-            connect: {
-              id: contentfulId,
-            },
+          include: {
+            user: true,
+            record: true,
           },
-          user: {
-            connect: {
-              id: user,
-            },
-          },
+        });
+
+        const notifyAdminPayload: EmailAdminPayload = {
+          recordTitle: comment.record?.title,
+          recordId: comment.record?.id,
+          commentId: comment.id,
+          commentMessage: cleanedMessage,
+          commentUser: comment.user?.name,
+          commentUserId: comment.user?.id,
+          commentUserEmail: comment.user?.email,
+          commentUserDate: new Date(comment.createdAt).toLocaleDateString(
+            "en-AU",
+            {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          ),
+        };
+
+        await sendNewCommentEmailToAdmin(notifyAdminPayload);
+        return { ok: true };
+      } catch (error) {
+        throw new BadRequestException(
+          "An error occured processing your comment. Please try again later"
+        );
+      }
+    }
+  }
+  /**
+   * A public function to reply to a comment
+   */
+  public async replyToComment(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    contentfulId: string,
+    commentId: string,
+    replyCommentPayload: NewComment
+  ) {
+    const user = await validateToken(req, res);
+
+    if (user) {
+      if (!contentfulId) {
+        throw new BadRequestException("No contentfulId provided");
+      }
+
+      if (!commentId) {
+        throw new BadRequestException("No commentId provided");
+      }
+
+      const message = replyCommentPayload.message;
+
+      if (!message) {
+        throw new BadRequestException("No message provided");
+      }
+
+      // Find the comment to check if it exists and has email notifications enabled
+      const commentToReplyTo = await prisma.comment.findUnique({
+        where: {
+          id: commentId,
         },
         include: {
           user: true,
@@ -100,99 +171,98 @@ export async function createComment(
         },
       });
 
-      const notifyAdminPayload: EmailAdminPayload = {
-        recordTitle: comment.record?.title,
-        recordId: comment.record?.id,
-        commentId: comment.id,
-        commentMessage: cleanedMessage,
-        commentUser: comment.user?.name,
-        commentUserId: comment.user?.id,
-        commentUserEmail: comment.user?.email,
-        commentUserDate: new Date(comment.createdAt).toLocaleDateString(
-          "en-AU",
-          {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          }
-        ),
-      };
+      if (!commentToReplyTo) {
+        throw new BadRequestException("Comment not found");
+      }
 
-      await sendNewCommentEmailToAdmin(notifyAdminPayload);
-      return { ok: true };
-    } catch (error) {
-      throw new BadRequestException(
-        "An error occured processing your comment. Please try again later"
-      );
+      try {
+        const comment = await prisma.comment.create({
+          data: {
+            message: message,
+            user: {
+              connect: {
+                id: user,
+              },
+            },
+            record: {
+              connect: {
+                id: contentfulId,
+              },
+            },
+            parent: {
+              connect: {
+                id: commentId,
+              },
+            },
+          },
+          include: {
+            user: true,
+          },
+        });
+
+        if (commentToReplyTo.emailNotify) {
+          const replyToCommentPayload: ReplyCommentPayload = {
+            recordTitle: commentToReplyTo.record?.title,
+            recordSlug: commentToReplyTo.record?.slug,
+            rootCommentUser: commentToReplyTo.user?.name,
+            replyCommentUser: comment.user?.name,
+            replyCommentMessage: comment.message,
+            replyCommentDate: new Date(comment.createdAt)
+              .toLocaleDateString("en-AU", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+              })
+              .toString(),
+          };
+
+          await sendCommentReplyEmail(replyToCommentPayload);
+        }
+
+        return comment;
+      } catch (error) {
+        error;
+        throw new BadRequestException(
+          "An error occured processing your comment. Please try again later"
+        );
+      }
     }
   }
-}
-/**
- * A public function to reply to a comment
- */
-export async function replyToComment(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  contentfulId: string,
-  commentId: string,
-  replyCommentPayload: NewComment
-) {
-  const user = await validateToken(req, res);
 
-  if (user) {
-    if (!contentfulId) {
-      throw new BadRequestException("No contentfulId provided");
-    }
+  /**
+   * A public function to update a comment
+   */
+  public async updateComment(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    commentId: string,
+    updateCommentPayload: NewComment
+  ) {
+    const user = await validateToken(req, res);
 
-    if (!commentId) {
-      throw new BadRequestException("No commentId provided");
-    }
+    if (user) {
+      if (!commentId) {
+        throw new BadRequestException("No commentId provided");
+      }
 
-    const message = replyCommentPayload.message;
+      const message = updateCommentPayload.message;
 
-    if (!message) {
-      throw new BadRequestException("No message provided");
-    }
+      if (!message) {
+        throw new BadRequestException("No message provided");
+      }
 
-    // Find the comment to check if it exists and has email notifications enabled
-    const commentToReplyTo = await prisma.comment.findUnique({
-      where: {
-        id: commentId,
-      },
-      include: {
-        user: true,
-        record: true,
-      },
-    });
-
-    if (!commentToReplyTo) {
-      throw new BadRequestException("Comment not found");
-    }
-
-    try {
-      const comment = await prisma.comment.create({
-        data: {
-          message: message,
-          user: {
-            connect: {
-              id: user,
-            },
-          },
-          record: {
-            connect: {
-              id: contentfulId,
-            },
-          },
-          parent: {
-            connect: {
-              id: commentId,
-            },
-          },
+      // Check if the user created the comment first
+      const comment = await prisma.comment.findUnique({
+        where: {
+          id: commentId,
         },
-        include: {
-          user: true,
+        select: {
+          user: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
 
@@ -214,69 +284,58 @@ export async function replyToComment(
         };
 
         await sendCommentReplyEmail(replyToCommentPayload);
+        
+      if (!comment) {
+        throw new BadRequestException("No comment found");
+      }
+      if (comment.user.id !== user) {
+        throw new ForbiddenException("You are not the owner of this comment");
       }
 
-      return comment;
-    } catch (error) {
-      error;
-      throw new BadRequestException(
-        "An error occured processing your comment. Please try again later"
-      );
+      try {
+        await prisma.comment.update({
+          where: {
+            id: commentId,
+          },
+          data: {
+            message: message,
+          },
+        });
+
+        return { ok: true };
+      } catch (error) {
+        throw new InternalServerErrorException(
+          "An error occured processing your comment. Please try again later"
+        );
+      }
     }
   }
-}
 
-/**
- * A public function to update a comment
- */
-export async function updateComment(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  commentId: string,
-  updateCommentPayload: NewComment
-) {
-  const user = await validateToken(req, res);
+  /**
+   * A public function to delete a comment
+   */
+  public async deleteComment(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    commentId: string
+  ) {
+    const user = await validateToken(req, res);
 
-  if (user) {
-    if (!commentId) {
-      throw new BadRequestException("No commentId provided");
-    }
+    console.log;
 
-    const message = updateCommentPayload.message;
+    if (user) {
+      if (!commentId) {
+        throw new BadRequestException("No commentId provided");
+      }
 
-    if (!message) {
-      throw new BadRequestException("No message provided");
-    }
-
-    // Check if the user created the comment first
-    const comment = await prisma.comment.findUnique({
-      where: {
-        id: commentId,
-      },
-      select: {
-        user: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-
-    if (!comment) {
-      throw new BadRequestException("No comment found");
-    }
-
-    if (comment.user.id !== user) {
-      throw new ForbiddenException("You are not the owner of this comment");
-    }
-
-    try {
-      await prisma.comment.update({
+      // Check if the user created the comment first
+      const comment = await prisma.comment.findUnique({
         where: {
           id: commentId,
         },
-        data: {
-          message: message,
+        include: {
+          user: true,
+          record: true,
         },
       });
 
@@ -305,50 +364,40 @@ export async function deleteComment(
     if (!commentId) {
       throw new BadRequestException("No commentId provided");
     }
+=======
+      if (!comment) {
+        throw new BadRequestException("No comment found");
+      }
 
-    // Check if the user created the comment first
-    const comment = await prisma.comment.findUnique({
-      where: {
-        id: commentId,
-      },
-      include: {
-        user: true,
-        record: true,
-      },
-    });
+      if (comment.user.id !== user) {
+        throw new ForbiddenException("You are not the owner of this comment");
+      }
 
-    if (!comment) {
-      throw new BadRequestException("No comment found");
-    }
+      const deleteEmailPayload: EmailAdminPayload = {
+        recordTitle: comment.record?.title,
+        recordId: comment.record?.id,
+        commentId: comment.id,
+        commentMessage: comment.message,
+        commentUser: comment.user?.name,
+        commentUserId: comment.user?.id,
+        commentUserEmail: comment.user?.email,
+        commentUserDate: new Date(Date.now()).toString(),
+      };
 
-    if (comment.user.id !== user) {
-      throw new ForbiddenException("You are not the owner of this comment");
-    }
-
-    const deleteEmailPayload: EmailAdminPayload = {
-      recordTitle: comment.record?.title,
-      recordId: comment.record?.id,
-      commentId: comment.id,
-      commentMessage: comment.message,
-      commentUser: comment.user?.name,
-      commentUserId: comment.user?.id,
-      commentUserEmail: comment.user?.email,
-      commentUserDate: new Date(Date.now()).toString(),
-    };
-
-    await sendDeleteEmailToAdmin(deleteEmailPayload);
-    try {
-      await prisma.comment.delete({
-        where: {
-          id: commentId,
-        },
-      });
-      return { ok: true };
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException(
-        "An error occured deleting comment"
-      );
+      await sendDeleteEmailToAdmin(deleteEmailPayload);
+      try {
+        await prisma.comment.delete({
+          where: {
+            id: commentId,
+          },
+        });
+        return { ok: true };
+      } catch (error) {
+        console.log(error);
+        throw new InternalServerErrorException(
+          "An error occured deleting comment"
+        );
+      }
     }
   }
 }
