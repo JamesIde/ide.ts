@@ -39,6 +39,7 @@ export class RecordService {
         comments: commentTree,
       };
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(
         `Error retrieving comments for record: ${contentfulId}`
       );
