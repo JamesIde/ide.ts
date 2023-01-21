@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  background-color: #f9fafb;
-}
-
 .my-custom-editor-class {
   padding: 5px;
   border-radius: 5px;
