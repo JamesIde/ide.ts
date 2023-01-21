@@ -77,7 +77,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                   offset={-100}
                   duration={500}
                 >
-                  {commentCount ? (
+                  {commentCount > 0 ? (
                     <>
                       <div className="flex flex-row hover:cursor-pointer">
                         <div className="mt-[6px] mr-[3px]">
@@ -94,7 +94,16 @@ export default function Record({ record }: { record: IThumbnail }) {
                       </div>
                     </>
                   ) : (
-                    <p className="text-rich-indigo">--- Comments</p>
+                    <div className="flex flex-row hover:cursor-pointer">
+                      <div className="mt-[6px] mr-[3px]">
+                        <BiCommentDetail color="#6060FF" />
+                      </div>
+                      <div className="flex flex-row mt-[3px]">
+                        <p className="text-sm text-rich-indigo pr-1">
+                          {commentCount} comments
+                        </p>
+                      </div>
+                    </div>
                   )}
                 </Link>
                 <div>
