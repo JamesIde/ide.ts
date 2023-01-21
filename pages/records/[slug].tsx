@@ -78,7 +78,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                   duration={500}
                 >
                   {/* TODO Enable */}
-                  {/* {commentCount > 0 ? (
+                  {commentCount > 0 ? (
                     <>
                       <div className="flex flex-row hover:cursor-pointer">
                         <div className="mt-[6px] mr-[3px]">
@@ -105,11 +105,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                         </p>
                       </div>
                     </div>
-                  )} */}
+                  )}
                 </Link>
                 <div>
                   {/* TODO Enable */}
-                  {/* <ViewCount contentfulId={record.sys.id} /> */}
+                  <ViewCount contentfulId={record.sys.id} />
                 </div>
               </div>
               <hr className="mb-2 mt-2" />
@@ -490,12 +490,12 @@ export default function Record({ record }: { record: IThumbnail }) {
             </div>
           </div>
           {/* TODO Enable */}
-          {/* <div id="comments">
+          <div id="comments">
             <CommentWrapper
               contentfulId={record.sys.id}
               recordTitle={record.fields.title}
             />
-          </div> */}
+          </div>
           <Link
             activeClass="active"
             to="global-wrapper"
