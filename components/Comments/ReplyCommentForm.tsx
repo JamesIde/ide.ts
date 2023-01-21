@@ -40,12 +40,12 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
   });
 
   function handleReply() {
-    const comment = convertToHTML(editorState.getCurrentContent());
-    const isValid = validateComment(comment);
+    const commentMessage = convertToHTML(editorState.getCurrentContent());
+    const isValid = validateComment(commentMessage);
     if (isValid) {
       mutate({
         contentfulId: comment.recordId,
-        message: comment,
+        message: commentMessage,
         commentId: comment.id,
       });
     }
