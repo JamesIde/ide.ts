@@ -1,8 +1,8 @@
 import { IdpUser, OAuthToken } from "../../../@types/Profile";
 import { NextApiRequest, NextApiResponse } from "next";
-import jwt_decode from "jwt-decode";
 import prisma from "../../../config/prisma";
 import * as jwt from "jsonwebtoken";
+import jwt_decode from "jwt-decode";
 import { ProfileTransformer } from "../../../lib/transformer/profileTransformer";
 import {
   generateAccessToken,
@@ -16,7 +16,7 @@ import {
   Res,
 } from "next-api-decorators";
 import { autoInjectable } from "tsyringe";
-
+import * as jose from "jose";
 @autoInjectable()
 export class IdentityService {
   /**
@@ -51,7 +51,7 @@ export class IdentityService {
       );
       const transformedUser = ProfileTransformer.transformProfile(
         user,
-        tokens.accessToken
+        await tokens.accessToken
       );
       return transformedUser;
     } catch (error) {
@@ -127,8 +127,8 @@ export class IdentityService {
   private async generateTokens(profile: IdpUser) {
     return {
       ok: true,
-      accessToken: generateAccessToken(profile),
-      refreshToken: generateRefreshToken(profile),
+      accessToken: await generateAccessToken(profile),
+      refreshToken: await generateRefreshToken(profile),
     };
   }
 
@@ -137,9 +137,17 @@ export class IdentityService {
     if (!jid) {
       throw new BadRequestException("An error occured. Please login again.");
     }
+
+    const secret = new TextEncoder().encode(
+      process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET
+    );
+
     let payload: any = null;
     try {
-      payload = jwt.verify(jid, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET);
+      const resp = await jose.jwtVerify(jid, secret, {
+        issuer: "jamesaide",
+      });
+      payload = resp.payload;
     } catch (err) {
       throw new BadRequestException("An error occured. Please login again.");
     }
@@ -159,6 +167,7 @@ export class IdentityService {
       throw new BadRequestException(
         "An error occured. Validating your identity"
       );
+    console.log("here 4");
     const tokens = await this.generateTokens(user);
     return { ok: true, token: tokens.accessToken };
   }

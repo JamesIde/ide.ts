@@ -10,7 +10,6 @@ export interface JWTPayload {
   providerId: string;
   picture: string;
   sub: string;
-  iat?: Date;
   QcP?: Date;
   tokenVersion: number;
   exp?: number;

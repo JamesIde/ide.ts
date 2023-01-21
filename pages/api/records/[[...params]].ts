@@ -1,5 +1,5 @@
 import type { NextApiResponse, NextApiRequest } from "next";
-import { createHandler, Get, Param, Req, Res } from "next-api-decorators";
+import { createHandler, Get, Param, Post, Req, Res } from "next-api-decorators";
 import { autoInjectable } from "tsyringe";
 import { RecordService } from "./records.service";
 
@@ -12,6 +12,13 @@ class RecordHandler {
     @Param("contentfulId") contentfulId: string
   ) {
     return await this.recordService.retrieveRecordComments(contentfulId);
+  }
+
+  @Post("/:contentfulId")
+  public async updateRecordViewCount(
+    @Param("contentfulId") contentfulId: string
+  ) {
+    return await this.recordService.updateRecordViewCount(contentfulId);
   }
 }
 

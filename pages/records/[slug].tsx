@@ -12,6 +12,7 @@ import Layout from "../../components/Navigation/Layout";
 import Modal from "../../components/Modal/Modal";
 import CommentWrapper from "../../components/Comments/CommentWrapper";
 import Script from "next/script";
+import ViewCount from "../../components/Views/ViewCount";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const commentCount = commentStore((state) => state.commentCount);
@@ -60,7 +61,13 @@ export default function Record({ record }: { record: IThumbnail }) {
               <p className="text-center mb-2 mt-2 font-mono">
                 [{record.fields.location}]
               </p>
-              <p>{record.fields.description}</p>
+              <div className="items-right">
+                <p className="text-right text-sm text-gray-700 mt-1 mb-2">
+                  {record.fields.date}
+                </p>
+              </div>
+              <hr />
+              <p className="mt-2">{record.fields.description}</p>
               <div className="flex justify-between mt-1">
                 <Link
                   activeClass="active"
@@ -70,24 +77,28 @@ export default function Record({ record }: { record: IThumbnail }) {
                   offset={-100}
                   duration={500}
                 >
-                  {commentCount > 0 && (
-                    <div className="flex flex-row hover:cursor-pointer">
-                      <div className="mt-[6px] mr-[3px]">
-                        <BiCommentDetail color="#6060FF" />
+                  {commentCount ? (
+                    <>
+                      <div className="flex flex-row hover:cursor-pointer">
+                        <div className="mt-[6px] mr-[3px]">
+                          <BiCommentDetail color="#6060FF" />
+                        </div>
+                        <div className="flex flex-row mt-[3px]">
+                          <p className="text-sm text-rich-indigo pr-1">
+                            {commentCount}
+                          </p>
+                          <p className="text-sm text-rich-indigo">
+                            {commentCount === 1 ? "Comment" : "Comments"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex flex-row mt-[3px]">
-                        <p className="text-sm text-rich-indigo pr-1">
-                          {commentCount}
-                        </p>
-                        <p className="text-sm text-rich-indigo">
-                          {commentCount === 1 ? "Comment" : "Comments"}
-                        </p>
-                      </div>
-                    </div>
+                    </>
+                  ) : (
+                    <p className="text-rich-indigo">--- Comments</p>
                   )}
                 </Link>
                 <div>
-                  <p className="text-right">{record.fields.date}</p>
+                  <ViewCount contentfulId={record.sys.id} />
                 </div>
               </div>
               <hr className="mb-2 mt-2" />
