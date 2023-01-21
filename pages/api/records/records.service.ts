@@ -45,4 +45,31 @@ export class RecordService {
       );
     }
   }
+
+  public async updateRecordViewCount(recordId: string) {
+    const contentfulId = recordId;
+    try {
+      const record = await prisma.record.findUnique({
+        where: {
+          id: contentfulId,
+        },
+      });
+
+      const updatedRecord = await prisma.record.update({
+        where: {
+          id: contentfulId,
+        },
+        data: {
+          viewCount: record.viewCount + 1,
+        },
+      });
+      return {
+        viewCount: updatedRecord.viewCount,
+      };
+    } catch (error) {
+      throw new BadRequestException(
+        `Error updating view count for record: ${contentfulId}`
+      );
+    }
+  }
 }

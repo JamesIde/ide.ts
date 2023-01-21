@@ -7,6 +7,7 @@ import {
   NewComment,
 } from "../../@types/Comment";
 import baseClient from "../../config/baseClient";
+import { ViewCount } from "../../@types/ViewCount";
 export async function handleGoogleLogin(credential: CredentialResponse) {
   const res = await baseClient.post<User>("/api/identity", {
     OAuthToken: credential.credential,
@@ -57,5 +58,12 @@ export async function deleteCommentFromRecord(
   commentId: string
 ): Promise<CommentSuccess> {
   const res = await baseClient.delete(`/api/comments/${commentId}`);
+  return res.data;
+}
+
+export async function updateRecordViewCount(
+  contentfulId: string
+): Promise<ViewCount> {
+  const res = await baseClient.post(`/api/records/${contentfulId}`);
   return res.data;
 }

@@ -25,10 +25,11 @@ model User {
 }
 
 model Record {
-  id       String    @id @default(uuid())
-  title    String
-  slug     String    @unique
-  comments Comment[]
+  id        String    @id @default(uuid())
+  title     String
+  viewCount Int       @default(0)
+  slug      String    @unique
+  comments  Comment[]
 }
 
 model Comment {
