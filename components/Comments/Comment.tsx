@@ -13,9 +13,9 @@ import { hasCookie } from "cookies-next";
 import axios, { AxiosError } from "axios";
 import ReplyCommentForm from "./ReplyCommentForm";
 import IconLoader from "../Misc/IconLoader";
-import UpdateCommentForm from "./UpdateCommentForm";
 import HandleCommentDate from "./HandleCommentDate";
 import Image from "next/image";
+import parse from "html-react-parser";
 function Comment({
   comment,
   hasChildren,
@@ -150,7 +150,7 @@ function Comment({
             </div>
           </div>
           <div className="comment-body">
-            <p className="pt-2 pl-2">{comment.message}</p>
+            <p className="pt-2 pl-2">{parse(comment.message)}</p>
           </div>
         </div>
         {toggleReply && <ReplyCommentForm comment={comment} />}

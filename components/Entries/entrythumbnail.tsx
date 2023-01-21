@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function EntryThumbnail({ entry }: { entry: IEntries }) {
   return (
     <>
-      <div className="xl:w-[45%] lg:w-2/3 md:w-2/3 mb-8 mx-auto">
+      <div className="xl:w-[45%] lg:w-full md:w-full mb-8 mx-auto">
         <div className="flex flex-col justify-between md:flex-row">
           <Link href={`entries/${entry?.fields.slug}`}>
             <h4 className="w-[90%] mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100 hover:text-orange-700">

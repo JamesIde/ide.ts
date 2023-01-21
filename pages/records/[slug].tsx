@@ -12,6 +12,7 @@ import Layout from "../../components/Navigation/Layout";
 import Modal from "../../components/Modal/Modal";
 import CommentWrapper from "../../components/Comments/CommentWrapper";
 import Script from "next/script";
+
 export default function Record({ record }: { record: IThumbnail }) {
   const commentCount = commentStore((state) => state.commentCount);
   const [modal, setModal] = useState(false);
@@ -38,6 +39,7 @@ export default function Record({ record }: { record: IThumbnail }) {
   const closeModal = () => {
     setModal(false);
   };
+
   return (
     <>
       <Layout>

@@ -51,64 +51,64 @@ function CommentWrapper({
   }
 
   return (
-    // <div>
-    //   <RichTextEditor />
-    // </div>
-    <div className="xl:w-[40%] md:w-4/5 w-full mx-auto p-2 mb-5">
-      <div>
-        <h5 className="font-playfair text-xl">Leave a comment</h5>
-        <p className="mt-1 text-sm text-gray-500 italic">
-          {!user ? (
-            <> Sign in through Google to comment. </>
-          ) : (
-            <>Signed in as {user.email}. </>
-          )}
-        </p>
-        <p className="mt-1 text-sm text-gray-500 italic">
-          Your email address will not be published.
-        </p>
-      </div>
-      {user ? (
-        <CommentForm contentfulId={contentfulId} />
-      ) : (
-        <GoogleLoginButton />
-      )}
-      <hr className="mt-4 mb-4" />
-
-      {comments?.comments.length > 0 && (
-        <div className="flex flex-row">
-          <h5 className="font-playfair text-xl pb-4">
-            View {comments?.commentCount}{" "}
-            {comments?.commentCount === 1 ? "comment" : "comments"} for{" "}
-            {recordTitle}
-          </h5>
-          {/* Drop down with sort TODO */}
-          {/* https://www.npmjs.com/package/react-dropdown */}
+    <>
+      <hr className="xl:w-[50%] md:w-4/5 w-full mx-auto" />
+      <div className="xl:w-[40%] md:w-4/5 w-full mx-auto p-2 mb-5 mt-3">
+        <div>
+          <h5 className="font-playfair text-xl">Leave a comment</h5>
+          <p className="mt-1 text-sm text-gray-500 italic">
+            {!user ? (
+              <> Sign in through Google to comment. </>
+            ) : (
+              <>Signed in as {user.email}. </>
+            )}
+          </p>
+          <p className="mt-1 text-sm text-gray-500 italic">
+            Your email address will not be published.
+          </p>
         </div>
-      )}
-
-      {isLoading && <p>Fetching comments</p>}
-      {isError && (
-        <p className="text-red-500 mx-auto text-sm">
-          <>{error.response.data}</>
-        </p>
-      )}
-      {isSuccess &&
-        (comments.comments.length > 0 ? (
-          <Comments comments={comments.comments} />
+        {user ? (
+          <CommentForm contentfulId={contentfulId} />
         ) : (
-          <p>No comments found</p>
-        ))}
-      <hr />
-      {user && (
-        <div
-          className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold text-sm"
-          onClick={() => handleSignout()}
-        >
-          Logout
-        </div>
-      )}
-    </div>
+          <GoogleLoginButton />
+        )}
+        <hr className="mt-4 mb-4" />
+
+        {comments?.comments.length > 0 && (
+          <div className="flex flex-row">
+            <h5 className="font-playfair text-xl pb-4">
+              View {comments?.commentCount}{" "}
+              {comments?.commentCount === 1 ? "comment" : "comments"} for{" "}
+              {recordTitle}
+            </h5>
+            {/* Drop down with sort TODO */}
+            {/* https://www.npmjs.com/package/react-dropdown */}
+          </div>
+        )}
+
+        {isLoading && <p>Fetching comments</p>}
+        {isError && (
+          <p className="text-red-500 mx-auto text-sm">
+            <>{error.response.data}</>
+          </p>
+        )}
+        {isSuccess &&
+          (comments.comments.length > 0 ? (
+            <Comments comments={comments.comments} />
+          ) : (
+            <p>No comments found</p>
+          ))}
+        <hr />
+        {user && (
+          <div
+            className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold text-sm"
+            onClick={() => handleSignout()}
+          >
+            Logout
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 export default CommentWrapper;
