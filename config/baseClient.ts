@@ -10,8 +10,8 @@ const baseClient = axios.create({
 });
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
-  if (localStorage.getItem("user")) {
-    const user: User = JSON.parse(localStorage.getItem("user"));
+  if (sessionStorage.getItem("user")) {
+    const user: User = JSON.parse(sessionStorage.getItem("user"));
     config.headers!["Authorization"] = `Bearer ${user.token}`;
     return config;
   } else {
@@ -35,9 +35,9 @@ const onResponseError = async (error: AxiosError) => {
         axios.defaults.withCredentials = true;
         const token = await baseClient.get("/api/identity");
         const rs = token.data as AccessTokenSuccess;
-        const user: User = JSON.parse(localStorage.getItem("user"));
+        const user: User = JSON.parse(sessionStorage.getItem("user"));
         user.token = rs.token;
-        localStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("user", JSON.stringify(user));
         //Return the original request with new token
         return baseClient(originalConfig);
       } catch (_error) {

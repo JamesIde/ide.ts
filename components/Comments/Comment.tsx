@@ -41,7 +41,7 @@ function Comment({
 
     if (!cookie) {
       setUser(null);
-      localStorage.removeItem("user");
+      sessionStorage.removeItem("user");
     }
     if (!isActionCompleted) {
       setToggleReply(false);

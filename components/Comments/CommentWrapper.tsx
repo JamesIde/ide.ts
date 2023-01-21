@@ -46,7 +46,7 @@ function CommentWrapper({
 
   function handleSignout() {
     setUser(null);
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
     notify("success", "Logout successfully");
   }
 
