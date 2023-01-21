@@ -19,7 +19,7 @@ export default function GoogleLoginButton() {
   const { isLoading, mutate } = useMutation({
     mutationFn: handleGoogleLogin, // Axios call
     onSuccess: (data) => {
-      localStorage.setItem("user", JSON.stringify(data));
+      sessionStorage.setItem("user", JSON.stringify(data));
       setUser(data);
       notify("success", "Login successful!");
     },

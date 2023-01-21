@@ -20,9 +20,9 @@ export const useStore = create<State & Action>()((set) => ({
 export function getUserFromStorage() {
   // Wait until client and window object have been rendered. Next renders server content first..
   if (typeof window !== "undefined") {
-    // Perform localStorage action
-    const user = localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user"))
+    // Perform sessionStorage action
+    const user = sessionStorage.getItem("user")
+      ? JSON.parse(sessionStorage.getItem("user"))
       : null;
     return user;
   }
