@@ -1,11 +1,12 @@
 import { IdpUser, User } from "../../@types/Profile";
 import * as jwt from "jsonwebtoken";
+import * as jose from "jose";
 import { JWTPayload } from "../../@types/Token";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../config/prisma";
 
-export function generateAccessToken(profile: IdpUser) {
-  let ATPayload: JWTPayload = {
+export async function generateAccessToken(profile: IdpUser) {
+  let ATPayload = {
     id: profile.id,
     name: profile.name,
     email_verified: profile.email_verified,
@@ -15,25 +16,43 @@ export function generateAccessToken(profile: IdpUser) {
     tokenVersion: profile.tokenVersion,
   };
 
-  return jwt.sign(ATPayload, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET, {
-    expiresIn: "15min",
-  });
+  const secret = new TextEncoder().encode(
+    process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET
+  );
+  const alg = "HS256";
+
+  const token = await new jose.SignJWT(ATPayload)
+    .setProtectedHeader({ alg })
+    .setIssuedAt()
+    .setExpirationTime("10s")
+    .setIssuer("jamesaide")
+    .sign(secret);
+  return token;
 }
 
-export function generateRefreshToken(profile: IdpUser) {
-  let RTPayload: JWTPayload = {
+export async function generateRefreshToken(profile: IdpUser) {
+  let RTPayload = {
     id: profile.id,
     name: profile.name,
     email_verified: profile.email_verified,
     providerId: profile.providerId,
     picture: profile.picture,
-    sub: profile.email,
     tokenVersion: profile.tokenVersion,
   };
 
-  return jwt.sign(RTPayload, process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET, {
-    expiresIn: "30d",
-  });
+  const secret = new TextEncoder().encode(
+    process.env.NEXT_PUBLIC_REFRESH_TOKEN_SECRET
+  );
+  const alg = "HS256";
+
+  const token = await new jose.SignJWT(RTPayload)
+    .setProtectedHeader({ alg })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .setIssuer("jamesaide")
+    .sign(secret);
+
+  return token;
 }
 
 export async function validateToken(req: NextApiRequest, res: NextApiResponse) {
