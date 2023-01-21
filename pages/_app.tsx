@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
-
+import "../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (

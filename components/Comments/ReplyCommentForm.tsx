@@ -1,23 +1,32 @@
 import { CommentType } from "../../@types/Comment";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { replyToComment } from "../../lib/api/api";
 import { notify, validateComment } from "../../lib/toastr/Notify";
 import axios, { AxiosError } from "axios";
 import AddCommentLoader from "../Misc/AddCommentLoader";
 import { commentStore } from "../../lib/store/commentStore";
+import dynamic from "next/dynamic";
+import { EditorState } from "draft-js";
+import { convertToHTML } from "draft-convert";
+// Dynamic import
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
 function ReplyCommentForm({ comment }: { comment: CommentType }) {
+  const queryClient = useQueryClient();
   const [isActionCompleted, setIsActionCompleted] = commentStore((state) => [
     state.isActionCompleted,
     state.setIsActionCompleted,
   ]);
-  const ref = useRef(null);
-  const queryClient = useQueryClient();
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
   const { mutate, isLoading } = useMutation({
     mutationFn: replyToComment,
     onSuccess: () => {
-      ref.current.value = "";
       queryClient.refetchQueries(["comments"]);
+      setEditorState(EditorState.createEmpty());
       notify("success", "Reply posted successfully");
       setIsActionCompleted(false);
     },
@@ -31,30 +40,36 @@ function ReplyCommentForm({ comment }: { comment: CommentType }) {
   });
 
   function handleReply() {
-    const isValid = validateComment(ref.current.value);
+    const comment = convertToHTML(editorState.getCurrentContent());
+    const isValid = validateComment(comment);
     if (isValid) {
       mutate({
         contentfulId: comment.recordId,
-        message: ref.current.value,
+        message: comment,
         commentId: comment.id,
       });
     }
   }
-
+  const replyTo = `Reply to ${comment.user.name}...`;
   return (
     <div className="ml-2 border-l-2 p-2 mb-2">
-      <div className="flex flex-row justify-center">
-        <div className="mt-2 rounded-full w-full">
-          <textarea
-            name=""
-            id=""
-            className="w-full h-24 border-[1px] rounded-md pl-2 p-2"
-            rows={10}
-            placeholder={`Reply to ${comment.user.name}...`}
-            ref={ref}
-          />
-        </div>
-      </div>
+      <Editor
+        wrapperClassName="wrapperClassName"
+        editorClassName="my-custom-editor-class"
+        toolbarClassName="my-custom-toolbar-class"
+        editorState={editorState}
+        placeholder={replyTo}
+        onEditorStateChange={setEditorState}
+        toolbar={{
+          options: ["inline", "list"],
+          inline: {
+            options: ["bold", "italic"],
+          },
+          list: {
+            options: ["ordered", "unordered"],
+          },
+        }}
+      />
       <div className="w-max">
         <button
           type="submit"

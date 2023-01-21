@@ -8,7 +8,7 @@ export default function Entries({ entries }: { entries: IEntries[] }) {
     return dateB.getTime() - dateA.getTime();
   });
   return (
-    <div className=" w-3/4 mx-auto">
+    <div className="xl:w-3/4 w-full p-4 mx-auto">
       <h1 className="text-center text-xl mb-3 mt-3 nav-center text-bold heading">
         LATEST ENTRIES
       </h1>

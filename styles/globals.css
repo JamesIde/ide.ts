@@ -2,9 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+.my-custom-editor-class {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid rgb(231, 228, 228);
+}
+
 /* Comment */
 .comment-body p {
-  padding-bottom: 3px;
+  padding-bottom: 5px;
+  font-size: 1rem;
+  line-height: 1.25;
 }
 
 .comment-body h1,
