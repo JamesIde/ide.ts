@@ -61,12 +61,6 @@ export default function Record({ record }: { record: IThumbnail }) {
               <p className="text-center mb-2 mt-2 font-mono">
                 [{record.fields.location}]
               </p>
-              <div className="items-right">
-                <p className="text-right text-sm text-gray-700 mt-1 mb-2">
-                  {record.fields.date}
-                </p>
-              </div>
-              <hr />
               <p className="mt-2">{record.fields.description}</p>
               <div className="flex justify-between mt-1">
                 <Link
@@ -109,7 +103,8 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </Link>
                 <div>
                   {/* TODO Enable */}
-                  <ViewCount contentfulId={record.sys.id} />
+                  {/* <ViewCount contentfulId={record.sys.id} /> */}
+                  <p className="text-right">{record.fields?.date}</p>
                 </div>
               </div>
               <hr className="mb-2 mt-2" />
