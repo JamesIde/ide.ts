@@ -16,7 +16,7 @@ function ViewCount({ contentfulId }: { contentfulId: string }) {
   });
 
   return (
-    <p className="text-rich-indigo text-sm">
+    <p className="text-rich-indigo text-sm text-right">
       {isSuccess
         ? viewCount.viewCount === 1
           ? viewCount.viewCount + " view"

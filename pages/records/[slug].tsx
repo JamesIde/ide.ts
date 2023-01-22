@@ -101,9 +101,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                     </div>
                   )}
                 </Link>
-                <div>
+                <div className="flex flex-col items-right ml-auto">
                   {/* TODO Enable */}
-                  {/* <ViewCount contentfulId={record.sys.id} /> */}
+                  <ViewCount contentfulId={record.sys.id} />
                   <p className="text-right">{record.fields?.date}</p>
                 </div>
               </div>

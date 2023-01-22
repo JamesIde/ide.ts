@@ -167,7 +167,6 @@ export class IdentityService {
       throw new BadRequestException(
         "An error occured. Validating your identity"
       );
-    console.log("here 4");
     const tokens = await this.generateTokens(user);
     return { ok: true, token: tokens.accessToken };
   }

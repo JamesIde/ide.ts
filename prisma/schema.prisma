@@ -45,4 +45,8 @@ model Comment {
   parent      Comment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   children    Comment[] @relation("ParentChild")
   parentId    String?
+
+  @@index([parentId])
+  @@index([recordId])
+  @@index([userId])
 }

@@ -18,8 +18,8 @@ export async function getStaticProps() {
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
 
+  await seedContentfulRecords(cRecords.items as IThumbnail[]);
   if (process.env.NODE_ENV === "production") {
-    await seedContentfulRecords(cRecords.items as IThumbnail[]);
   }
 
   return {
