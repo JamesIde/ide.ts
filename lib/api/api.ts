@@ -8,18 +8,27 @@ import {
 } from "../../@types/Comment";
 import baseClient from "../../config/baseClient";
 import { ViewCount } from "../../@types/ViewCount";
+
 export async function handleGoogleLogin(credential: CredentialResponse) {
   const res = await baseClient.post<User>("/api/identity", {
-    OAuthToken: credential.credential,
+    token: credential.credential,
   });
   return res.data;
 }
 
 export async function retrieveAllRecordComments(contentfulId: string) {
   const res = await baseClient.get<CommentRetrievalSuccess>(
-    `/api/records/${contentfulId}`
+    `/api/records?contentfulId=${contentfulId}`
   );
+  return res.data;
+}
 
+export async function updateRecordViewCount(
+  contentfulId: string
+): Promise<ViewCount> {
+  const res = await baseClient.post(
+    `/api/records?contentfulId=${contentfulId}`
+  );
   return res.data;
 }
 
@@ -58,12 +67,5 @@ export async function deleteCommentFromRecord(
   commentId: string
 ): Promise<CommentSuccess> {
   const res = await baseClient.delete(`/api/comments/${commentId}`);
-  return res.data;
-}
-
-export async function updateRecordViewCount(
-  contentfulId: string
-): Promise<ViewCount> {
-  const res = await baseClient.post(`/api/records/${contentfulId}`);
   return res.data;
 }

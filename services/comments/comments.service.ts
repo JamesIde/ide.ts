@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { EmailAdminPayload } from "../../../@types/Email";
-import prisma from "../../../config/prisma";
+import { EmailAdminPayload } from "../../@types/Email";
+import prisma from "../../config/prisma";
 import wash from "washyourmouthoutwithsoap";
 import emojiStrip from "emoji-strip";
 import {
   sendNewCommentEmailToAdmin,
   sendDeleteEmailToAdmin,
   sendCommentReplyEmail,
-} from "../../../lib/nodemailer/email";
-import { ReplyCommentPayload } from "../../../@types/Comment";
-import { validateToken } from "../../../lib/jwt/auth";
+} from "../../lib/nodemailer/email";
+import { ReplyCommentPayload } from "../../@types/Comment";
+import { validateToken } from "../../lib/jwt/auth";
 import {
   BadRequestException,
   InternalServerErrorException,
