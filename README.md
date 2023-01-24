@@ -8,7 +8,7 @@ This is a re-write of my [original site in Gatsby](https://github.com/JamesIde/j
 
 Migration to a better framework with incredible DX. No more plugins or GraphQL.
 
-The biggest change is the integration of a nested client-side rendered comments system. Its similar to Reddit, you can read, update and delete comments, and reply to other comments. Its embedded in the statically generated records page, for now. Other features include:
+The biggest change is the integration of a nested client-side rendered comments system. Its similar to Reddit, you can read, delete comments, and reply to other comments. Its embedded in the statically generated records page, for now. Other features include:
 
 - Google OAuth for authorization and own JWT integration with cookies.
 - SMTP service with Nodemailer for email notifications (comment post/reply).
