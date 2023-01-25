@@ -33,7 +33,7 @@ export async function handleIdentityToken(
   };
 
   const [setRedis, setSessionCookie] = await Promise.allSettled([
-    await setSession(req.session.user.sessionId, req.session.user.userId, 24),
+    await setSession(req.session.user.sessionId, req.session.user.userId, 1),
     await req.session.save(),
   ]);
 

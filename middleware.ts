@@ -25,8 +25,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
 }
 
 /*
- * This function queries the Redis database to check if the sessionId and userId
- * match the ones stored in the database. If they do, the request is forwarded
+ * Function to query redis and check if session in cookie matches session stored
  */
 async function queryRedis(
   sessionId: string,
@@ -76,7 +75,6 @@ async function queryRedis(
   }
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: "/api/records/:path*",
+  matcher: "/api/comments/:path*",
 };
