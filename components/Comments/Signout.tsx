@@ -5,7 +5,6 @@ import { notify } from "../../lib/toastr/Notify";
 import { handleSessionLogout } from "../../lib/api/api";
 function Signout() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-
   const { mutate } = useMutation({
     mutationFn: handleSessionLogout,
     onSuccess: () => {

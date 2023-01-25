@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { HiExternalLink } from "react-icons/hi";
-function Navigation() {
+function Navigation({ color }: { color: string }) {
   return (
-    <div className="navbar  mb-2">
+    <div
+      className="navbar  mb-2"
+      style={{
+        color: color,
+      }}
+    >
       <div className="container mx-auto ">
         <div className="flex-1">
           <div className="flex-none text-center nav-center mb-2">
