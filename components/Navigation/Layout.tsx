@@ -11,7 +11,7 @@ function Layout({ children }: Props) {
   return (
     <>
       {/* Navbar would go here */}
-      <Navigation />
+      <Navigation color="black" />
       {children}
       {/* <Footer /> */}
     </>
