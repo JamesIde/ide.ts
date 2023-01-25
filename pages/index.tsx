@@ -14,8 +14,6 @@ import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import Banner from "../components/Banner/Banner";
 import { useQueryClient } from "@tanstack/react-query";
-import { retrieveAllRecordComments } from "../lib/api/api";
-const queryClient = useQueryClient();
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
