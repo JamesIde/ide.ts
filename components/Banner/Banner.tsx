@@ -33,9 +33,9 @@ function Banner({ banner }: { banner: IBanner }) {
           </p>
           <Link
             href={`records/${banner?.fields.slug}`}
-            className="text-md w-max border-2 mx-auto font-medium
-                  p-2 bg-white text-black rounded hover:cursor-pointer duration-500 mt-4
-                  hover:bg-neutral-300 "
+            className="text-md w-max border-2 mx-auto font-medium rounded-lg hover:text-black hover:bg-white duration-500
+
+                  p-2 text-white "
           >
             READ MORE
           </Link>
