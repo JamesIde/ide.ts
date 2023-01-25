@@ -10,7 +10,7 @@ Migration to a better framework with incredible DX. No more plugins or GraphQL.
 
 The biggest change is the integration of a nested client-side rendered comments system. Its similar to Reddit, you can read, delete comments, and reply to other comments. Its embedded in the statically generated records page, for now. Other features include:
 
-- Google OAuth for authorization and own JWT integration with cookies.
+- Google OAuth with server-side sessions cached in Redis
 - SMTP service with Nodemailer for email notifications (comment post/reply).
 - A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
 - PostgreSQL database managed by ElephantSQL
@@ -18,8 +18,7 @@ The biggest change is the integration of a nested client-side rendered comments 
 ## techy resources
 
 - [Contentful interface generator](https://github.com/intercom/contentful-typescript-codegen) to generate typings for the environment
-- [next-api-decorators](https://next-api-decorators.vercel.app/) for decorated and typed API routes
-- [tsyringe](https://github.com/microsoft/tsyringe) for lightweight dependency injection container for services
+- [iron-session](https://github.com/vvo/iron-session) for handling sessions which are cached in Redis
 
 ## original resources and inspiration
 

@@ -8,28 +8,40 @@ import {
 } from "../../@types/Comment";
 import baseClient from "../../config/baseClient";
 import { ViewCount } from "../../@types/ViewCount";
+
 export async function handleGoogleLogin(credential: CredentialResponse) {
   const res = await baseClient.post<User>("/api/identity", {
-    OAuthToken: credential.credential,
+    token: credential.credential,
   });
   return res.data;
 }
 
 export async function retrieveAllRecordComments(contentfulId: string) {
   const res = await baseClient.get<CommentRetrievalSuccess>(
-    `/api/records/${contentfulId}`
+    `/api/records?contentfulId=${contentfulId}`
   );
+  return res.data;
+}
 
+export async function updateRecordViewCount(
+  contentfulId: string
+): Promise<ViewCount> {
+  const res = await baseClient.post(
+    `/api/records?contentfulId=${contentfulId}`
+  );
   return res.data;
 }
 
 export async function addCommentToRecord(
   comment: NewComment
 ): Promise<CommentSuccess> {
-  const res = await baseClient.post(`/api/comments/${comment.contentfulId}`, {
-    message: comment.message,
-    emailNotify: comment.emailNotify,
-  });
+  const res = await baseClient.post(
+    `/api/comments?contentfulId=${comment.contentfulId}`,
+    {
+      message: comment.message,
+      emailNotify: comment.emailNotify,
+    }
+  );
   return res.data;
 }
 
@@ -37,7 +49,7 @@ export async function replyToComment(
   comment: NewComment
 ): Promise<CommentSuccess> {
   const res = await baseClient.put(
-    `/api/comments/${comment.contentfulId}/${comment.commentId}`,
+    `/api/comments/?contentfulId=${comment.contentfulId}&commentId=${comment.commentId}`,
     {
       message: comment.message,
     }
@@ -45,25 +57,9 @@ export async function replyToComment(
   return res.data;
 }
 
-export async function updateComment(
-  comment: NewComment
-): Promise<CommentSuccess> {
-  const res = await baseClient.patch(`/api/comments/${comment.commentId}`, {
-    message: comment.message,
-  });
-  return res.data;
-}
-
 export async function deleteCommentFromRecord(
   commentId: string
 ): Promise<CommentSuccess> {
-  const res = await baseClient.delete(`/api/comments/${commentId}`);
-  return res.data;
-}
-
-export async function updateRecordViewCount(
-  contentfulId: string
-): Promise<ViewCount> {
-  const res = await baseClient.post(`/api/records/${contentfulId}`);
+  const res = await baseClient.delete(`/api/comments/?commentId=${commentId}`);
   return res.data;
 }
