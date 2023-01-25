@@ -9,7 +9,6 @@ import { deleteCommentFromRecord } from "../../lib/api/api";
 import { useEffect, useState } from "react";
 import { notify } from "../../lib/toastr/Notify";
 import { commentStore } from "../../lib/store/commentStore";
-import { hasCookie } from "cookies-next";
 import axios, { AxiosError } from "axios";
 import ReplyCommentForm from "./ReplyCommentForm";
 import IconLoader from "../Misc/IconLoader";
@@ -32,17 +31,6 @@ function Comment({
 
   const queryClient = useQueryClient();
   useEffect(() => {
-    const cookie = hasCookie("jid", {
-      domain:
-        process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_PROD_COOKIE_DOMAIN
-          : process.env.NEXT_PUBLIC_DEV_COOKIE_DOMAIN,
-    });
-
-    if (!cookie) {
-      setUser(null);
-      sessionStorage.removeItem("user");
-    }
     if (!isActionCompleted) {
       setToggleReply(false);
     }
