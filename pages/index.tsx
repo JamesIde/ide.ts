@@ -15,7 +15,7 @@ import Helmet from "../components/Navigation/Helmet";
 import Banner from "../components/Banner/Banner";
 import { useQueryClient } from "@tanstack/react-query";
 import { retrieveAllRecordComments } from "../lib/api/api";
-
+const queryClient = useQueryClient();
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -36,14 +36,6 @@ export async function getStaticProps() {
   };
 }
 
-async function prefetchRecordComments(records: IThumbnail[]) {
-  const queryClient = useQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["comments"],
-    queryFn: () => retrieveAllRecordComments("3zsIHczhEyQ3OdCfxxlve6"),
-  });
-}
-
 export default function Home({
   entries,
   records,
@@ -55,7 +47,6 @@ export default function Home({
   photos: IPhotoCollection[];
   banner: IBanner;
 }) {
-  prefetchRecordComments(records);
   return (
     <>
       <Helmet title="Home" />
