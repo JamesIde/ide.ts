@@ -1,13 +1,14 @@
 import { useStore } from "../../lib/store/userStore";
 import { retrieveAllRecordComments } from "../../lib/api/api";
 import { useQuery } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
 import { CommentRetrievalSuccess } from "../../@types/Comment";
 import { notify } from "../../lib/toastr/Notify";
-import axios, { AxiosError } from "axios";
 import GoogleLoginButton from "./GoogleLoginButton";
 import CommentForm from "./AddCommentForm";
 import Comments from "./Comments";
 import { commentStore } from "../../lib/store/commentStore";
+import Signout from "./Signout";
 function CommentWrapper({
   contentfulId,
   recordTitle,
@@ -43,12 +44,6 @@ function CommentWrapper({
       refetchOnWindowFocus: false,
     }
   );
-
-  function handleSignout() {
-    setUser(null);
-    sessionStorage.removeItem("user");
-    notify("success", "Logout successfully");
-  }
 
   return (
     <>
@@ -99,14 +94,7 @@ function CommentWrapper({
             <p>No comments found</p>
           ))}
         <hr />
-        {user && (
-          <div
-            className="mt-2 ml-auto p-2 border-[1px] text-red-700 border-red-800 hover:bg-red-800 duration-500 w-min hover:cursor-pointer rounded hover:text-white font-bold text-sm"
-            onClick={() => handleSignout()}
-          >
-            Logout
-          </div>
-        )}
+        <Signout />
       </div>
     </>
   );

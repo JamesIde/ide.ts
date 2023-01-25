@@ -8,11 +8,17 @@ import {
 } from "../../@types/Comment";
 import baseClient from "../../config/baseClient";
 import { ViewCount } from "../../@types/ViewCount";
+import { LogoutSuccess } from "../../@types/Token";
 
 export async function handleGoogleLogin(credential: CredentialResponse) {
   const res = await baseClient.post<User>("/api/identity", {
     token: credential.credential,
   });
+  return res.data;
+}
+
+export async function handleSessionLogout() {
+  const res = await baseClient.delete<LogoutSuccess>("/api/identity");
   return res.data;
 }
 

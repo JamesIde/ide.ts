@@ -16,6 +16,10 @@ export interface JWTPayload {
 }
 
 export interface AccessTokenSuccess {
-  ok: true;
+  ok: boolean;
   token: string;
+}
+
+export interface LogoutSuccess {
+  ok: boolean;
 }

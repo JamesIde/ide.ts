@@ -4,7 +4,7 @@ import { ProfileTransformer } from "../lib/transformer/profileTransformer";
 import { v4 as uuidv4 } from "uuid";
 import { sendNewUserEmailToAdmin } from "../lib/nodemailer/email";
 import prisma from "../config/prisma";
-import setSession from "../lib/redis/setSession";
+import { deleteSession, setSession } from "../lib/redis/sessionHandlers";
 import jwt_decode from "jwt-decode";
 /**
  * Public method for handling the OAuth Token returned from Google
@@ -113,4 +113,29 @@ export async function loginUser(profile: OAuthToken) {
       providerId: profile.sub,
     },
   });
+}
+
+/**
+ * Public method for logging out a user and removing the session from Redis
+ */
+export async function handleSessionLogout(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { sessionId } = req.session.user;
+
+  const [deleteSessionRedis, deleteSessionCookie] = await Promise.allSettled([
+    await deleteSession(sessionId),
+    req.session.destroy(),
+  ]);
+
+  if (
+    deleteSessionRedis.status === "rejected" ||
+    deleteSessionCookie.status === "rejected"
+  ) {
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+  return res.status(200).json({ ok: true });
 }
