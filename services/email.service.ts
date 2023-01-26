@@ -1,7 +1,7 @@
-import { ReplyCommentPayload } from "../../@types/Comment";
-import { EmailAdminPayload } from "../../@types/Email";
-import { IdpUser } from "../../@types/Profile";
-import emailSender from "./transporter";
+import { ReplyCommentPayload } from "../@types/Comment";
+import { EmailAdminPayload } from "../@types/Email";
+import { IdpUser } from "../@types/Profile";
+import emailSender from "../lib/nodemailer/transporter";
 
 export async function sendNewCommentEmailToAdmin(email: EmailAdminPayload) {
   await emailSender().sendMail({

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { IdpUser, OAuthToken } from "../@types/Profile";
 import { ProfileTransformer } from "../lib/transformer/profileTransformer";
 import { v4 as uuidv4 } from "uuid";
-import { sendNewUserEmailToAdmin } from "../lib/nodemailer/email";
+import { sendNewUserEmailToAdmin } from "./email.service";
 import prisma from "../config/prisma";
 import { deleteSession, setSession } from "../lib/redis/sessionHandlers";
 import jwt_decode from "jwt-decode";

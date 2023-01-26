@@ -6,7 +6,7 @@ import {
   sendCommentReplyEmail,
   sendDeleteEmailToAdmin,
   sendNewCommentEmailToAdmin,
-} from "../lib/nodemailer/email";
+} from "./email.service";
 import emojiStrip from "emoji-strip";
 import wash from "washyourmouthoutwithsoap";
 import getUserFromHeader from "../lib/transformer/userHeader";
