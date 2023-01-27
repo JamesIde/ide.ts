@@ -8,11 +8,11 @@ import {
 } from "../../@types/Comment";
 import baseClient from "../../config/baseClient";
 import { ViewCount } from "../../@types/ViewCount";
-import { LogoutSuccess } from "../../@types/Token";
+import { GoogleToken, LogoutSuccess } from "../../@types/Token";
 
-export async function handleGoogleLogin(credential: CredentialResponse) {
+export async function handleGoogleLogin(googleToken: GoogleToken) {
   const res = await baseClient.post<User>("/api/identity", {
-    token: credential.credential,
+    code: googleToken.code,
   });
   return res.data;
 }

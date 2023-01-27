@@ -6,7 +6,7 @@ import {
 } from "../../services/identity.service";
 
 function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST" && req.body.token) {
+  if (req.method === "POST") {
     return handleIdentityToken(req, res);
   } else if (req.method === "DELETE") {
     return handleSessionLogout(req, res);

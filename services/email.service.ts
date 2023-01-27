@@ -52,5 +52,3 @@ export async function sendCommentReplyEmail(payload: ReplyCommentPayload) {
     `,
   });
 }
-
-// You've received a reply to your comment.
