@@ -1,11 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { IdpUser, OAuthToken } from "../@types/Profile";
+import { IdpUser } from "../@types/Profile";
 import { ProfileTransformer } from "../lib/transformer/profileTransformer";
 import { v4 as uuidv4 } from "uuid";
 import { sendNewUserEmailToAdmin } from "./email.service";
 import prisma from "../config/prisma";
 import { deleteSession, setSession } from "../lib/redis/sessionHandlers";
-import jwt_decode from "jwt-decode";
+import {
+  GoogleOAuthTokenSuccess,
+  GoogleProfile,
+  GoogleToken,
+} from "../@types/Token";
+import fetch, { Response } from "node-fetch";
 /**
  * Public method for handling the OAuth Token returned from Google
  */
@@ -13,19 +18,26 @@ export async function handleIdentityToken(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (!req.body.token) {
+  const clientOauthRequest: GoogleToken = req.body;
+  if (!req.body) {
     return res.status(400).send("No identity presented");
   }
-  const token = req.body.token;
 
-  let decoded: OAuthToken;
-  try {
-    decoded = jwt_decode(token);
-  } catch (error) {
-    return res.status(400).send("Error establishing identity.");
+  const googleToken = await handleGoogleTokenValidation(clientOauthRequest);
+
+  if (!googleToken) {
+    return res.status(500).send("Error establishing identity.");
   }
 
-  const user = await validateUserIdentity(res, decoded);
+  const googleProfile = await handleGoogleUserInformation(
+    googleToken.access_token
+  );
+
+  if (!googleProfile) {
+    return res.status(500).send("Error establishing identity.");
+  }
+
+  const user = await validateUserIdentity(res, googleProfile);
 
   req.session.user = {
     sessionId: uuidv4(),
@@ -50,37 +62,120 @@ export async function handleIdentityToken(
 }
 
 /**
+ * A private method for calling Google's OAuth token API to validate the client code
+ */
+export async function handleGoogleTokenValidation(
+  clientOauthRequest: GoogleToken
+): Promise<GoogleOAuthTokenSuccess> {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+  const data = {
+    client_id: clientId,
+    client_secret: clientSecret,
+    code: clientOauthRequest.code,
+    grant_type: "authorization_code",
+    redirect_uri:
+      process.env.NODE_ENV === "production"
+        ? process.env.OAUTH_PROD_URL
+        : process.env.OAUTH_DEV_URL,
+  };
+
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  const url = new URL(process.env.GOOGLE_OAUTH_TOKEN_URL);
+
+  let response: Response;
+  try {
+    response = await fetch(url.href.toString(), requestOptions);
+  } catch (error) {
+    throw new Error("Error establishing identity on your behalf.");
+  }
+
+  if (response.ok) {
+    const data = await response.json();
+    return data as GoogleOAuthTokenSuccess;
+  } else {
+    let message: string;
+    try {
+      message = (await response.json()) as string;
+    } catch (error) {}
+    throw new Error(
+      message ?? `Error ${response.status}: ${response.statusText}`
+    );
+  }
+}
+
+/**
+ * A method for accessing the user's profile information from Google
+ */
+export async function handleGoogleUserInformation(token: string) {
+  const url = new URL(process.env.GOOGLE_OAUTH_PROFILE_URL);
+
+  const requestOptions = {
+    method: "GET",
+    "Content-Type": "application/json",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  let response: Response;
+  try {
+    response = await fetch(url.href.toString(), requestOptions);
+  } catch (error) {
+    throw new Error("Error establishing identity on your behalf.");
+  }
+
+  if (response.ok) {
+    const data = await response.json();
+    return data as GoogleProfile;
+  } else {
+    let message: string;
+    try {
+      message = (await response.json()) as string;
+    } catch (error) {}
+    throw new Error(
+      message ?? `Error ${response.status}: ${response.statusText}`
+    );
+  }
+}
+
+/**
  * Public method for validating the users identity based on the decoded token
  * It either registers or logs in the user
  */
 export async function validateUserIdentity(
   res: NextApiResponse,
-  decoded: OAuthToken
+  user: GoogleProfile
 ): Promise<IdpUser> {
-  let user: IdpUser;
+  let userProfile;
 
-  const userExists = await checkIfUserExists(decoded);
+  const userExists = await checkIfUserExists(user);
 
   if (!userExists) {
-    user = await registerUser(decoded);
-    await sendNewUserEmailToAdmin(user);
+    userProfile = await registerUser(user);
+    await sendNewUserEmailToAdmin(userProfile);
+  } else {
+    userProfile = await loginUser(user);
   }
-
-  user = await loginUser(decoded);
-
-  return user;
+  return userProfile;
 }
 
 /**
  * A public method for checking if the user exists based on the decoded token
  */
-export async function checkIfUserExists(decoded: OAuthToken) {
-  const user = await prisma.user.findUnique({
+export async function checkIfUserExists(user: GoogleProfile) {
+  const existingUser = await prisma.user.findUnique({
     where: {
-      providerId: decoded.sub,
+      providerId: user.id,
     },
   });
-  if (!user) {
+  if (!existingUser) {
     return false;
   }
   return true;
@@ -89,17 +184,17 @@ export async function checkIfUserExists(decoded: OAuthToken) {
 /**
  *  Public method for registering user based on the decoded token
  */
-export async function registerUser(profile: OAuthToken) {
+export async function registerUser(user: GoogleProfile) {
   return await prisma.user.create({
     data: {
-      email: profile.email,
+      email: user.email,
       email_verified: true,
-      name: profile.name,
-      providerId: profile.sub,
-      iss: profile.iss,
-      picture: profile.picture,
-      family_name: profile.family_name,
-      given_name: profile.given_name,
+      name: user.name,
+      providerId: user.id,
+      iss: "https://accounts.google.com",
+      picture: user.picture,
+      family_name: user.family_name,
+      given_name: user.given_name,
     },
   });
 }
@@ -107,10 +202,10 @@ export async function registerUser(profile: OAuthToken) {
 /**
  * Public method for logging in user based on the decoded token
  */
-export async function loginUser(profile: OAuthToken) {
+export async function loginUser(user: GoogleProfile) {
   return await prisma.user.findUnique({
     where: {
-      providerId: profile.sub,
+      providerId: user.id,
     },
   });
 }
