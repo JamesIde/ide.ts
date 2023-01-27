@@ -10,7 +10,7 @@ Migration to a better framework with incredible DX. No more plugins or GraphQL.
 
 The biggest change is the integration of a nested client-side rendered comments system. Its similar to Reddit, you can read, delete comments, and reply to other comments. Its embedded in the statically generated records page, for now. Other features include:
 
-- Google OAuth with server-side sessions cached in Redis
+- OAuth 2.0 with Google and Redis for server-side sessions.
 - SMTP service with Nodemailer for email notifications (comment post/reply).
 - A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
 - PostgreSQL database managed by ElephantSQL
