@@ -12,7 +12,7 @@ The biggest change is the integration of a nested client-side rendered comments 
 
 - OAuth 2.0 with Google and Redis for server-side sessions.
 - SMTP service with Nodemailer for email notifications (comment post/reply).
-- Serverless pub/sub queue for handling emails via a Gmail SMPT server.
+- Serverless pub/sub queue for handling emails via a Gmail SMTP server.
 - A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
 - PostgreSQL database for comments and users.
 
