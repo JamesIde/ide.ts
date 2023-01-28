@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { IdpUser } from "../@types/Profile";
 import { ProfileTransformer } from "../lib/transformer/profileTransformer";
 import { v4 as uuidv4 } from "uuid";
-import { sendNewUserEmailToAdmin } from "./email.service";
 import prisma from "../config/prisma";
 import { deleteSession, setSession } from "../lib/redis/sessionHandlers";
 import {
@@ -11,6 +10,9 @@ import {
   GoogleToken,
 } from "../@types/Token";
 import fetch, { Response } from "node-fetch";
+import broker from "../lib/broker/qStashClient";
+import { sendNewUserEmailToAdmin } from "./email.service";
+
 /**
  * Public method for handling the OAuth Token returned from Google
  */
@@ -23,6 +25,12 @@ export async function handleIdentityToken(
     return res.status(400).send("No identity presented");
   }
 
+  await broker.publishJSON({
+    topic: "email",
+    body: {
+      channel: "new-user",
+    },
+  });
   const googleToken = await handleGoogleTokenValidation(clientOauthRequest);
 
   if (!googleToken) {
