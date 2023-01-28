@@ -12,13 +12,15 @@ The biggest change is the integration of a nested client-side rendered comments 
 
 - OAuth 2.0 with Google and Redis for server-side sessions.
 - SMTP service with Nodemailer for email notifications (comment post/reply).
+- Serverless pub/sub queue for handling emails via a Gmail SMPT server.
 - A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
-- PostgreSQL database managed by ElephantSQL
+- PostgreSQL database for comments and users.
 
 ## techy resources
 
 - [Contentful interface generator](https://github.com/intercom/contentful-typescript-codegen) to generate typings for the environment
 - [iron-session](https://github.com/vvo/iron-session) for handling sessions which are cached in Redis
+- [QStash](https://docs.upstash.com/qstash) for serverless message brokering. A pub/sub solution consumed by [ide.qstash.ts](https://github.com/JamesIde/ide.qstash.ts) for emails.
 
 ## original resources and inspiration
 
