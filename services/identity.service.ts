@@ -11,6 +11,8 @@ import {
   GoogleToken,
 } from "../@types/Token";
 import fetch, { Response } from "node-fetch";
+import broker from "../lib/broker/qStashClient";
+
 /**
  * Public method for handling the OAuth Token returned from Google
  */
@@ -23,6 +25,12 @@ export async function handleIdentityToken(
     return res.status(400).send("No identity presented");
   }
 
+  await broker.publishJSON({
+    topic: "email",
+    body: {
+      channel: "new-user",
+    },
+  });
   const googleToken = await handleGoogleTokenValidation(clientOauthRequest);
 
   if (!googleToken) {
@@ -159,9 +167,9 @@ export async function validateUserIdentity(
 
   if (!userExists) {
     userProfile = await registerUser(user);
-    await sendNewUserEmailToAdmin(userProfile);
+    // await sendNewUserEmailToAdmin(userProfile);
   } else {
-    userProfile = await loginUser(user);
+    userProfile = await loginUser(user); // TODO un comment
   }
   return userProfile;
 }
