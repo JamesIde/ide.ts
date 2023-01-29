@@ -39,7 +39,7 @@ export async function handleIdentityToken(
     return res.status(500).send("Error establishing identity.");
   }
 
-  const user = await validateUserIdentity(res, googleProfile);
+  const user = await validateUserIdentity(googleProfile);
 
   req.session.user = {
     sessionId: uuidv4(),
@@ -152,7 +152,6 @@ export async function handleGoogleUserInformation(token: string) {
  * It either registers or logs in the user
  */
 export async function validateUserIdentity(
-  res: NextApiResponse,
   user: GoogleProfile
 ): Promise<IdpUser> {
   let userProfile;
