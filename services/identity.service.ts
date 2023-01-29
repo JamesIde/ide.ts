@@ -160,7 +160,7 @@ export async function validateUserIdentity(
 
   if (!userExists) {
     userProfile = await registerUser(user);
-    await sendNewUserEmailToAdmin(userProfile);
+    sendNewUserEmailToAdmin(userProfile);
   } else {
     userProfile = await loginUser(user);
   }

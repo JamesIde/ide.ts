@@ -111,7 +111,7 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
       }),
     };
 
-    await sendNewCommentEmailToAdmin(notifyAdminPayload);
+    sendNewCommentEmailToAdmin(notifyAdminPayload);
     return res.status(201).json({ ok: true });
   } catch (error) {
     return res
@@ -201,7 +201,7 @@ export async function replyToComment(
             .toString(),
         };
 
-        await sendCommentReplyEmail(replyToCommentPayload);
+        sendCommentReplyEmail(replyToCommentPayload);
       }
 
       return res.status(201).json(comment);
@@ -256,7 +256,7 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
       commentUserDate: new Date(Date.now()).toString(),
     };
 
-    await sendDeleteEmailToAdmin(deleteEmailPayload);
+    sendDeleteEmailToAdmin(deleteEmailPayload);
     try {
       await prisma.comment.delete({
         where: {
