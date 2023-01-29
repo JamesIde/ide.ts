@@ -25,12 +25,6 @@ export async function handleIdentityToken(
     return res.status(400).send("No identity presented");
   }
 
-  await broker.publishJSON({
-    topic: "email",
-    body: {
-      channel: "new-user",
-    },
-  });
   const googleToken = await handleGoogleTokenValidation(clientOauthRequest);
 
   if (!googleToken) {
