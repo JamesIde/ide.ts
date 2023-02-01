@@ -27,7 +27,7 @@ export async function getStaticProps() {
   return {
     props: {
       entries: cEntries.items,
-      records: cRecords.items,
+      records: cRecords.items.slice(1, 3),
       photos: cPhotos.items,
       banner: cBanner.items[0],
     },
