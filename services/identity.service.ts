@@ -65,6 +65,7 @@ export async function handleIdentityToken(
 
 /**
  * A private method for calling Google's OAuth token API to validate the client code
+ * This is called after a user hits 'Sign in with Google' on the UI.
  */
 export async function handleGoogleTokenValidation(
   clientOauthRequest: GoogleToken
@@ -113,7 +114,8 @@ export async function handleGoogleTokenValidation(
 }
 
 /**
- * A method for accessing the user's profile information from Google
+ * A private method for accessing Googles profile API with the access token obtained from Googles OAuth token API.
+ * This returns the user's Google profile information.
  */
 export async function handleGoogleUserInformation(token: string) {
   const url = new URL(process.env.GOOGLE_OAUTH_PROFILE_URL);
@@ -148,8 +150,9 @@ export async function handleGoogleUserInformation(token: string) {
 }
 
 /**
- * Public method for validating the users identity based on the decoded token
- * It either registers or logs in the user
+ * Public method for validating the user identity based on the google profile obtained from google.
+ * The profile is handed to this function after the OAuth steps have completed.
+ * A check for registering or logging in the user is performed.
  */
 export async function validateUserIdentity(
   user: GoogleProfile
@@ -168,7 +171,7 @@ export async function validateUserIdentity(
 }
 
 /**
- * A public method for checking if the user exists based on the decoded token
+ * A public method for checking if the user exists based on the google profile Id (provider Id)
  */
 export async function checkIfUserExists(user: GoogleProfile) {
   const existingUser = await prisma.user.findUnique({
@@ -183,7 +186,7 @@ export async function checkIfUserExists(user: GoogleProfile) {
 }
 
 /**
- *  Public method for registering user based on the decoded token
+ *  Public method for registering users
  */
 export async function registerUser(user: GoogleProfile) {
   return await prisma.user.create({
@@ -201,7 +204,7 @@ export async function registerUser(user: GoogleProfile) {
 }
 
 /**
- * Public method for logging in user based on the decoded token
+ * Public method for logging in users
  */
 export async function loginUser(user: GoogleProfile) {
   return await prisma.user.findUnique({
