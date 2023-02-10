@@ -41,20 +41,6 @@ export async function handleIdentityToken(
 
   const user = await validateUserIdentity(googleProfile);
 
-  const sessionUser = await setUserSession(req, res, user);
-
-  return ProfileTransformer.transformProfile(sessionUser as IdpUser);
-}
-
-/**
- * A method for creating the user session.
- * It sets the session cookie, and sets the session in Redis by calling the underlying service @see setSession
- */
-export async function setUserSession(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  user: IdpUser
-) {
   req.session.user = {
     sessionId: uuidv4(),
     userId: user.id,
@@ -73,7 +59,7 @@ export async function setUserSession(
       .status(500)
       .send("Something went wrong. Please try again later.");
   } else {
-    return user;
+    return res.status(200).json(ProfileTransformer.transformProfile(user));
   }
 }
 
