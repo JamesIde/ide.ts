@@ -14,6 +14,7 @@ import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import Banner from "../components/Banner/Banner";
 import { useQueryClient } from "@tanstack/react-query";
+import Navigation from "../components/Navigation/Navigation";
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -27,7 +28,7 @@ export async function getStaticProps() {
   return {
     props: {
       entries: cEntries.items,
-      records: cRecords.items.slice(1, 3),
+      records: cRecords.items,
       photos: cPhotos.items,
       banner: cBanner.items[0],
     },
@@ -48,8 +49,8 @@ export default function Home({
   return (
     <>
       <Helmet title="Home" />
-      {/* <Navigation /> */}
-      <Banner banner={banner} />
+      <Navigation color="black" />
+      {/* <Banner banner={banner} /> */}
       <Records records={records} />
       <PhotoCollection photos={photos} />
       <Entries entries={entries} />
