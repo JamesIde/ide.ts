@@ -217,6 +217,9 @@ export interface IThumbnailFields {
   /** date */
   date?: string | undefined;
 
+  /** date */
+  attributions?: string | undefined;
+
   /** posted */
   posted: string;
 

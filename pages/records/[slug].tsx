@@ -109,7 +109,12 @@ export default function Record({ record }: { record: IThumbnail }) {
               </div>
               <hr className="mb-2 mt-2" />
             </section>
-
+            <div id="attributions">
+              <p className="text-center pb-2">
+                <ReactMarkdown>{record.fields.attributions}</ReactMarkdown>
+              </p>
+              <hr />
+            </div>
             <div className="record-details">
               <ReactMarkdown>{record.fields?.prefaceDescription}</ReactMarkdown>
               <div className="record-stats">

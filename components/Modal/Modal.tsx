@@ -8,7 +8,7 @@ export default function Modal({
   id: string;
 }) {
   return (
-    <div className="fixed flex justify-center items-center h-screen top-0 left-0 bg-blurred flex-col">
+    <div className="fixed flex justify-center items-center h-screen w-screen top-0 left-0 bg-blurred flex-col">
       <div>
         <Image
           src={currImage.url}
