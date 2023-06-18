@@ -6,16 +6,6 @@ A place to store hiking trips, photo collections and the occasional blog entry.
 
 This is a re-write of my [original site in Gatsby](https://github.com/JamesIde/jamesaide.com) to NextJS with TypeScript. All content is served from Contentful and styled with TailwindCSS. Text is rendered using React-Markdown.
 
-Migration to a better framework with incredible DX. No more plugins or GraphQL.
-
-The biggest change is the integration of a nested client-side rendered comments system. Its similar to Reddit, you can read, delete comments, and reply to other comments. Its embedded in the statically generated records page, for now. Other features include:
-
-- OAuth 2.0 with Google and Redis for server-side sessions.
-- SMTP service with Nodemailer for email notifications (comment post/reply).
-- Serverless pub/sub queue for handling emails via a Gmail SMTP server.
-- A properly resized modal optimised by [Next/Image](https://nextjs.org/docs/api-reference/next/image).
-- PostgreSQL database for comments and users.
-
 ## techy resources
 
 - [Contentful interface generator](https://github.com/intercom/contentful-typescript-codegen) to generate typings for the environment
