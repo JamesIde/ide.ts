@@ -85,7 +85,7 @@ function Privacy() {
           <h3 className="mt-2 mb-2 playfair text-2xl">Contact Us</h3>
           <p className="mt-2 mb-2">
             If you have any questions or concerns about this Privacy Policy or
-            Terratrack's privacy practices, please{" "}
+            Terratrack's privacy practices, please
             <a
               href="mailto:james.ide775@gmail.com"
               target="_#"
