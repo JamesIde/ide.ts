@@ -11,11 +11,10 @@ function Privacy() {
           Effective Date: 24/6/2023
         </h3>
         <p className="mt-2 mb-2">
-          This Privacy Policy governs the manner in which Terratrack ("the App,"
-          "we," "our," or "us") collects, uses, maintains, and discloses
-          information collected from users ("you" or "your") of the Terratrack
-          mobile application. This Privacy Policy applies to the App and all
-          products and services offered by Terratrack.
+          This Privacy Policy governs the manner in which Terratrack collects,
+          uses, maintains, and discloses information collected from usersof the
+          Terratrack mobile application. This Privacy Policy applies to the App
+          and all products and services offered by Terratrack.
         </p>
         <div>
           <h3 className="mt-2 mb-2 playfair text-2xl">
