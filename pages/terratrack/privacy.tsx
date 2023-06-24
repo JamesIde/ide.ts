@@ -51,7 +51,6 @@ function Privacy() {
             mandatory for using Terratrack, and the App will still function with
             location updates while running in the foreground.
           </p>
-
           <h3 className="mt-2 mb-2 playfair text-2xl">Cloud Storage</h3>
           <h4 className="playfair text-xl">1.4 Cloud Storage:</h4>
           <p className="mt-2 mb-2">
@@ -61,7 +60,6 @@ function Privacy() {
             your uploaded activities are securely stored and accessible only to
             you.
           </p>
-
           <h3 className="mt-2 mb-2 playfair text-2xl">Data Security</h3>
           <p className="mt-2 mb-2">
             We prioritize the security of your information and have implemented
@@ -70,7 +68,6 @@ function Privacy() {
             We employ industry-standard encryption protocols and secure storage
             practices to safeguard your data.
           </p>
-
           <h3 className="mt-2 mb-2 playfair text-2xl">
             Changes to this Privacy Policy
           </h3>
@@ -82,7 +79,6 @@ function Privacy() {
             to this Privacy Policy will constitute your acknowledgment of the
             changes and your consent to abide by the updated terms.
           </p>
-
           <h3 className="mt-2 mb-2 playfair text-2xl">Contact Us</h3>
           <p className="mt-2 mb-2">
             If you have any questions or concerns about this Privacy Policy or
