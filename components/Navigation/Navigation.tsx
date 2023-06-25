@@ -27,6 +27,12 @@ function Navigation({ color }: { color: string }) {
               ABOUT
             </Link>
             <Link
+              href="/projects"
+              className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3"
+            >
+              PROJECTS
+            </Link>
+            <Link
               href="/gear"
               className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3"
             >

@@ -335,3 +335,19 @@ ul > li > a {
 #attributions > p > p > a {
   color: #007bff !important;
 }
+
+@font-face {
+  font-weight: 400;
+  font-family: Proxima Nova;
+  src: url(/fonts/proxima-nova-regular.woff) format("woff");
+}
+@font-face {
+  font-weight: 600;
+  font-family: Proxima Nova;
+  src: url(/fonts/proxima-nova-semibold.woff) format("woff");
+}
+@font-face {
+  font-weight: 700;
+  font-family: Proxima Nova;
+  src: url(/fonts/proxima-nova-bold.woff) format("woff");
+}
