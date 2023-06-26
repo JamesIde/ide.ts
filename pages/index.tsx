@@ -20,7 +20,6 @@ export async function getStaticProps() {
   const cRecords = await getContentfulEntries("thumbnail");
   const cPhotos = await getContentfulEntries("photoCollection");
   const cBanner = await getContentfulEntries("banner");
-  const cProjects = await getContentfulEntries("projects");
 
   if (process.env.NODE_ENV === "production") {
     await seedContentfulRecords(cRecords.items as IThumbnail[]);

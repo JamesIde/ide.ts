@@ -4,6 +4,7 @@ import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
 import { getContentfulEntries } from "../../lib/api/contentful";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import ProjectItem from "./projectItem";
 
 export async function getStaticProps() {
   const cProjects = await getContentfulEntries("projects");
@@ -28,40 +29,9 @@ export default function Projects({ projects }: { projects: IProjects[] }) {
           I am often building things in my spare time - sometimes these things
           make it to production.
         </p>
-        <section>
-          {projects.map((project: IProjects) => {
-            return (
-              <>
-                <div
-                  className="flex md:flex-col lg:flex-row xl:flex-row flex-col
-                gap-2 md:gap-4 lg:gap-4 xl:gap-4  hover:border-gray-200"
-                >
-                  <Image
-                    src={`https:${project.fields.logo.fields.file.url}`}
-                    alt={project.fields.logo.fields.title}
-                    width={128}
-                    height={128}
-                    quality={100}
-                    className="mx-auto mb-2 md:mb-0 lg:mb-0 xl:mb-0 md:mx-auto lg:mx-0 xl:mx-0 "
-                  />
-                  <div>
-                    <h3 className="text-3xl font-nova font-bold text-center md:text-center xl:text-left lg:text-left">
-                      {project.fields.title.toUpperCase()}
-                    </h3>
-                    <span className="font-nova text-md md:text-center xl:text-left lg:text-left">
-                      <ReactMarkdown>
-                        {project.fields.description}
-                      </ReactMarkdown>
-                    </span>
-                  </div>
-                </div>
-                {projects.indexOf(project) !== projects.length - 1 && (
-                  <hr className="mt-4 mb-4" />
-                )}
-              </>
-            );
-          })}
-        </section>
+        {projects.map((project: IProjects) => {
+          return <ProjectItem project={project} />;
+        })}
       </div>
     </Layout>
   );
