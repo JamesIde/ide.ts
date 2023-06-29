@@ -18,7 +18,7 @@ activities - specifically my longer rucks in preparation for trips later this ye
 
 <br />
 
-I'd never worked with Mapbox, (specifically <a href = "https://github.com/rnmapbox/maps" target = "_#" className = "text-blue-500 hover:text-blue-900 duration-500">@rnmapbox/maps</a>) or even React Native at this point. It was a good opportunity to start something new, given I've spent a decent amount of time with React and its metaframeworks.
+I'd never worked with Mapbox, (specifically <a href = "https://github.com/rnmapbox/maps" target = "_#" className = "text-blue-500 hover:text-blue-900 duration-500">@rnmapbox/maps</a>) or even React Native at this point. I'd never used Expo and I didn't know what EAS and didn't know how mobile apps really worked. So it was a good opportunity to learn something new.. and man, there was a lot to learn...
 
 <br />
 Terratrack is very minimal. You select your activity type, record your activity and
@@ -70,7 +70,7 @@ These are stored on <a href = "https://supabase.com/docs" target ="_#" className
 <a href = "https://terratrack-web.vercel.app/" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500"> website </a> that allows you to login, and view your uploaded activities. It's a lot easier and more pleasing to view your gps tracks on a bigger screen.
 <br />
 
-The greatest issue was consistent location updates. Given this is a GPS tracking app, you HAVE to have the most accurate information possible, otherwise whats the point of the whole thing? This took many attempts to get right.
+One of the bigger problems I had was arround consistent location updates. Given this is a GPS tracking app, you HAVE to have the most accurate information possible, otherwise whats the point of the whole thing? This took many attempts to get right.
 You can use the UserLocation Component that comes with RNMapbox and this works well on iOS devices, but on Android its a different story. Here's how I originally set it up:
 
 <br />
@@ -155,6 +155,8 @@ useEffect(() => {
   };
 }, [recordingState]);
 ```
+<br/>
+You see above? There's no code thats actually updating state or making an API call with the location updates. But! We're starting a continous stream of location updates by passing in our ```TASK_FETCH_LOCATION```. This will run the task (see code snippet 2) which will handle the updating of the location object.
 
 <br />
 The catch here is the following: your Location object registers to receive the location
@@ -162,6 +164,8 @@ updates provided by the task manager - even in the background. Basically... I ge
 background location updates despite only having foreground permissions available.
 This is a great thing for GPS tracking, but from a conceptual/technical understanding,
 its a bit confusing.
+
+
 <br />
 Thats all to it really. A pretty minimal GPS tracker with some interesting problems
 to solve and new technology to try. You can view the full code <a href="https://github.com/JamesIde/terratrack-app" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500">here</a> and check out the app on the <a href="https://play.google.com/store/apps/details?id=com.tudor14abw.terratrack" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500">Android Play Store</a>.
