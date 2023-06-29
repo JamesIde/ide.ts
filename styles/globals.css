@@ -1,4 +1,6 @@
 @tailwind base;
+@import "./mdx.css";
+
 @tailwind components;
 @tailwind utilities;
 
@@ -350,4 +352,10 @@ ul > li > a {
   font-weight: 700;
   font-family: Proxima Nova;
   src: url(/fonts/proxima-nova-bold.woff) format("woff");
+}
+
+.projects > span > p > a:hover {
+  /* Smooth underline animation */
+  transition-duration: 500ms;
+  color: #007bff;
 }

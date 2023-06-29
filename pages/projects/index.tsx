@@ -9,7 +9,6 @@ import ProjectItem from "./projectItem";
 export async function getStaticProps() {
   const cProjects = await getContentfulEntries("projects");
   let sorted = cProjects.items.sort((a: IProjects, b: IProjects) => {
-    console.log(a.fields.title, b.fields.title);
     return b.sys.createdAt.localeCompare(a.sys.createdAt);
   });
   return {
@@ -30,7 +29,7 @@ export default function Projects({ projects }: { projects: IProjects[] }) {
           make it to production.
         </p>
         {projects.map((project: IProjects) => {
-          return <ProjectItem project={project} />;
+          return <ProjectItem project={project} key={project.fields.slug} />;
         })}
       </div>
     </Layout>

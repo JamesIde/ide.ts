@@ -1,0 +1,168 @@
+---
+title: Terratrack
+date: "26th June 2023"
+---
+
+<BannerImage
+  alt="banner"
+  caption="Terratrack"
+  src={"/assets/terratrack/banner.png"}
+  width={1200}
+  height={500}
+/>
+
+<br />
+
+For a long time I've wanted to build something that allows me to track my outdoor
+activities - specifically my longer rucks in preparation for trips later this year.
+
+<br />
+
+I'd never worked with Mapbox, (specifically <a href = "https://github.com/rnmapbox/maps" target = "_#" className = "text-blue-500 hover:text-blue-900 duration-500">@rnmapbox/maps</a>) or even React Native at this point. It was a good opportunity to start something new, given I've spent a decent amount of time with React and its metaframeworks.
+
+<br />
+Terratrack is very minimal. You select your activity type, record your activity and
+save it to your device. There's an elevation chart for good measure. You can skribble
+along the chart and see your marker on the selected activity, which I think is pretty
+cool and useful feature.
+
+<br />
+<div className="grid grid-cols-2 gap-3 justify-center">
+    <div className="flex flex-col md:flex-row gap-2">
+    <Image
+      alt="1"
+      caption="Tracking your location"
+      src={"/assets/terratrack/in-action.jpg"}
+      width={1000}
+      height={1000}
+    />
+    <Image
+      alt="2"
+      caption="Tracking your location"
+      src={"/assets/terratrack/mt-george.jpg"}
+      width={1000}
+      height={1000}
+    />
+
+  </div>
+  <div className="flex flex-col md:flex-row gap-2">
+    <Image
+      alt="3"
+      caption="Tracking your location"
+      src={"/assets/terratrack/finished-track.jpg"}
+      width={1000}
+      height={1000}
+    />
+    <Image
+      alt="4"
+      caption="Profile"
+      src={"/assets/terratrack/profile.jpg"}
+      width={1000}
+      height={1000}
+    />
+  </div>
+</div>
+
+<br />
+
+You can also create an account (secured by <a href="https://clerk.com/" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500">Clerk</a>) and upload your activites to the cloud.
+These are stored on <a href = "https://supabase.com/docs" target ="_#" className = "text-blue-500 hover:text-blue-900 duration-500">Supabase</a> and secured with Supabase Auth too. Thats because theres a 
+<a href = "https://terratrack-web.vercel.app/" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500"> website </a> that allows you to login, and view your uploaded activities. It's a lot easier and more pleasing to view your gps tracks on a bigger screen.
+<br />
+
+The greatest issue was consistent location updates. Given this is a GPS tracking app, you HAVE to have the most accurate information possible, otherwise whats the point of the whole thing? This took many attempts to get right.
+You can use the UserLocation Component that comes with RNMapbox and this works well on iOS devices, but on Android its a different story. Here's how I originally set it up:
+
+<br />
+```tsx
+<Mapbox.MapView>
+  <Camera followUserLocation={followUser} ref={cameraRef} />
+  <UserLocation
+    // other props
+    onUpdate={(location) => {
+      // update any global state, fire an api call.. anything
+    }}
+  />
+</Mapbox.MapView>
+```
+
+<br />
+This was still causing me problems. My Android would stop sending location updates
+after 10-15 minutes, then receive them all in one big batch. Which wasn't helpful!
+Desperate to find a solution, I spent hours testing, researching and debugging. Eventually,
+I stumbled across a potential solution - battery optimization, background and expo-location.
+<br />
+The first one is to install expo-task-manager. This allows us to establish long running
+tasks that the app must perform, even in the background. This can get quite heavy
+interleaving it with the second package needed - expo-location (there is a lot of
+code omitted for brevity BTW). My understanding is this... you establish a task constant
+outside of your component:
+<br />
+
+```ts
+// Mapbox.tsx
+const TASK_FETCH_LOCATION = "TASK_FETCH_LOCATION";
+// Above your component
+
+export default function Mapbox() {
+  return (
+    // Your jsx
+  )
+}
+```
+
+<br />
+
+Once you've done this, you need to define the task using Task Manager:
+
+<br />
+
+```ts
+TaskManager.defineTask(TASK_FETCH_LOCATION, ({ data, error }) => {
+  if (error) {
+    // check `error.message` for more details.
+    return;
+  }
+
+  if (recordingState.isRecording) {
+    // user has clicked 'start'
+    // update location, distance, elevation and so on
+  }
+});
+```
+
+<br />
+
+This then runs inside of a useEffect hook:
+
+<br />
+
+```ts
+useEffect(() => {
+  if (recordingState.isRecording) {
+    // Comes from expo-location
+    Location.startLocationUpdatesAsync(TASK_FETCH_LOCATION, {
+      accuracy: Location.Accuracy.Balanced,
+      distanceInterval: 0,
+      showsBackgroundLocationIndicator: true,
+      timeInterval: 1000,
+    });
+  }
+
+  // Cleanup the interval when the component unmounts
+  return () => {
+    Location.stopLocationUpdatesAsync(TASK_FETCH_LOCATION).catch(() => {});
+  };
+}, [recordingState]);
+```
+
+<br />
+The catch here is the following: your Location object registers to receive the location
+updates provided by the task manager - even in the background. Basically... I get
+background location updates despite only having foreground permissions available.
+This is a great thing for GPS tracking, but from a conceptual/technical understanding,
+its a bit confusing.
+<br />
+Thats all to it really. A pretty minimal GPS tracker with some interesting problems
+to solve and new technology to try. You can view the full code <a href="https://github.com/JamesIde/terratrack-app" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500">here</a> and check out the app on the <a href="https://play.google.com/store/apps/details?id=com.tudor14abw.terratrack" target="_#" className = "text-blue-500 hover:text-blue-900 duration-500">Android Play Store</a>.
+<br/>
