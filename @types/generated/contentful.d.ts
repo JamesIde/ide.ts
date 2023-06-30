@@ -3,6 +3,35 @@
 import { Asset, Entry } from "contentful";
 import { Document } from "@contentful/rich-text-types";
 
+export interface IProjectFields {
+  title?: string | undefined;
+
+  slug?: string | undefined;
+
+  description?: string | undefined;
+
+  logo?: Asset | undefined;
+}
+
+/** Banner for the website. Title, slug, text and image */
+
+export interface IProjects extends Entry<IProjectFields> {
+  sys: {
+    id: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+    locale: string;
+    contentType: {
+      sys: {
+        id: "projects";
+        linkType: "ContentType";
+        type: "Link";
+      };
+    };
+  };
+}
+
 export interface IBannerFields {
   /** BannerTitle */
   title?: string | undefined;

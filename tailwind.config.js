@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         playfair: ["Playfair Display"],
+        nova: ["Proxima Nova"],
       },
       colors: {
         "rich-indigo": "#6060FF",
