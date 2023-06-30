@@ -35,6 +35,10 @@ export default makeSource({
   contentDirPath: "data",
   documentTypes: [Post],
   mdx: {
+    esbuildOptions(options) {
+      options.target = "esnext"
+      return options
+    },
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
   },
 });

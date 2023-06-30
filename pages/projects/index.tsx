@@ -3,8 +3,7 @@ import { IProjects } from "../../@types/generated/contentful";
 import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
 import { getContentfulEntries } from "../../lib/api/contentful";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import ProjectItem from "./projectItem";
+import ProjectItem from "../../components/Projects/projectItem";
 
 export async function getStaticProps() {
   const cProjects = await getContentfulEntries("projects");

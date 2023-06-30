@@ -1,17 +1,15 @@
-import Layout from "../../components/Navigation/Layout";
-import Helmet from "../../components/Navigation/Helmet";
+import Layout from "../../../components/Navigation/Layout";
+import Helmet from "../../../components/Navigation/Helmet";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 
-import { allPosts, Post } from "contentlayer/generated";
+import { Post, allPosts } from "contentlayer/generated";
+import { GetStaticProps } from "next";
 
 const PostPage = ({ post }) => {
-  console.log(post);
   const Component = useMDXComponent(post.body.code);
   const MDXComponents = {
     BannerImage: (props) => {
-      console.log(props);
       return (
         <>
           <Image
@@ -26,7 +24,6 @@ const PostPage = ({ post }) => {
       );
     },
     Image: (props) => {
-      console.log(props);
       return (
         <>
           <Image
@@ -40,12 +37,10 @@ const PostPage = ({ post }) => {
       );
     },
   };
-  // const MDXComponents = {
-  //   Image: Image,
-  // };
   return (
     <Layout>
       <Helmet title={post.title} />
+      
       <div className="mt-4 xl:w-2/5 lg:w-3/5 md:w-4/5 w-full mx-auto p-3 justify ">
         <header className="mb-2">
           <h1 className="font-bold text-3xl text-center font-nova">
@@ -60,30 +55,13 @@ const PostPage = ({ post }) => {
 };
 export default PostPage;
 
-export const getStaticProps = async ({
-  params,
-}: {
-  params: { slug: string };
-}) => {
-  const post = allPosts.find((p) => p.slug === params.slug);
-  if (!post) {
-    return notFound();
-  } else {
-    return {
-      props: {
-        post,
-      },
-    };
-  }
-};
+export const getStaticProps: GetStaticProps<{
+  post: Post
+}> = ({ params }) => ({
+  props: { post: allPosts.find((post) => post.slug === params?.slug) },
+})
 
-export const getStaticPaths = () => {
-  const paths = allPosts.map((post) => ({
-    params: { slug: post.slug }, // Match the dynamic route parameter name
-  }));
-  console.log(paths);
-  return {
-    paths,
-    fallback: false,
-  };
-};
+export const getStaticPaths = () => ({
+  paths: allPosts.map((post) => ({ params: { slug: post.slug } })),
+  fallback: false,
+})
