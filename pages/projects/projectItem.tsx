@@ -7,7 +7,7 @@ function ProjectItem({ project }: { project: IProjects }) {
   return (
     <>
       <div>
-        <div className="flex lg:flex-row xl:flex-row flex-col">
+        <div className="flex lg:flex-row xl:flex-row flex-col justify-between">
           <div
             className="flex md:flex-col lg:flex-row xl:flex-row flex-col
             gap-2 md:gap-4 lg:gap-4 xl:gap-4  hover:border-gray-200"
