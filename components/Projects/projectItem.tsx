@@ -33,14 +33,14 @@ function ProjectItem({ project }: { project: IProjects }) {
               </span>
             </div>
           </div>
-          <div className="flex justify-center">
-            <Link href={`projects/${project.fields.slug}`}>
+          <Link href={`projects/${project.fields.slug}`}>
+            <div className="flex justify-center">
               <p className="font-bold font-nova mt-[2px] lg:hidden hover:text-blue-500 duration-500">
                 READ MORE
               </p>
               <MdOutlineKeyboardArrowRight size={25} color="black" />
-            </Link>
-          </div>
+            </div>
+          </Link>
         </div>
         <hr className="mt-4 mb-4" />
       </div>
