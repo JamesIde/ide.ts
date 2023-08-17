@@ -22,11 +22,7 @@ export default function Projects({ projects }: { projects: IProjects[] }) {
     <Layout>
       <Helmet title="Projects" />
       <div className="w-full md:w-full lg:w-4/5 xl:w-3/5 2xl:w-[50%] mx-auto p-2">
-        <h1 className="text-2xl font-playfair">Projects</h1>
-        <p className="mt-2 mb-4 font-nova">
-          I am often building things in my spare time - sometimes these things
-          make it to production.
-        </p>
+        <h1 className="text-2xl font-playfair mb-5">Projects</h1>
         {projects.map((project: IProjects) => {
           return <ProjectItem project={project} key={project.fields.slug} />;
         })}
