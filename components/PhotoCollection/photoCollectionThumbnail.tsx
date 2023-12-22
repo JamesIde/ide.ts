@@ -7,7 +7,7 @@ export default function PhotoCollectionThumbnail({
   collection: IPhotoCollection;
 }) {
   return (
-    <div className="mx-auto lg:w-1/3 xl:w-1/3 md:w-2/3 px-4 mt-5 mb-5">
+    <div className="mx-auto 2xl:w-1/3 xl:w-4/10 md:w-2/3 px-4 mt-5 mb-5">
       <div className="grid grid-cols-1">
         <div className="px-6 py-2">
           <div className="mb-1 mx-auto text-[20px] text-[#343a40] leading-6 font-semibold text-center hover:text-orange-500 thumbnail-title">
