@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getIronSession } from "iron-session/edge";
+import * as Sentry from "@sentry/nextjs";
 export async function middleware(request: NextRequest, response: NextResponse) {
   const session = await getIronSession(request, response, {
     password: process.env.IRON_SESSION,
@@ -13,6 +14,12 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   });
 
   if (!session.user) {
+    Sentry.captureMessage("No identity presented to middleware", {
+      tags: {
+        code: "middleware",
+      },
+    });
+
     return new NextResponse(
       JSON.stringify({
         ok: false,
@@ -53,6 +60,11 @@ async function queryRedis(
       });
       return response;
     } else {
+      Sentry.captureMessage("No identity presented to middleware", {
+        tags: {
+          code: "middleware",
+        },
+      });
       return new NextResponse(
         JSON.stringify({
           ok: false,
@@ -62,6 +74,12 @@ async function queryRedis(
       );
     }
   } else {
+    Sentry.captureMessage(redisQuery.statusText, {
+      tags: {
+        code: "middleware",
+      },
+    });
+
     return new NextResponse(
       JSON.stringify({
         ok: false,

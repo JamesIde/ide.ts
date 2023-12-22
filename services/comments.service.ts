@@ -10,10 +10,10 @@ import {
 import emojiStrip from "emoji-strip";
 import wash from "washyourmouthoutwithsoap";
 import getUserFromHeader from "../lib/transformer/userHeader";
+import * as Sentry from "@sentry/nextjs";
 
 export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   const user = getUserFromHeader(req);
-  console.log("user", user);
   const newComment: NewComment = req.body;
   const contentfulId = req.query.contentfulId as string;
 
@@ -48,6 +48,12 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error) {
     console.log(error);
+    Sentry.captureException(error, {
+      tags: {
+        contentfulId: contentfulId,
+        user: user,
+      },
+    });
     return res
       .status(500)
       .send("Error adding a comment. Please try again later.");
@@ -71,7 +77,6 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const cleanedMessage = emojiStrip(newComment.message);
-
   try {
     const comment = await prisma.comment.create({
       data: {
@@ -111,11 +116,17 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
       }),
     };
 
-    sendNewCommentEmailToAdmin(notifyAdminPayload);
+    // sendNewCommentEmailToAdmin(notifyAdminPayload);
     return res.status(201).json({ ok: true });
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        contentfulId: contentfulId,
+        user: user,
+      },
+    });
     return res
-      .status(400)
+      .status(500)
       .send("Error occured adding comment. Try again later.");
   }
 }
@@ -201,12 +212,17 @@ export async function replyToComment(
             .toString(),
         };
 
-        sendCommentReplyEmail(replyToCommentPayload);
+        // sendCommentReplyEmail(replyToCommentPayload);
       }
 
       return res.status(201).json(comment);
     } catch (error) {
-      error;
+      Sentry.captureException(error, {
+        tags: {
+          contentfulId: contentfulId,
+          user: user,
+        },
+      });
       return res
         .status(500)
         .send(
@@ -256,7 +272,7 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
       commentUserDate: new Date(Date.now()).toString(),
     };
 
-    sendDeleteEmailToAdmin(deleteEmailPayload);
+    // sendDeleteEmailToAdmin(deleteEmailPayload);
     try {
       await prisma.comment.delete({
         where: {
@@ -265,6 +281,12 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
       });
       return res.status(200).json({ ok: true });
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          commentId: commentId,
+          user: user,
+        },
+      });
       return res
         .status(500)
         .send("Error deleting comment. Please try again later.");
