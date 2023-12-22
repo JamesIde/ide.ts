@@ -12,7 +12,7 @@ import {
 import fetch, { Response } from "node-fetch";
 import broker from "../lib/broker/qStashClient";
 import { sendNewUserEmailToAdmin } from "./email.service";
-
+import * as Sentry from "@sentry/nextjs";
 /**
  * Public method for handling the OAuth Token returned from Google
  */
@@ -26,7 +26,11 @@ export async function handleIdentityToken(
   }
 
   const googleToken = await handleGoogleTokenValidation(clientOauthRequest);
-
+  Sentry.captureMessage("Google token validated", {
+    tags: {
+      code: clientOauthRequest.code,
+    },
+  });
   if (!googleToken) {
     return res.status(500).send("Error establishing identity.");
   }
@@ -35,11 +39,22 @@ export async function handleIdentityToken(
     googleToken.access_token
   );
 
+  Sentry.captureMessage("Google profile retrieved", {
+    tags: {
+      code: clientOauthRequest.code,
+    },
+  });
+
   if (!googleProfile) {
     return res.status(500).send("Error establishing identity.");
   }
 
   const user = await validateUserIdentity(googleProfile);
+  Sentry.captureMessage("User validated", {
+    tags: {
+      code: clientOauthRequest.code,
+    },
+  });
 
   req.session.user = {
     sessionId: uuidv4(),
@@ -59,6 +74,12 @@ export async function handleIdentityToken(
       .status(500)
       .send("Something went wrong. Please try again later.");
   } else {
+    Sentry.captureMessage("Session set", {
+      tags: {
+        user: user.email,
+      },
+    });
+
     return res.status(200).json(ProfileTransformer.transformProfile(user));
   }
 }
@@ -96,6 +117,12 @@ export async function handleGoogleTokenValidation(
   try {
     response = await fetch(url.href.toString(), requestOptions);
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        code: clientOauthRequest.code,
+        clientId,
+      },
+    });
     throw new Error("Error establishing identity on your behalf.");
   }
 
@@ -107,6 +134,18 @@ export async function handleGoogleTokenValidation(
     try {
       message = (await response.json()) as string;
     } catch (error) {}
+
+    Sentry.captureException(
+      message ?? `Error ${response.status}: ${response.statusText}`,
+      {
+        tags: {
+          code: clientOauthRequest.code,
+          clientId,
+          clientSecret,
+        },
+      }
+    );
+
     throw new Error(
       message ?? `Error ${response.status}: ${response.statusText}`
     );
@@ -132,6 +171,12 @@ export async function handleGoogleUserInformation(token: string) {
   try {
     response = await fetch(url.href.toString(), requestOptions);
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        token,
+      },
+    });
+
     throw new Error("Error establishing identity on your behalf.");
   }
 
@@ -143,6 +188,16 @@ export async function handleGoogleUserInformation(token: string) {
     try {
       message = (await response.json()) as string;
     } catch (error) {}
+
+    Sentry.captureException(
+      message ?? `Error ${response.status}: ${response.statusText}`,
+      {
+        tags: {
+          token,
+        },
+      }
+    );
+
     throw new Error(
       message ?? `Error ${response.status}: ${response.statusText}`
     );
