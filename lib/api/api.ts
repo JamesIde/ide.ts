@@ -69,3 +69,8 @@ export async function deleteCommentFromRecord(
   const res = await baseClient.delete(`/api/comments/?commentId=${commentId}`);
   return res.data;
 }
+
+export async function addEmailToAudienceList(email: string) {
+  const res = baseClient.post("/api/mailchimp", { email });
+  return res;
+}
