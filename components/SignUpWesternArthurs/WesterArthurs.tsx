@@ -21,8 +21,8 @@ function WesternArthursWaitList() {
               The Western Arthurs Walking App
             </h1>
             <p className="mt-2 mb-2">
-              The Western Arthurs Walking App is your all-inclusive resource
-              hikers undertaking the stunning traverse.
+              The Western Arthurs Walking App is the all-inclusive resource for
+              hikers undertaking this stunning journey.
             </p>
             <p className="mt-2 mb-2 font-bold">
               Everything you need to know, on an app.
