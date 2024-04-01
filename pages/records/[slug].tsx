@@ -13,6 +13,8 @@ import Modal from "../../components/Modal/Modal";
 import CommentWrapper from "../../components/Comments/CommentWrapper";
 import Script from "next/script";
 import ViewCount from "../../components/Views/ViewCount";
+import WesternArthursWaitList from "components/SignUpWesternArthurs/WesterArthurs";
+import { useRouter } from "next/router";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const commentCount = commentStore((state) => state.commentCount);
@@ -41,6 +43,10 @@ export default function Record({ record }: { record: IThumbnail }) {
     setModal(false);
   };
 
+  const router = useRouter();
+
+  const slug = "the-western-arthurs-traverse";
+
   return (
     <>
       <Layout>
@@ -62,59 +68,23 @@ export default function Record({ record }: { record: IThumbnail }) {
                 [{record.fields.location}]
               </p>
               <p className="mt-2">{record.fields.description}</p>
+              {slug === router.query.slug && <WesternArthursWaitList />}
               <div className="flex justify-between mt-1">
-                <Link
-                  activeClass="active"
-                  to="comments"
-                  spy={true}
-                  smooth={true}
-                  offset={-100}
-                  duration={500}
-                >
-                  {/* TODO Enable */}
-                  {/* {commentCount > 0 ? (
-                    <>
-                      <div className="flex flex-row hover:cursor-pointer">
-                        <div className="mt-[6px] mr-[3px]">
-                          <BiCommentDetail color="#6060FF" />
-                        </div>
-                        <div className="flex flex-row mt-[3px]">
-                          <p className="text-sm text-rich-indigo pr-1">
-                            {commentCount}
-                          </p>
-                          <p className="text-sm text-rich-indigo">
-                            {commentCount === 1 ? "Comment" : "Comments"}
-                          </p>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="flex flex-row hover:cursor-pointer">
-                      <div className="mt-[6px] mr-[3px]">
-                        <BiCommentDetail color="#6060FF" />
-                      </div>
-                      <div className="flex flex-row mt-[3px]">
-                        <p className="text-sm text-rich-indigo pr-1">
-                          {commentCount} comments
-                        </p>
-                      </div>
-                    </div>
-                  )} */}
-                </Link>
                 <div className="flex flex-col items-right ml-auto">
-                  {/* TODO Enable */}
                   <ViewCount contentfulId={record.sys.id} />
                   <p className="text-right">{record.fields?.date}</p>
                 </div>
               </div>
               <hr className="mb-2 mt-2" />
             </section>
-            <div id="attributions">
-              <p className="text-center pb-2">
-                <ReactMarkdown>{record.fields.attributions}</ReactMarkdown>
-              </p>
-              <hr />
-            </div>
+            {record.fields.attributions && (
+              <div id="attributions">
+                <p className="text-center pb-2">
+                  <ReactMarkdown>{record.fields.attributions}</ReactMarkdown>
+                </p>
+                <hr />
+              </div>
+            )}
             <div className="record-details">
               <ReactMarkdown>{record.fields?.prefaceDescription}</ReactMarkdown>
               <div className="record-stats">

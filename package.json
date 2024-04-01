@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.16.2",
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@next/font": "^13.1.1",
     "@prisma/client": "^5.11.0",
     "@react-oauth/google": "^0.5.1",
@@ -69,6 +70,7 @@
     "@tailwindcss/typography": "^0.5.8",
     "@types/draft-js": "^0.11.10",
     "@types/jsonwebtoken": "^9.0.0",
+    "@types/mailchimp__mailchimp_marketing": "^3.0.19",
     "@types/nodemailer": "^6.4.7",
     "@types/react-draft-wysiwyg": "^1.13.4",
     "@types/react-syntax-highlighter": "^15.5.7",
