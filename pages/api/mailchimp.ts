@@ -20,6 +20,7 @@ export default async function handler(
       });
       return res.status(201).end();
     } catch (error) {
+      console.log(error);
       Sentry.captureException(error, { data: email });
       return res.status(500).json({ error: "Something went wrong" });
     }
