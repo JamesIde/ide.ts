@@ -6,10 +6,6 @@ import {
   IoCloudDownload,
 } from "react-icons/io5";
 
-import * as mailchimp from "@mailchimp/mailchimp_marketing";
-import { useState } from "react";
-import baseClient from "config/baseClient";
-import { addEmailToAudienceList } from "lib/api/api";
 import SignUpNow from "./SignUpNow";
 
 function WesternArthursWaitList() {

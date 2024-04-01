@@ -14,6 +14,7 @@ import CommentWrapper from "../../components/Comments/CommentWrapper";
 import Script from "next/script";
 import ViewCount from "../../components/Views/ViewCount";
 import WesternArthursWaitList from "components/SignUpWesternArthurs/WesterArthurs";
+import { useRouter } from "next/router";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const commentCount = commentStore((state) => state.commentCount);
@@ -42,6 +43,10 @@ export default function Record({ record }: { record: IThumbnail }) {
     setModal(false);
   };
 
+  const router = useRouter();
+
+  const slug = "the-western-arthurs-traverse";
+
   return (
     <>
       <Layout>
@@ -63,7 +68,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 [{record.fields.location}]
               </p>
               <p className="mt-2">{record.fields.description}</p>
-              <WesternArthursWaitList />
+              {slug === router.query.slug && <WesternArthursWaitList />}
               <div className="flex justify-between mt-1">
                 <div className="flex flex-col items-right ml-auto">
                   <ViewCount contentfulId={record.sys.id} />
