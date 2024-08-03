@@ -1,18 +1,11 @@
-import {
-  IBanner,
-  IEntries,
-  IPhotoCollection,
-  IThumbnail,
-} from "../@types/generated/contentful";
+import { IBanner, IEntries, IPhotoCollection, IThumbnail } from "../@types/generated/contentful";
 import Records from "../components/Records/records";
-import {
-  getContentfulEntries,
-  seedContentfulRecords,
-} from "../lib/api/contentful";
+import { getContentfulEntries, seedContentfulRecords } from "../lib/api/contentful";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import Navigation from "../components/Navigation/Navigation";
+import Mapbox from "components/Mapbox/Mapbox";
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -48,10 +41,11 @@ export default function Home({
     <>
       <Helmet title="Home" />
       <Navigation color="black" />
+      <Mapbox />
       {/* <Banner banner={banner} /> */}
-      <Records records={records} />
+      {/* <Records records={records} />
       <PhotoCollection photos={photos} />
-      <Entries entries={entries} />
+      <Entries entries={entries} /> */}
     </>
   );
 }
