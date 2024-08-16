@@ -1,16 +1,14 @@
-import mapboxGL, { LngLatBoundsLike } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { MutableRefObject, Ref, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Feature, parseGPX } from "@we-gold/gpxjs";
-import * as turf from "@turf/turf";
-import { yosemite } from "./Yosemite";
 import { haversineDistance } from "./Haversine";
 import Map from "./Map";
 import Chart from "./Chart";
+import * as turf from "@turf/turf";
 
-function Mapbox() {
+function Mapbox({ line }: { line: string }) {
   useEffect(() => {
     setLoading(true);
-    const [file, error] = parseGPX(yosemite);
+    const [file, error] = parseGPX(line);
     if (error) throw error;
 
     var gps = file.toGeoJSON();
@@ -42,7 +40,7 @@ function Mapbox() {
     <>
       {!loading && (
         <>
-          <Map line={yosemite} coordinatesArray={coordinatesArray} markers={markers} />
+          <Map line={line} coordinatesArray={coordinatesArray} markers={markers} />
           <Chart distancePoints={distancePoints} elevationPoints={elevationPoints} />
         </>
       )}

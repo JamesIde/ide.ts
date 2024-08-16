@@ -6,6 +6,7 @@ import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import Navigation from "../components/Navigation/Navigation";
 import Mapbox from "components/Mapbox/Mapbox";
+import { yosemite } from "components/Mapbox/Yosemite";
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -41,8 +42,9 @@ export default function Home({
     <>
       <Helmet title="Home" />
       <Navigation color="black" />
-      <Mapbox />
       {/* <Banner banner={banner} /> */}
+      <Mapbox line={yosemite} />
+
       {/* <Records records={records} />
       <PhotoCollection photos={photos} />
       <Entries entries={entries} /> */}

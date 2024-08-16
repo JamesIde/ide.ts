@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Chart as ChartJS,
   Tooltip,
@@ -11,6 +10,7 @@ import {
   ChartData,
   ChartOptions,
   Filler,
+  Plugin,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import React from "react";
@@ -34,25 +34,24 @@ function Chart({ distancePoints, elevationPoints }: { distancePoints: number[]; 
         yAxisID: "elevation",
         pointRadius: 0,
         pointHoverRadius: 0,
-        backgroundColor: "rgb(70,130,180)",
+        backgroundColor: "rgb(151,211,203, 0.7)",
       },
     ],
   } satisfies ChartData;
 
   const chartOptions = {
-    // maintainAspectRatio: false, // Disable the aspect ratio to control the height
+    maintainAspectRatio: false,
     scales: {
       x: {
         display: true,
-        labels: distancePoints,
+        labels: distancePoints as any,
         title: {
           display: true,
-          text: "Distance (km)", // X-axis title
+          text: "Distance (km)",
         },
         ticks: {
-          // stepSize: 5, // Set the step size to 10 km
           callback: function (value, index, values) {
-            return value / 1000 + " km"; // Format the label with 'km'
+            return value / 1000 + " km";
           },
         },
         type: "linear",
@@ -60,29 +59,45 @@ function Chart({ distancePoints, elevationPoints }: { distancePoints: number[]; 
       },
     },
     plugins: {
+      legend: { display: false },
       tooltip: {
         mode: "index",
         intersect: false,
         displayColors: false,
-        title: "",
+        titleColor: "black",
+        bodyColor: "rgb(90, 204, 189)",
+        borderWidth: 1,
+        borderColor: "gray",
+        titleFont: { size: 14 },
+        bodyFont: { size: 14, weight: "bolder" },
+        padding: 12,
+        cornerRadius: 0,
+        backgroundColor: "white",
         callbacks: {
           label: (context: any) => {
             setMarker(context.dataIndex);
             const elevation = context.parsed.y || 0;
             return [`Elevation: ${elevation} m`];
           },
+          title(tooltipItems) {
+            const number = parseInt(tooltipItems[0].label.replace(",", ""), 10);
+            const distance = Math.round((number / 1000) * 10) / 10;
+            return [`Distance: ${distance} km`];
+          },
         },
       },
-      legend: { display: false },
-      colors: {
-        enabled: true,
-      },
     },
-  } satisfies ChartOptions;
+    interaction: {
+      intersect: false,
+      mode: "index",
+    },
+  } as ChartOptions;
 
   return (
-    <div className="w-full mx-auto">
-      <Line data={chartData} options={chartOptions} onMouseLeave={() => setMarker(null)} />
+    <div className="mt-3 mb-1">
+      <div className="w-full mx-auto h-[250px] p-2 border-[1px] border-gray-300 rounded-xl">
+        <Line data={chartData} options={chartOptions as any} onMouseLeave={() => setMarker(null)} />
+      </div>
     </div>
   );
 }
