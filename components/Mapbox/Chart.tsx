@@ -94,7 +94,7 @@ function Chart({ distancePoints, elevationPoints }: { distancePoints: number[]; 
   } as ChartOptions;
 
   return (
-    <div className="mt-3 mb-1">
+    <div className="mt-3 mb-1 mx-2">
       <div className="w-full mx-auto h-[250px] p-2 border-[1px] border-gray-300 rounded-xl">
         <Line data={chartData} options={chartOptions as any} onMouseLeave={() => setMarker(null)} />
       </div>
