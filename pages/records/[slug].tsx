@@ -89,10 +89,12 @@ export default function Record({ record }: { record: IThumbnail }) {
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock1 &&
+                    // Applies to all image blocks. The > 5700 is to get portrait X100VI photos filling 2 spots vertically
                     record.fields?.imageBlock1.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -159,8 +161,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock2 &&
                     record.fields?.imageBlock2.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -227,8 +230,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock3 &&
                     record.fields?.imageBlock3.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -295,8 +299,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock4 &&
                     record.fields?.imageBlock4.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -363,8 +368,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock5 &&
                     record.fields?.imageBlock5.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image

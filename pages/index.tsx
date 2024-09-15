@@ -1,14 +1,6 @@
-import {
-  IBanner,
-  IEntries,
-  IPhotoCollection,
-  IThumbnail,
-} from "../@types/generated/contentful";
+import { IBanner, IEntries, IPhotoCollection, IThumbnail } from "../@types/generated/contentful";
 import Records from "../components/Records/records";
-import {
-  getContentfulEntries,
-  seedContentfulRecords,
-} from "../lib/api/contentful";
+import { getContentfulEntries, seedContentfulRecords } from "../lib/api/contentful";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
