@@ -61,12 +61,8 @@ export default function Record({ record }: { record: IThumbnail }) {
                 alt={record.fields.title!}
                 loading="eager"
               />{" "}
-              <h1 className="text-2xl text-center nav-title mt-4">
-                {record.fields.title}
-              </h1>
-              <p className="text-center mb-2 mt-2 font-mono">
-                [{record.fields.location}]
-              </p>
+              <h1 className="text-2xl text-center nav-title mt-4">{record.fields.title}</h1>
+              <p className="text-center mb-2 mt-2 font-mono">[{record.fields.location}]</p>
               <p className="mt-2">{record.fields.description}</p>
               {slug === router.query.slug && <WesternArthursWaitList />}
               <div className="flex justify-between mt-1">
@@ -88,9 +84,7 @@ export default function Record({ record }: { record: IThumbnail }) {
             <div className="record-details">
               <ReactMarkdown>{record.fields?.prefaceDescription}</ReactMarkdown>
               <div className="record-stats">
-                <ReactMarkdown>
-                  {record.fields?.dayOneDescription!}
-                </ReactMarkdown>
+                <ReactMarkdown>{record.fields?.dayOneDescription!}</ReactMarkdown>
               </div>
               <div className="record-grid-container">
                 <div className="record-grid">
@@ -158,9 +152,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </div>
               </div>
               <div className="record-stats">
-                <ReactMarkdown>
-                  {record.fields?.dayTwoDescription!}
-                </ReactMarkdown>
+                <ReactMarkdown>{record.fields?.dayTwoDescription!}</ReactMarkdown>
               </div>
               <div className="record-grid-container">
                 <div className="record-grid">
@@ -228,9 +220,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </div>
               </div>
               <div className="record-stats">
-                <ReactMarkdown>
-                  {record.fields?.dayThreeDescription!}
-                </ReactMarkdown>
+                <ReactMarkdown>{record.fields?.dayThreeDescription!}</ReactMarkdown>
               </div>
               <div className="record-grid-container">
                 <div className="record-grid">
@@ -298,9 +288,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </div>
               </div>
               <div className="record-stats">
-                <ReactMarkdown>
-                  {record.fields?.dayFourDescription!}
-                </ReactMarkdown>
+                <ReactMarkdown>{record.fields?.dayFourDescription!}</ReactMarkdown>
               </div>
               <div className="record-grid-container">
                 <div className="record-grid">
@@ -368,9 +356,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </div>
               </div>
               <div className="record-stats">
-                <ReactMarkdown>
-                  {record.fields?.dayFiveDescription!}
-                </ReactMarkdown>
+                <ReactMarkdown>{record.fields?.dayFiveDescription!}</ReactMarkdown>
               </div>
               <div className="record-grid-container">
                 <div className="record-grid">
@@ -449,8 +435,8 @@ export default function Record({ record }: { record: IThumbnail }) {
                   marginBottom: "10px",
                 }}
               />
-              <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
-              <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>
+              {record.fields?.travelDescription && <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>}
+              {record.fields?.aboutDescription && <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>}
             </div>
 
             <div className="record-details">
@@ -466,14 +452,7 @@ export default function Record({ record }: { record: IThumbnail }) {
               recordTitle={record.fields.title}
             />
           </div> */}
-          <Link
-            activeClass="active"
-            to="global-wrapper"
-            spy={true}
-            smooth={true}
-            offset={-100}
-            duration={500}
-          >
+          <Link activeClass="active" to="global-wrapper" spy={true} smooth={true} offset={-100} duration={500}>
             <p className="w-max mx-auto hover:cursor-pointer mb-5 font-mono hover:text-orange-500 duration-500">
               Back to top
             </p>
