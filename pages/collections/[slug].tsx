@@ -1,21 +1,14 @@
 import { IPhotoCollection } from "../../@types/generated/contentful";
 import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
-import {
-  getPhotoCollectionBySlug,
-  getPhotoCollectionSlugs,
-} from "../../lib/api/contentful";
+import { getPhotoCollectionBySlug, getPhotoCollectionSlugs } from "../../lib/api/contentful";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import Image from "next/image";
 import { useState } from "react";
 import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
-export default function Collection({
-  collection,
-}: {
-  collection: IPhotoCollection;
-}) {
+export default function Collection({ collection }: { collection: IPhotoCollection }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -46,9 +39,7 @@ export default function Collection({
       [MARKS.BOLD]: (text) => <b className="font-bold">{text}</b>,
     },
     renderNode: {
-      [BLOCKS.PARAGRAPH]: (node, children) => (
-        <p className="mb-4 mx-auto lg:w-3/5 px-2">{children}</p>
-      ),
+      [BLOCKS.PARAGRAPH]: (node, children) => <p className="mb-4 mx-auto lg:w-3/5 px-2">{children}</p>,
       [INLINES.HYPERLINK]: (node, children) => (
         <a
           href={node.data.uri}
@@ -81,7 +72,10 @@ export default function Collection({
         <div className="collection-grid-container">
           <div className="collection-grid pl-4 pr-4">
             {collection.fields.photos.map(function (photo) {
-              if (photo.fields.file.details.image?.height >= 4000) {
+              if (
+                (photo.fields.file.details.image?.height >= 4000 && photo.fields.file.details.image?.width < 6000) ||
+                (photo.fields.file.details.image?.height >= 3000 && photo.fields.file.details.image?.width < 3000)
+              ) {
                 return (
                   <Image
                     src={`https:${photo.fields.file.url}`}
@@ -94,6 +88,7 @@ export default function Collection({
                       height: "100%",
                       width: "100%",
                     }}
+                    quality={100}
                     key={photo.sys.id}
                     onClick={(e) => imageModal(e, photo)}
                   />
@@ -111,6 +106,7 @@ export default function Collection({
                       height: "100%",
                       width: "100%",
                     }}
+                    quality={100}
                     key={photo.sys.id}
                     onClick={(e) => imageModal(e, photo)}
                   />
