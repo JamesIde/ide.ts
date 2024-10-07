@@ -64,7 +64,6 @@ export default function Record({ record }: { record: IThumbnail }) {
               <h1 className="text-2xl text-center nav-title mt-4">{record.fields.title}</h1>
               <p className="text-center mb-2 mt-2 font-mono">[{record.fields.location}]</p>
               <p className="mt-2">{record.fields.description}</p>
-              {slug === router.query.slug && <WesternArthursWaitList />}
               <div className="flex justify-between mt-1">
                 <div className="flex flex-col items-right ml-auto">
                   <ViewCount contentfulId={record.sys.id} />
@@ -464,7 +463,7 @@ export default function Record({ record }: { record: IThumbnail }) {
             </p>
           </Link>
 
-          {modal && <Modal currImage={currImage} id={record.sys.id} />}
+          {modal && <Modal currImage={currImage} id={record.sys.id} onClose={closeModal} />}
         </div>
       </Layout>
     </>
