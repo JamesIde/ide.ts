@@ -114,7 +114,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
               }
             })}
           </div>
-          {modal && <Modal currImage={currImage} id={collection.sys.id} />}
+          {modal && <Modal currImage={currImage} id={collection.sys.id} onClose={closeModal} />}
         </div>
       </div>
     </Layout>
