@@ -65,7 +65,6 @@ export default function Record({ record }: { record: IThumbnail }) {
               <h1 className="text-2xl text-center nav-title mt-4">{record.fields.title}</h1>
               <p className="text-center mb-2 mt-2 font-mono">[{record.fields.location}]</p>
               <p className="mt-2">{record.fields.description}</p>
-              {slug === router.query.slug && <WesternArthursWaitList />}
               <div className="flex justify-between mt-1">
                 <div className="flex flex-col items-right ml-auto">
                   <ViewCount contentfulId={record.sys.id} />
@@ -90,10 +89,12 @@ export default function Record({ record }: { record: IThumbnail }) {
               <div className="record-grid-container">
                 <div className="record-grid">
                   {record.fields?.imageBlock1 &&
+                    // Applies to all image blocks. The > 5700 is to get portrait X100VI photos filling 2 spots vertically
                     record.fields?.imageBlock1.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -160,8 +161,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock2 &&
                     record.fields?.imageBlock2.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -228,8 +230,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock3 &&
                     record.fields?.imageBlock3.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -296,8 +299,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock4 &&
                     record.fields?.imageBlock4.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -364,8 +368,9 @@ export default function Record({ record }: { record: IThumbnail }) {
                   {record.fields?.imageBlock5 &&
                     record.fields?.imageBlock5.map(function (photo) {
                       if (
-                        photo.fields.file.details.image?.height! >= 4000 &&
-                        photo.fields.file.details.image?.width! === 3024
+                        (photo.fields.file.details.image?.height! >= 4000 &&
+                          photo.fields.file.details.image?.width! === 3024) ||
+                        photo.fields.file.details.image?.height > 5700
                       ) {
                         return (
                           <Image
@@ -437,8 +442,8 @@ export default function Record({ record }: { record: IThumbnail }) {
                 }}
               />
               <Mapbox line={yosemite} />
-              <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>
-              <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>
+              {record.fields?.travelDescription && <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>}
+              {record.fields?.aboutDescription && <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>}
             </div>
 
             <div className="record-details">
@@ -460,7 +465,7 @@ export default function Record({ record }: { record: IThumbnail }) {
             </p>
           </Link>
 
-          {modal && <Modal currImage={currImage} id={record.sys.id} />}
+          {modal && <Modal currImage={currImage} id={record.sys.id} onClose={closeModal} />}
         </div>
       </Layout>
     </>
