@@ -15,7 +15,7 @@ function Map({
   markers: Feature[];
   bounds: LngLatBoundsLike;
 }) {
-  mapboxGL.accessToken = "pk.eyJ1IjoiMW1hY3JvcyIsImEiOiJjbGYzZndjb3QwZzZzM3NwZnNheGhpcGEyIn0.1kFMlajw3UonchFxVMZ-8A";
+  mapboxGL.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
   const mapContainer = useRef(null);
   const map = useRef<MapboxGL | null>(null);
   const marker = useRef<Marker | null>(null);
@@ -26,7 +26,7 @@ function Map({
   useEffect(() => {
     map.current = new MapboxGL({
       container: mapContainer.current!,
-      style: "mapbox://styles/1macros/clzdtvgw800fs01r142d8d8lr",
+      style: process.env.NEXT_PUBLIC_MAPBOX_STYLING,
       bounds: bounds,
       zoom: 6,
       fitBoundsOptions: {
