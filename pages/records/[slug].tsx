@@ -423,8 +423,10 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </div>
               </div>
 
-              <h1 className="mb-3">GPS</h1>
-              <Mapbox line={GPX_MAPPER[record.fields.slug]} />
+              <div className="mb-2">
+                <h1 className="mb-3">GPS</h1>
+                <Mapbox line={GPX_MAPPER[record.fields.slug]} />
+              </div>
               {record.fields?.travelDescription && <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>}
               {record.fields?.aboutDescription && <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>}
             </div>
