@@ -1,12 +1,10 @@
 import { IBanner, IEntries, IPhotoCollection, IThumbnail } from "../@types/generated/contentful";
-import Records from "../components/Records/records";
 import { getContentfulEntries, seedContentfulRecords } from "../lib/api/contentful";
+import Records from "../components/Records/records";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import Navigation from "../components/Navigation/Navigation";
-import Mapbox from "components/Mapbox/Mapbox";
-import { yosemite } from "components/Mapbox/Yosemite";
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
