@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { updateRecordViewCount } from "../../lib/api/api";
 import { useEffect } from "react";
 function ViewCount({ contentfulId }: { contentfulId: string }) {

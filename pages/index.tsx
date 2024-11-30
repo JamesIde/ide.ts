@@ -43,11 +43,10 @@ export default function Home({
       <Helmet title="Home" />
       <Navigation color="black" />
       {/* <Banner banner={banner} /> */}
-      <Mapbox line={yosemite} />
 
-      {/* <Records records={records} />
+      <Records records={records} />
       <PhotoCollection photos={photos} />
-      <Entries entries={entries} /> */}
+      <Entries entries={entries} />
     </>
   );
 }

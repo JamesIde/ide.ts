@@ -4,6 +4,7 @@ import { haversineDistance } from "./Haversine";
 import Map from "./Map";
 import Chart from "./Chart";
 import * as turf from "@turf/turf";
+import { LngLatBoundsLike } from "mapbox-gl";
 
 function Mapbox({ line }: { line: string }) {
   useEffect(() => {
@@ -16,12 +17,16 @@ function Mapbox({ line }: { line: string }) {
     var lineString = gps.features.find((f) => (f.geometry.coordinates as number[]).length > 0);
     var lineMarkers = gps.features.filter((f) => f.geometry.type === "Point") as Feature[];
 
+    var bbox = turf.bbox(gps as any);
+    var bounds: LngLatBoundsLike = [bbox[0], bbox[1], bbox[2], bbox[3]];
+
     var processedData = parseAndRound(lineString.geometry.coordinates as number[]);
 
     setDistancePoints(processedData.distancePoints);
     setElevationPoints(processedData.elevationPoints);
     setCoordinatesArray(processedData.coordinateArray);
     setMarkers(lineMarkers);
+    setBounds(bounds);
 
     setLoading(false);
   }, []);
@@ -35,14 +40,15 @@ function Mapbox({ line }: { line: string }) {
   // Map
   const [coordinatesArray, setCoordinatesArray] = useState<number[][]>([[]]);
   const [markers, setMarkers] = useState<Feature[]>([]);
+  const [bounds, setBounds] = useState<LngLatBoundsLike>();
 
   return (
     <>
       {!loading && (
-        <>
-          <Map line={line} coordinatesArray={coordinatesArray} markers={markers} />
+        <div className="border-[1px] border-gray-300 rounded-xl rounded-t-none">
+          <Map line={line} coordinatesArray={coordinatesArray} markers={markers} bounds={bounds} />
           <Chart distancePoints={distancePoints} elevationPoints={elevationPoints} />
-        </>
+        </div>
       )}
     </>
   );

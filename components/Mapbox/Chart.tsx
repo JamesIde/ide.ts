@@ -10,7 +10,6 @@ import {
   ChartData,
   ChartOptions,
   Filler,
-  Plugin,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import React from "react";
@@ -50,7 +49,7 @@ function Chart({ distancePoints, elevationPoints }: { distancePoints: number[]; 
           text: "Distance (km)",
         },
         ticks: {
-          callback: function (value, index, values) {
+          callback: function (value: any, index, values) {
             return value / 1000 + " km";
           },
         },
@@ -94,10 +93,8 @@ function Chart({ distancePoints, elevationPoints }: { distancePoints: number[]; 
   } as ChartOptions;
 
   return (
-    <div className="mt-3 mb-1 mx-2">
-      <div className="w-full mx-auto h-[250px] p-2 border-[1px] border-gray-300 rounded-xl">
-        <Line data={chartData} options={chartOptions as any} onMouseLeave={() => setMarker(null)} />
-      </div>
+    <div className="h-[250px] p-2">
+      <Line data={chartData} options={chartOptions as any} onMouseLeave={() => setMarker(null)} />
     </div>
   );
 }

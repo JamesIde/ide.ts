@@ -1,12 +1,20 @@
 import mapboxGL, { LngLatBoundsLike, LngLatLike, Map as MapboxGL, Marker } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import React, { MutableRefObject, Ref, useEffect, useRef, useState } from "react";
-import { Feature, parseGPX } from "@we-gold/gpxjs";
-import * as turf from "@turf/turf";
-import { Coordinate } from "./Mapbox";
+import React, { MutableRefObject, useEffect, useRef } from "react";
+import { Feature } from "@we-gold/gpxjs";
 import { useMarkerStore } from "lib/store/markerStore";
 import mapboxgl from "mapbox-gl";
 
-function Map({ line, coordinatesArray, markers }: { line: string; coordinatesArray: number[][]; markers: Feature[] }) {
+function Map({
+  line,
+  coordinatesArray,
+  markers,
+  bounds,
+}: {
+  line: string;
+  coordinatesArray: number[][];
+  markers: Feature[];
+  bounds: LngLatBoundsLike;
+}) {
   mapboxGL.accessToken = "pk.eyJ1IjoiMW1hY3JvcyIsImEiOiJjbGYzZndjb3QwZzZzM3NwZnNheGhpcGEyIn0.1kFMlajw3UonchFxVMZ-8A";
   const mapContainer = useRef(null);
   const map = useRef<MapboxGL | null>(null);
@@ -14,16 +22,8 @@ function Map({ line, coordinatesArray, markers }: { line: string; coordinatesArr
 
   const markerIdx = useMarkerStore((state) => state.marker);
 
-  // Load the map
+  // This useEffect is required here to load the Map even if we've done a useEffect in the parent Mapbox component
   useEffect(() => {
-    const [file, error] = parseGPX(line);
-    if (error) throw error;
-
-    var gps = file.toGeoJSON();
-
-    var bbox = turf.bbox(gps as any);
-    var bounds: LngLatBoundsLike = [bbox[0], bbox[1], bbox[2], bbox[3]];
-
     map.current = new MapboxGL({
       container: mapContainer.current!,
       style: "mapbox://styles/1macros/clzdtvgw800fs01r142d8d8lr",
@@ -63,6 +63,7 @@ function Map({ line, coordinatesArray, markers }: { line: string; coordinatesArr
     </div>
   );
 }
+
 export default React.memo(Map);
 
 export const PlotMarkers = (map: MutableRefObject<MapboxGL>, markers: Feature[]) => {

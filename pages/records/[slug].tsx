@@ -3,22 +3,17 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/api/contentful";
 import { useState } from "react";
 import { ModalImage } from "../../@types/Modal";
-import { BiCommentDetail } from "react-icons/bi";
 import { Link } from "react-scroll";
-import { commentStore } from "../../lib/store/commentStore";
 import Image from "next/image";
 import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
 import Modal from "../../components/Modal/Modal";
 import Script from "next/script";
 import ViewCount from "../../components/Views/ViewCount";
-import WesternArthursWaitList from "components/SignUpWesternArthurs/WesterArthurs";
-import { useRouter } from "next/router";
 import Mapbox from "components/Mapbox/Mapbox";
-import { yosemite } from "components/Mapbox/Yosemite";
+import { GPX_MAPPER } from "lib/gpx-mapper/mapper";
 
 export default function Record({ record }: { record: IThumbnail }) {
-  const commentCount = commentStore((state) => state.commentCount);
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -40,13 +35,10 @@ export default function Record({ record }: { record: IThumbnail }) {
 
     setImage(modalImage);
   };
+
   const closeModal = () => {
     setModal(false);
   };
-
-  const router = useRouter();
-
-  const slug = "the-western-arthurs-traverse";
 
   return (
     <>
@@ -67,6 +59,7 @@ export default function Record({ record }: { record: IThumbnail }) {
               <p className="mt-2">{record.fields.description}</p>
               <div className="flex justify-between mt-1">
                 <div className="flex flex-col items-right ml-auto">
+                  {/* Comment this out to avoid inflating view count when doing local development */}
                   <ViewCount contentfulId={record.sys.id} />
                   <p className="text-right">{record.fields?.date}</p>
                 </div>
@@ -431,17 +424,7 @@ export default function Record({ record }: { record: IThumbnail }) {
               </div>
 
               <h1 className="mb-3">GPS</h1>
-              <iframe
-                src={record.fields?.map}
-                style={{
-                  width: "1px",
-                  minWidth: "100%",
-                  height: "700px",
-                  border: "none",
-                  marginBottom: "10px",
-                }}
-              />
-              <Mapbox line={yosemite} />
+              <Mapbox line={GPX_MAPPER[record.fields.slug]} />
               {record.fields?.travelDescription && <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>}
               {record.fields?.aboutDescription && <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>}
             </div>
