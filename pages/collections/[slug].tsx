@@ -1,6 +1,5 @@
 import { IPhotoCollection } from "../../@types/generated/contentful";
 import Helmet from "../../components/Navigation/Helmet";
-import Layout from "../../components/Navigation/Layout";
 import { getPhotoCollectionBySlug, getPhotoCollectionSlugs } from "../../lib/api/contentful";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -39,7 +38,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
       [MARKS.BOLD]: (text) => <b className="font-bold">{text}</b>,
     },
     renderNode: {
-      [BLOCKS.PARAGRAPH]: (node, children) => <p className="mb-4 mx-auto lg:w-3/5 px-2">{children}</p>,
+      [BLOCKS.PARAGRAPH]: (node, children) => <p className="mb-4 px-2">{children}</p>,
       [INLINES.HYPERLINK]: (node, children) => (
         <a
           href={node.data.uri}
@@ -53,10 +52,10 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
     },
   };
   return (
-    <Layout>
+    <>
       <Helmet title={collection.fields.title!} />
-      <div className="mx-auto mb-4" onClick={closeModal}>
-        <div className="m-2 xl:w-[65%] lg:w-[65%] md:w-[65%] mx-auto pl-4 pr-4">
+      <div className="mr-auto mb-4 w-1/3" onClick={closeModal}>
+        <div className="m-2 pl-4 pr-4">
           <div className="mb-1 mx-auto font-playfair text-[20px] text-[#343a40] font-semibold text-center ">
             {collection.fields.title}
           </div>
@@ -117,7 +116,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
           {modal && <Modal currImage={currImage} id={collection.sys.id} onClose={closeModal} />}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

@@ -20,22 +20,10 @@ function Navigation({ color }: { color: string }) {
           </div>
 
           <div className="flex justify-center mt-1 font-mono">
-            <Link
-              href="/about"
-              className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3"
-            >
+            <Link href="/about" className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3">
               ABOUT
             </Link>
-            {/* <Link
-              href="/projects"
-              className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3"
-            >
-              PROJECTS
-            </Link> */}
-            <Link
-              href="/gear"
-              className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3"
-            >
+            <Link href="/gear" className="text-base hover:text-sky-700 duration-500 lg:mr-3 md:mr-3 sm:mr-3 mr-3">
               GEAR
             </Link>
             <a

@@ -5,6 +5,11 @@ import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
 import Navigation from "../components/Navigation/Navigation";
+import { HiExternalLink } from "react-icons/hi";
+
+import Link from "next/link";
+import RecordThumbnail from "components/Records/recordThumbnail";
+
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
@@ -39,11 +44,12 @@ export default function Home({
   return (
     <>
       <Helmet title="Home" />
-      <Navigation color="black" />
-      {/* <Banner banner={banner} /> */}
-      <Records records={records} />
-      <PhotoCollection photos={photos} />
-      <Entries entries={entries} />
+      {/* <Navigation color="black" /> */}
+      <div className="w-1/3">
+        <RecordThumbnail record={records[0]} hrefOverride={`${records[0].fields.slug}`} />
+      </div>
+      {/* <PhotoCollection photos={photos} /> */}
+      {/* <Entries entries={entries} /> */}
     </>
   );
 }
