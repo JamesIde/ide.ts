@@ -1,4 +1,4 @@
-import { CommentType } from "../../@types/Comment";
+import { CommentType } from "../../interfaces/Comment";
 import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { replyToComment } from "../../lib/api/api";
@@ -10,10 +10,7 @@ import dynamic from "next/dynamic";
 import { EditorState } from "draft-js";
 import { convertToHTML } from "draft-convert";
 // Dynamic import
-const Editor = dynamic(
-  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
-  { ssr: false }
-);
+const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false });
 function ReplyCommentForm({ comment }: { comment: CommentType }) {
   const queryClient = useQueryClient();
   const [isActionCompleted, setIsActionCompleted] = commentStore((state) => [

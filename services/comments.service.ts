@@ -1,12 +1,8 @@
 import prisma from "../config/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { NewComment, ReplyCommentPayload } from "../@types/Comment";
-import { EmailAdminPayload } from "../@types/Email";
-import {
-  sendCommentReplyEmail,
-  sendDeleteEmailToAdmin,
-  sendNewCommentEmailToAdmin,
-} from "./email.service";
+import { NewComment, ReplyCommentPayload } from "../interfaces/Comment";
+import { EmailAdminPayload } from "../interfaces/Email";
+import { sendCommentReplyEmail, sendDeleteEmailToAdmin, sendNewCommentEmailToAdmin } from "./email.service";
 import emojiStrip from "emoji-strip";
 import wash from "washyourmouthoutwithsoap";
 import getUserFromHeader from "../lib/transformer/userHeader";
@@ -54,9 +50,7 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
         user: user,
       },
     });
-    return res
-      .status(500)
-      .send("Error adding a comment. Please try again later.");
+    return res.status(500).send("Error adding a comment. Please try again later.");
   }
 
   // If the user has reached the maximum comments per record, return an error
@@ -71,9 +65,7 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
 
   // Returns true if the message contains profanity
   if (wash.check("en", newComment.message)) {
-    return res
-      .status(400)
-      .send("Your comment contains profanity. Please remove it and try again.");
+    return res.status(400).send("Your comment contains profanity. Please remove it and try again.");
   }
 
   const cleanedMessage = emojiStrip(newComment.message);
@@ -125,16 +117,11 @@ export async function createComment(req: NextApiRequest, res: NextApiResponse) {
         user: user,
       },
     });
-    return res
-      .status(500)
-      .send("Error occured adding comment. Try again later.");
+    return res.status(500).send("Error occured adding comment. Try again later.");
   }
 }
 
-export async function replyToComment(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function replyToComment(req: NextApiRequest, res: NextApiResponse) {
   const user = getUserFromHeader(req);
   const contentfulId = req.query.contentfulId as string;
   const commentId = req.query.commentId as string;
@@ -223,11 +210,7 @@ export async function replyToComment(
           user: user,
         },
       });
-      return res
-        .status(500)
-        .send(
-          "An error occured processing your comment. Please try again later"
-        );
+      return res.status(500).send("An error occured processing your comment. Please try again later");
     }
   }
 }
@@ -256,9 +239,7 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if (comment.user.id !== user) {
-      return res
-        .status(403)
-        .send("No relationship between user and comment found");
+      return res.status(403).send("No relationship between user and comment found");
     }
 
     const deleteEmailPayload: EmailAdminPayload = {
@@ -287,9 +268,7 @@ export async function deleteComment(req: NextApiRequest, res: NextApiResponse) {
           user: user,
         },
       });
-      return res
-        .status(500)
-        .send("Error deleting comment. Please try again later.");
+      return res.status(500).send("Error deleting comment. Please try again later.");
     }
   }
 }

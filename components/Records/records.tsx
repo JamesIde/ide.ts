@@ -1,4 +1,4 @@
-import { IThumbnail } from "../../@types/generated/contentful";
+import { IThumbnail } from "../../interfaces/generated/contentful";
 import RecordThumbnail from "./recordThumbnail";
 
 export default function Records({ records }: { records: IThumbnail[] }) {
@@ -9,7 +9,7 @@ export default function Records({ records }: { records: IThumbnail[] }) {
   });
 
   return (
-    <div className="grid grid-cols-1 gap-3 ">
+    <div className="mb-2">
       {records.map((record) => {
         return <RecordThumbnail record={record} key={record.sys.id} />;
       })}

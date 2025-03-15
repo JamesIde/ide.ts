@@ -1,12 +1,9 @@
-import { Comment } from "../../@types/Comment";
+import { Comment } from "../../interfaces/Comment";
 /**
  * A public function that creates a nested structure of comments based on the complete array of comments.
  * It looks for a parentId in the comment before recursively calling itself to find the children of the comment.
  */
-export default function createNestedStructure(
-  comments: Comment[],
-  parentId: string | null = null
-): Comment[] {
+export default function createNestedStructure(comments: Comment[], parentId: string | null = null): Comment[] {
   let nestedComments = [];
 
   let commentCount = 0;

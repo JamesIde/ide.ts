@@ -1,9 +1,5 @@
 import { createClient } from "contentful";
-import {
-  IEntries,
-  IPhotoCollection,
-  IThumbnail,
-} from "../../@types/generated/contentful";
+import { IEntries, IPhotoCollection, IThumbnail } from "../../interfaces/generated/contentful";
 import prisma from "../../config/prisma";
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID as string,

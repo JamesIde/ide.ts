@@ -1,11 +1,10 @@
 import Helmet from "../components/Navigation/Helmet";
-import Layout from "../components/Navigation/Layout";
 import Link from "next/link";
 import Script from "next/script";
 export default function gear() {
   return (
     <>
-      <Helmet title="Gear" />
+      <Helmet title="gear" />
       <div className=" mt-5 mb-5">
         <div className="mx-auto ml-5 mr-5">
           <Script src="https://lighterpack.com/e/0bu8zl" />

@@ -1,15 +1,12 @@
 import prisma from "../config/prisma";
 import createNestedStructure from "../lib/transformer/nestedComment";
-import { Comment } from "../@types/Comment";
+import { Comment } from "../interfaces/Comment";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as Sentry from "@sentry/nextjs";
 /**
  * A public method to retrieve all comments for a record
  */
-export async function retrieveRecordComments(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function retrieveRecordComments(req: NextApiRequest, res: NextApiResponse) {
   const contentfulId = req.query.contentfulId as string;
   try {
     const rootComments = await prisma.comment.findMany({
@@ -53,10 +50,7 @@ export async function retrieveRecordComments(
 /**
  * A public method to update the view count for a record
  */
-export async function updateRecordViewCount(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function updateRecordViewCount(req: NextApiRequest, res: NextApiResponse) {
   const contentfulId = req.query.contentfulId as string;
   try {
     const record = await prisma.record.findUnique({

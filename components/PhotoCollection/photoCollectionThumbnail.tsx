@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { IPhotoCollection } from "../../@types/generated/contentful";
+import { IPhotoCollection } from "../../interfaces/generated/contentful";
 
 export default function PhotoCollectionThumbnail({ collection }: { collection: IPhotoCollection }) {
   return (
     <>
-      <div className="container ">
+      <div className="w-full md:w-4/6 mx-auto my-2">
         <div className="ml-5 mr-5 border-[1px]">
           <Link href={`${collection.fields.slug}`}>
             <Image

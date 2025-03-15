@@ -1,19 +1,15 @@
-import { IThumbnail } from "../../@types/generated/contentful";
+import { IThumbnail } from "../../interfaces/generated/contentful";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getRecordBySlug, getRecordSlugs } from "../../lib/api/contentful";
 import { useState } from "react";
-import { ModalImage } from "../../@types/Modal";
-import { BiCommentDetail } from "react-icons/bi";
+import { ModalImage } from "../../interfaces/Modal";
 import { Link } from "react-scroll";
 import { commentStore } from "../../lib/store/commentStore";
 import Image from "next/image";
 import Helmet from "../../components/Navigation/Helmet";
-import Layout from "../../components/Navigation/Layout";
 import Modal from "../../components/Modal/Modal";
-import CommentWrapper from "../../components/Comments/CommentWrapper";
 import Script from "next/script";
 import ViewCount from "../../components/Views/ViewCount";
-import WesternArthursWaitList from "components/SignUpWesternArthurs/WesterArthurs";
 import { useRouter } from "next/router";
 
 export default function Record({ record }: { record: IThumbnail }) {
@@ -51,7 +47,7 @@ export default function Record({ record }: { record: IThumbnail }) {
     <>
       <Helmet title={record.fields.title!} />
       <div id="global-wrapper" onClick={closeModal}>
-        <div className="lg:w-[900px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3 p-2">
+        <div className="lg:w-[900px] sm:w-[600px] overflow-hidden ml-1 text-black mt-2 mb-3 p-2">
           <section id="record-details">
             <Image
               src={`https:${record.fields.featuredImage?.fields.file?.url}`}

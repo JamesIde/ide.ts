@@ -5,7 +5,7 @@ import { useStore } from "../../lib/store/userStore";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { GoogleToken } from "../../@types/Token";
+import { GoogleToken } from "../../interfaces/Token";
 export default function GoogleLoginButton() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
 

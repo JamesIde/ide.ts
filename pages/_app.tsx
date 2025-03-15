@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import "../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import Layout from "components/Layout/layout";
+import Layout from "components/Layout/Layout";
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (

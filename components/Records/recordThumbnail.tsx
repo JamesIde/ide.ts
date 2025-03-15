@@ -1,14 +1,11 @@
-import { IThumbnail } from "../../@types/generated/contentful";
+import { IThumbnail } from "../../interfaces/generated/contentful";
 import Image from "next/image";
 import Link from "next/link";
 function RecordThumbnail({ record, hrefOverride }: { record: IThumbnail; hrefOverride?: string }) {
   var link = hrefOverride != null ? `records/${record.fields.slug}` : `${record.fields.slug}`;
   return (
-    <div
-      className="
-      container mx-auto"
-    >
-      <div className="col-span-1 ml-5 mr-5 border-[1px]">
+    <div className="w-full md:w-4/6 mx-auto">
+      <div className=" ml-5 mr-5 border-[1px]">
         <Link href={link}>
           <Image
             alt={record.fields?.description!}

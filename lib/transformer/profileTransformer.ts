@@ -1,4 +1,4 @@
-import { IdpUser, User } from "../../@types/Profile";
+import { IdpUser, User } from "../../interfaces/Profile";
 
 export class ProfileTransformer {
   /**

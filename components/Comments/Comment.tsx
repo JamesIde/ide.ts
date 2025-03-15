@@ -1,4 +1,4 @@
-import { CommentType } from "../../@types/Comment";
+import { CommentType } from "../../interfaces/Comment";
 import { HiPencilAlt } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaReply } from "react-icons/fa";
@@ -15,13 +15,7 @@ import IconLoader from "../Misc/IconLoader";
 import HandleCommentDate from "./HandleCommentDate";
 import Image from "next/image";
 import parse from "html-react-parser";
-function Comment({
-  comment,
-  hasChildren,
-}: {
-  comment: CommentType;
-  hasChildren: boolean;
-}) {
+function Comment({ comment, hasChildren }: { comment: CommentType; hasChildren: boolean }) {
   const [isActionCompleted, setIsActionCompleted] = commentStore((state) => [
     state.isActionCompleted,
     state.setIsActionCompleted,
@@ -53,9 +47,7 @@ function Comment({
 
   function handleDeleteClick(commentId: string) {
     if (
-      window.confirm(
-        "Are you sure you want to delete this comment? Deleting a comment will delete any replies too."
-      )
+      window.confirm("Are you sure you want to delete this comment? Deleting a comment will delete any replies too.")
     ) {
       mutate(commentId);
     }
@@ -92,10 +84,7 @@ function Comment({
               />
               <div className="flex flex-col pl-2">
                 <p className="font-semibold">{comment.user.name} </p>
-                <HandleCommentDate
-                  createdAt={comment.createdAt}
-                  updatedAt={comment.updatedAt}
-                />
+                <HandleCommentDate createdAt={comment.createdAt} updatedAt={comment.updatedAt} />
               </div>
             </div>
             <div>
@@ -103,11 +92,7 @@ function Comment({
                 <div className="flex flex-row justify-end">
                   <div className="p-1">
                     {!toggleReply ? (
-                      <FaReply
-                        className="cursor-pointer"
-                        color="blue"
-                        onClick={() => toggleReplyEditor()}
-                      />
+                      <FaReply className="cursor-pointer" color="blue" onClick={() => toggleReplyEditor()} />
                     ) : (
                       <AiOutlineCloseCircle
                         color="red"
@@ -118,18 +103,8 @@ function Comment({
                   </div>
                   {user.id === comment.user.id && (
                     <>
-                      <div
-                        className="p-1"
-                        onClick={() => handleDeleteClick(comment.id)}
-                      >
-                        {!isLoading ? (
-                          <MdDeleteOutline
-                            className="cursor-pointer"
-                            color="red"
-                          />
-                        ) : (
-                          <IconLoader />
-                        )}
+                      <div className="p-1" onClick={() => handleDeleteClick(comment.id)}>
+                        {!isLoading ? <MdDeleteOutline className="cursor-pointer" color="red" /> : <IconLoader />}
                       </div>
                     </>
                   )}
@@ -144,9 +119,7 @@ function Comment({
         {toggleReply && <ReplyCommentForm comment={comment} />}
         {comment.children &&
           comment.children.map((child) => {
-            return (
-              <Comment comment={child} key={child.id} hasChildren={true} />
-            );
+            return <Comment comment={child} key={child.id} hasChildren={true} />;
           })}
       </div>
     </div>

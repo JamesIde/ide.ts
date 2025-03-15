@@ -1,6 +1,7 @@
-import { IPhotoCollection } from "@types/generated/contentful";
+import { IPhotoCollection } from "interfaces/generated/contentful";
 import { getContentfulEntries } from "lib/api/contentful";
 import PhotoCollection from "components/PhotoCollection/photoCollection";
+import Helmet from "components/Navigation/Helmet";
 
 export default function Photos({ photos }: { photos: IPhotoCollection[] }) {
   photos.sort((a, b) => {
@@ -9,9 +10,10 @@ export default function Photos({ photos }: { photos: IPhotoCollection[] }) {
     return dateB.getTime() - dateA.getTime();
   });
   return (
-    <div className="grid grid-cols-1 gap-3 w-1/3">
+    <>
+      <Helmet title="photos" />
       <PhotoCollection photos={photos} />
-    </div>
+    </>
   );
 }
 

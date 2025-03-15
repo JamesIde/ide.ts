@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ModalImage } from "../../@types/Modal";
+import { ModalImage } from "../../interfaces/Modal";
 
 export default function Modal({ currImage, id, onClose }: { currImage: ModalImage; id: string; onClose: () => void }) {
   return (

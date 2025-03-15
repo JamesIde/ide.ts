@@ -1,4 +1,4 @@
-import { IEntries } from "../../@types/generated/contentful";
+import { IEntries } from "../../interfaces/generated/contentful";
 import EntryThumbnail from "./entrythumbnail";
 
 export default function Entries({ entries }: { entries: IEntries[] }) {
@@ -8,10 +8,7 @@ export default function Entries({ entries }: { entries: IEntries[] }) {
     return dateB.getTime() - dateA.getTime();
   });
   return (
-    <div className="xl:w-3/4 w-full p-4 mx-auto">
-      <h1 className="text-center text-xl mb-3 mt-3 nav-center text-bold heading">
-        LATEST ENTRIES
-      </h1>
+    <div className="w-full md:w-4/6 mx-auto mb-2">
       {entries.map((entry) => {
         return <EntryThumbnail entry={entry} key={entry.sys.id} />;
       })}

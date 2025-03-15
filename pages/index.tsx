@@ -1,20 +1,10 @@
-import { IBanner, IEntries, IPhotoCollection, IThumbnail } from "../@types/generated/contentful";
-import Records from "../components/Records/records";
+import { IThumbnail } from "../interfaces/generated/contentful";
 import { getContentfulEntries, seedContentfulRecords } from "../lib/api/contentful";
-import Entries from "../components/Entries/entries";
-import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
-import Navigation from "../components/Navigation/Navigation";
-import { HiExternalLink } from "react-icons/hi";
-
-import Link from "next/link";
 import RecordThumbnail from "components/Records/recordThumbnail";
 
 export async function getStaticProps() {
-  const cEntries = await getContentfulEntries("entries");
   const cRecords = await getContentfulEntries("thumbnail");
-  const cPhotos = await getContentfulEntries("photoCollection");
-  const cBanner = await getContentfulEntries("banner");
 
   if (process.env.NODE_ENV === "production") {
     await seedContentfulRecords(cRecords.items as IThumbnail[]);
@@ -22,34 +12,18 @@ export async function getStaticProps() {
 
   return {
     props: {
-      entries: cEntries.items,
       records: cRecords.items,
-      photos: cPhotos.items,
-      banner: cBanner.items[0],
     },
   };
 }
 
-export default function Home({
-  entries,
-  records,
-  photos,
-  banner,
-}: {
-  entries: IEntries[];
-  records: IThumbnail[];
-  photos: IPhotoCollection[];
-  banner: IBanner;
-}) {
+export default function Home({ records }: { records: IThumbnail[] }) {
   return (
     <>
       <Helmet title="Home" />
-      {/* <Navigation color="black" /> */}
-      <div className="w-1/3">
+      <div className=" mx-auto">
         <RecordThumbnail record={records[0]} hrefOverride={`${records[0].fields.slug}`} />
       </div>
-      {/* <PhotoCollection photos={photos} /> */}
-      {/* <Entries entries={entries} /> */}
     </>
   );
 }

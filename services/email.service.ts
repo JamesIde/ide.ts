@@ -1,6 +1,6 @@
-import { ReplyCommentPayload } from "../@types/Comment";
-import { EmailAdminPayload, EMAIL_TYPES } from "../@types/Email";
-import { IdpUser } from "../@types/Profile";
+import { ReplyCommentPayload } from "../interfaces/Comment";
+import { EmailAdminPayload, EMAIL_TYPES } from "../interfaces/Email";
+import { IdpUser } from "../interfaces/Profile";
 import broker from "../lib/broker/qStashClient";
 import emailSender from "../lib/nodemailer/transporter";
 
@@ -41,9 +41,7 @@ export async function sendNewUserEmailToAdmin(user: IdpUser) {
       to: process.env.ADMIN_EMAIL,
       subject: `New registration ${user.email}`,
       html: `<p>New user created. See below <br/>
-    ${user.name} registered with email: <strong>${
-        user.email
-      }</strong> on ${new Date(Date.now()).toString()}</p>`,
+    ${user.name} registered with email: <strong>${user.email}</strong> on ${new Date(Date.now()).toString()}</p>`,
     },
   });
 }
@@ -57,9 +55,9 @@ export async function sendCommentReplyEmail(payload: ReplyCommentPayload) {
       to: payload.replyCommentUser,
       subject: `Reply to your comment on ${payload.recordTitle}`,
       html: `<p>Reply to your comment on ${payload.recordTitle}. See below <br/>
-    ${payload.replyCommentUser} replied: <strong>${
-        payload.replyCommentMessage
-      }</strong> on ${new Date(Date.now()).toString()}</p>
+    ${payload.replyCommentUser} replied: <strong>${payload.replyCommentMessage}</strong> on ${new Date(
+        Date.now()
+      ).toString()}</p>
     <br/>
     <p>
       View it

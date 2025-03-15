@@ -1,22 +1,20 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        playfair: ["Playfair Display"],
-        nova: ["Proxima Nova"],
-      },
-      colors: {
-        "rich-indigo": "#6060FF",
-      },
+export const content = [
+  "./pages/**/*.{js,ts,jsx,tsx}",
+  "./components/**/*.{js,ts,jsx,tsx}",
+];
+export const theme = {
+  extend: {
+    fontFamily: {
+      playfair: ["Playfair Display"],
+      nova: ["Proxima Nova"],
+    },
+    colors: {
+      "rich-indigo": "#6060FF",
     },
   },
-  plugins: [
-    require("@tailwindcss/typography"),
-    // ...
-  ],
 };
+export const plugins = [
+  require("@tailwindcss/typography"),
+  // ...
+];

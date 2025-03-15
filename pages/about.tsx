@@ -1,12 +1,10 @@
 import Helmet from "../components/Navigation/Helmet";
-import Layout from "../components/Navigation/Layout";
-import Navigation from "../components/Navigation/Navigation";
 
 function about() {
   return (
     <>
       <Helmet title="about" />
-      <div className="pl-4">
+      <div className="p-4">
         <h1 className="font-bold text-xl my-2 font-mono ">About</h1>
         <p className="text-gray-600">
           Software developer and hiker. Sharing trips, projects, photos and anything I&apos;m interested in.

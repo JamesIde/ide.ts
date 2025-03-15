@@ -1,14 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { IdpUser } from "../@types/Profile";
+import { IdpUser } from "../interfaces/Profile";
 import { ProfileTransformer } from "../lib/transformer/profileTransformer";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/prisma";
 import { deleteSession, setSession } from "../lib/redis/sessionHandlers";
-import {
-  GoogleOAuthTokenSuccess,
-  GoogleProfile,
-  GoogleToken,
-} from "../@types/Token";
+import { GoogleOAuthTokenSuccess, GoogleProfile, GoogleToken } from "../interfaces/Token";
 import fetch, { Response } from "node-fetch";
 import broker from "../lib/broker/qStashClient";
 import { sendNewUserEmailToAdmin } from "./email.service";
@@ -16,10 +12,7 @@ import * as Sentry from "@sentry/nextjs";
 /**
  * Public method for handling the OAuth Token returned from Google
  */
-export async function handleIdentityToken(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function handleIdentityToken(req: NextApiRequest, res: NextApiResponse) {
   const clientOauthRequest: GoogleToken = req.body;
   if (!req.body) {
     return res.status(400).send("No identity presented");
@@ -35,9 +28,7 @@ export async function handleIdentityToken(
     return res.status(500).send("Error establishing identity.");
   }
 
-  const googleProfile = await handleGoogleUserInformation(
-    googleToken.access_token
-  );
+  const googleProfile = await handleGoogleUserInformation(googleToken.access_token);
 
   Sentry.captureMessage("Google profile retrieved", {
     tags: {
@@ -66,13 +57,8 @@ export async function handleIdentityToken(
     await req.session.save(),
   ]);
 
-  if (
-    setRedis.status === "rejected" ||
-    setSessionCookie.status === "rejected"
-  ) {
-    return res
-      .status(500)
-      .send("Something went wrong. Please try again later.");
+  if (setRedis.status === "rejected" || setSessionCookie.status === "rejected") {
+    return res.status(500).send("Something went wrong. Please try again later.");
   } else {
     Sentry.captureMessage("Session set", {
       tags: {
@@ -88,9 +74,7 @@ export async function handleIdentityToken(
  * A private method for calling Google's OAuth token API to validate the client code
  * This is called after a user hits 'Sign in with Google' on the UI.
  */
-export async function handleGoogleTokenValidation(
-  clientOauthRequest: GoogleToken
-): Promise<GoogleOAuthTokenSuccess> {
+export async function handleGoogleTokenValidation(clientOauthRequest: GoogleToken): Promise<GoogleOAuthTokenSuccess> {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
@@ -99,10 +83,7 @@ export async function handleGoogleTokenValidation(
     client_secret: clientSecret,
     code: clientOauthRequest.code,
     grant_type: "authorization_code",
-    redirect_uri:
-      process.env.NODE_ENV === "production"
-        ? process.env.OAUTH_PROD_URL
-        : process.env.OAUTH_DEV_URL,
+    redirect_uri: process.env.NODE_ENV === "production" ? process.env.OAUTH_PROD_URL : process.env.OAUTH_DEV_URL,
   };
 
   const requestOptions = {
@@ -135,20 +116,15 @@ export async function handleGoogleTokenValidation(
       message = (await response.json()) as string;
     } catch (error) {}
 
-    Sentry.captureException(
-      message ?? `Error ${response.status}: ${response.statusText}`,
-      {
-        tags: {
-          code: clientOauthRequest.code,
-          clientId,
-          clientSecret,
-        },
-      }
-    );
+    Sentry.captureException(message ?? `Error ${response.status}: ${response.statusText}`, {
+      tags: {
+        code: clientOauthRequest.code,
+        clientId,
+        clientSecret,
+      },
+    });
 
-    throw new Error(
-      message ?? `Error ${response.status}: ${response.statusText}`
-    );
+    throw new Error(message ?? `Error ${response.status}: ${response.statusText}`);
   }
 }
 
@@ -189,18 +165,13 @@ export async function handleGoogleUserInformation(token: string) {
       message = (await response.json()) as string;
     } catch (error) {}
 
-    Sentry.captureException(
-      message ?? `Error ${response.status}: ${response.statusText}`,
-      {
-        tags: {
-          token,
-        },
-      }
-    );
+    Sentry.captureException(message ?? `Error ${response.status}: ${response.statusText}`, {
+      tags: {
+        token,
+      },
+    });
 
-    throw new Error(
-      message ?? `Error ${response.status}: ${response.statusText}`
-    );
+    throw new Error(message ?? `Error ${response.status}: ${response.statusText}`);
   }
 }
 
@@ -209,9 +180,7 @@ export async function handleGoogleUserInformation(token: string) {
  * The profile is handed to this function after the OAuth steps have completed.
  * A check for registering or logging in the user is performed.
  */
-export async function validateUserIdentity(
-  user: GoogleProfile
-): Promise<IdpUser> {
+export async function validateUserIdentity(user: GoogleProfile): Promise<IdpUser> {
   let userProfile;
 
   const userExists = await checkIfUserExists(user);
@@ -272,10 +241,7 @@ export async function loginUser(user: GoogleProfile) {
 /**
  * Public method for logging out a user and removing the session from Redis
  */
-export async function handleSessionLogout(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function handleSessionLogout(req: NextApiRequest, res: NextApiResponse) {
   const { sessionId } = req.session.user;
 
   const [deleteSessionRedis, deleteSessionCookie] = await Promise.allSettled([
@@ -283,13 +249,8 @@ export async function handleSessionLogout(
     req.session.destroy(),
   ]);
 
-  if (
-    deleteSessionRedis.status === "rejected" ||
-    deleteSessionCookie.status === "rejected"
-  ) {
-    return res
-      .status(500)
-      .send("Something went wrong. Please try again later.");
+  if (deleteSessionRedis.status === "rejected" || deleteSessionCookie.status === "rejected") {
+    return res.status(500).send("Something went wrong. Please try again later.");
   }
   return res.status(200).json({ ok: true });
 }

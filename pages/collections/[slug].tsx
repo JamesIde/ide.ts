@@ -1,11 +1,11 @@
-import { IPhotoCollection } from "../../@types/generated/contentful";
+import { IPhotoCollection } from "../../interfaces/generated/contentful";
 import Helmet from "../../components/Navigation/Helmet";
 import { getPhotoCollectionBySlug, getPhotoCollectionSlugs } from "../../lib/api/contentful";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import Image from "next/image";
 import { useState } from "react";
-import { ModalImage } from "../../@types/Modal";
+import { ModalImage } from "../../interfaces/Modal";
 import Modal from "../../components/Modal/Modal";
 export default function Collection({ collection }: { collection: IPhotoCollection }) {
   const [modal, setModal] = useState(false);
@@ -54,7 +54,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
   return (
     <>
       <Helmet title={collection.fields.title!} />
-      <div className="mr-auto mb-4 w-1/3" onClick={closeModal}>
+      <div className="mb-4 w-3/5 mr-auto" onClick={closeModal}>
         <div className="m-2 pl-4 pr-4">
           <div className="mb-1 mx-auto font-playfair text-[20px] text-[#343a40] font-semibold text-center ">
             {collection.fields.title}

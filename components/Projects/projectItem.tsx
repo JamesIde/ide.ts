@@ -1,4 +1,4 @@
-import { IProjects } from "../../@types/generated/contentful";
+import { IProjects } from "../../interfaces/generated/contentful";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import Image from "next/image";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
@@ -35,9 +35,7 @@ function ProjectItem({ project }: { project: IProjects }) {
           </div>
           <Link href={`projects/${project.fields.slug}`}>
             <div className="flex justify-center">
-              <p className="font-bold font-nova mt-[2px] lg:hidden hover:text-blue-500 duration-500">
-                READ MORE
-              </p>
+              <p className="font-bold font-nova mt-[2px] lg:hidden hover:text-blue-500 duration-500">READ MORE</p>
               <MdOutlineKeyboardArrowRight size={25} color="black" />
             </div>
           </Link>
