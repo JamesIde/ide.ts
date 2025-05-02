@@ -1,6 +1,6 @@
 import { IBanner, IEntries, IPhotoCollection, IThumbnail } from "../@types/generated/contentful";
-import Records from "../components/Records/records";
 import { getContentfulEntries, seedContentfulRecords } from "../lib/api/contentful";
+import Records from "../components/Records/records";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
@@ -41,6 +41,7 @@ export default function Home({
       <Helmet title="Home" />
       <Navigation color="black" />
       {/* <Banner banner={banner} /> */}
+
       <Records records={records} />
       <PhotoCollection photos={photos} />
       <Entries entries={entries} />

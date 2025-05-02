@@ -357,3 +357,11 @@ ul > li > a {
 .projects > span > p > a {
   color: #007bff;
 }
+
+.marker {
+  background-image: url("../assets/camp.png");
+  background-size: cover;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
