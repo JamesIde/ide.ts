@@ -10,6 +10,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "static.productionready.io",
     ],
+    minimumCacheTTL: 2678400, // 31 days
   },
 };
 
