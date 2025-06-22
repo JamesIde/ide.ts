@@ -1,5 +1,6 @@
 import { IThumbnail } from "../interfaces/generated/contentful";
 import { getContentfulEntries, seedContentfulRecords } from "../lib/api/contentful";
+import Records from "../components/Records/records";
 import Helmet from "../components/Navigation/Helmet";
 import RecordThumbnail from "components/Records/recordThumbnail";
 

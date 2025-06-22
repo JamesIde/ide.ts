@@ -4,16 +4,15 @@ import { getRecordBySlug, getRecordSlugs } from "../../lib/api/contentful";
 import { useState } from "react";
 import { ModalImage } from "../../interfaces/Modal";
 import { Link } from "react-scroll";
-import { commentStore } from "../../lib/store/commentStore";
 import Image from "next/image";
 import Helmet from "../../components/Navigation/Helmet";
 import Modal from "../../components/Modal/Modal";
 import Script from "next/script";
 import ViewCount from "../../components/Views/ViewCount";
-import { useRouter } from "next/router";
+import Mapbox from "components/Mapbox/Mapbox";
+import { GPX_MAPPER } from "lib/gpx-mapper/mapper";
 
 export default function Record({ record }: { record: IThumbnail }) {
-  const commentCount = commentStore((state) => state.commentCount);
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
@@ -35,13 +34,10 @@ export default function Record({ record }: { record: IThumbnail }) {
 
     setImage(modalImage);
   };
+
   const closeModal = () => {
     setModal(false);
   };
-
-  const router = useRouter();
-
-  const slug = "the-western-arthurs-traverse";
 
   return (
     <>
@@ -424,17 +420,10 @@ export default function Record({ record }: { record: IThumbnail }) {
               </div>
             </div>
 
-            <h1 className="mb-3">GPS</h1>
-            <iframe
-              src={record.fields?.map}
-              style={{
-                width: "1px",
-                minWidth: "100%",
-                height: "700px",
-                border: "none",
-                marginBottom: "10px",
-              }}
-            />
+            <div className="mb-2">
+              <h1 className="mb-3">GPS</h1>
+              <Mapbox line={GPX_MAPPER[record.fields.slug]} />
+            </div>
             {record.fields?.travelDescription && <ReactMarkdown>{record.fields?.travelDescription!}</ReactMarkdown>}
             {record.fields?.aboutDescription && <ReactMarkdown>{record.fields?.aboutDescription!}</ReactMarkdown>}
           </div>
