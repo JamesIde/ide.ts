@@ -44,7 +44,7 @@ export default function Home({
 
       <Records records={records} />
       <PhotoCollection photos={photos} />
-      <Entries entries={entries} />
+      {/* <Entries entries={entries} /> */}
     </>
   );
 }
