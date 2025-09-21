@@ -1,6 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { User } from "../@types/Profile";
-import { AccessTokenSuccess } from "../@types/Token";
+import axios from "axios";
 
 const baseClient = axios.create({
   headers: {

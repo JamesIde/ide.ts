@@ -3,7 +3,9 @@ import { updateRecordViewCount } from "../../lib/api/api";
 import { useEffect } from "react";
 function ViewCount({ contentfulId }: { contentfulId: string }) {
   useEffect(() => {
-    mutate(contentfulId);
+    if (process.env.NODE_ENV === "production") {
+      mutate(contentfulId);
+    }
   }, []);
 
   const {
