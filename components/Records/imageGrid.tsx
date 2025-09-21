@@ -12,7 +12,7 @@ function ImageGrid({ images, onImageClick }) {
           <Image
             src={`https:${photo.fields.file.url}`}
             alt={photo.fields.description}
-            className={config.className}
+            className={config.className + "hover:cursor-pointer duration-500 hover:border-blue-500 border-2"}
             width={config.width}
             height={config.height}
             style={{
