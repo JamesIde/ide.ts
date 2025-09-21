@@ -3,24 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.my-custom-editor-class {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid rgb(231, 228, 228);
-}
-
-/* Comment */
-.comment-body p {
-  padding-bottom: 5px;
-  font-size: 1rem;
-  line-height: 1.25;
-}
-
-.comment-body h1,
-h2 {
-  font-weight: bold;
-}
-
 /* Collection */
 .collection-grid-container {
   --gap-length: 1rem;
@@ -281,58 +263,6 @@ ul > li > a {
   padding-top: 25px;
 }
 
-/* Icon Loader Spinner */
-.lds-dual-ring {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-}
-.lds-dual-ring:after {
-  content: " ";
-  display: block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 6px solid #fff;
-  border-color: rgb(255, 0, 0) transparent #fff transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
-}
-@keyframes lds-dual-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Add Comment Spinner */
-.add-comment-spinner {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  padding-left: 2px;
-}
-.add-comment-spinner:after {
-  content: " ";
-  display: block;
-  width: 25px;
-  height: 25px;
-
-  border-radius: 50%;
-  border: 6px solid #fff;
-  border-color: #fff transparent #fff transparent;
-  animation: add-comment-spinner 1.2s linear infinite;
-}
-@keyframes add-comment-spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 #attributions > p > p > a {
   color: #007bff !important;
 }
@@ -351,10 +281,6 @@ ul > li > a {
   font-weight: 700;
   font-family: Proxima Nova;
   src: url(/fonts/proxima-nova-bold.woff) format("woff");
-}
-
-.projects > span > p > a {
-  color: #007bff;
 }
 
 .marker {
