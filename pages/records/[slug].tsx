@@ -136,7 +136,6 @@ export default function Record({ record }: { record: IThumbnail }) {
                 <ReactMarkdown {...markdownConfig}>{record.fields?.aboutDescription!}</ReactMarkdown>
               )}
             </div>
-
             <div className="record-details">
               <h1 className="mb-3 mt-3">Gear</h1>
               <Script src={record.fields.lighterpackLink} />
