@@ -37,6 +37,7 @@ export default function Home({
     <>
       <Helmet title="Home" />
       <Navigation color="black" />
+      {/* <Banner banner={banner} /> */}
       <Records records={records} />
       <PhotoCollection photos={photos} />
       {/* <Entries entries={entries} /> */}
