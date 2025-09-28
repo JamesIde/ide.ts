@@ -50,6 +50,32 @@ export default function Record({ record }: { record: IThumbnail }) {
       ),
     },
   };
+
+  const mapRecordDescriptionsByDay = (record: IThumbnail) => {
+    const recordDescriptionByDay = [];
+
+    let dayIndex = 1;
+    while (record.fields?.[`day${getDayName(dayIndex)}Description`]) {
+      recordDescriptionByDay.push({
+        description: record.fields[`day${getDayName(dayIndex)}Description`],
+        images: record.fields[`imageBlock${dayIndex}`],
+      });
+      dayIndex++;
+    }
+
+    return recordDescriptionByDay;
+  };
+
+  const getDayName = (num: number): string => {
+    // TODO - if a trip ever exceeds 10 days, this would need to be adjusted.
+    // It's because of the original naming of the contentful assets we have to deal with this...
+    // The contentful asset nodes don't start at 0 either - no dayZeroDescription.
+    const dayNames = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+    return dayNames[num] || num.toString();
+  };
+
+  const dayData = mapRecordDescriptionsByDay(record);
+
   return (
     <>
       <Layout>
@@ -85,46 +111,16 @@ export default function Record({ record }: { record: IThumbnail }) {
             )}
             <div className="record-details">
               <ReactMarkdown>{record.fields?.prefaceDescription}</ReactMarkdown>
-              <>
-                <div className="record-stats">
-                  <ReactMarkdown>{record.fields?.dayOneDescription!}</ReactMarkdown>
-                  <div className="record-grid-container">
-                    <ImageGrid images={record.fields?.imageBlock1} onImageClick={imageModal} />
+              {dayData.map((day, index) => (
+                <>
+                  <div className="record-stats" key={index}>
+                    <ReactMarkdown>{day.description}</ReactMarkdown>
                   </div>
-                </div>
-              </>
-              <>
-                <div className="record-stats">
-                  <ReactMarkdown>{record.fields?.dayTwoDescription!}</ReactMarkdown>
-                </div>
-                <div className="record-grid-container">
-                  <ImageGrid images={record.fields?.imageBlock2} onImageClick={imageModal} />
-                </div>
-              </>
-              <>
-                <div className="record-stats">
-                  <ReactMarkdown>{record.fields?.dayThreeDescription!}</ReactMarkdown>
-                </div>
-                <div className="record-grid-container">
-                  <ImageGrid images={record.fields?.imageBlock3} onImageClick={imageModal} />
-                </div>
-              </>
-              <>
-                <div className="record-stats">
-                  <ReactMarkdown>{record.fields?.dayFourDescription!}</ReactMarkdown>
-                </div>
-                <div className="record-grid-container">
-                  <ImageGrid images={record.fields?.imageBlock4} onImageClick={imageModal} />
-                </div>
-              </>
-              <>
-                <div className="record-stats">
-                  <ReactMarkdown>{record.fields?.dayFiveDescription!}</ReactMarkdown>
-                </div>
-                <div className="record-grid-container">
-                  <ImageGrid images={record.fields?.imageBlock5} onImageClick={imageModal} />
-                </div>
-              </>
+                  <div className="record-grid-container">
+                    <ImageGrid images={day.images} onImageClick={imageModal} />
+                  </div>
+                </>
+              ))}
               <div className="record-details mb-2">
                 <h1 className="mb-3">GPS</h1>
                 <Mapbox line={GPX_MAPPER[record.fields.slug]} />
