@@ -69,6 +69,7 @@ export default function Record({ record }: { record: IThumbnail }) {
   const getDayName = (num: number): string => {
     // TODO - if a trip ever exceeds 10 days, this would need to be adjusted.
     // It's because of the original naming of the contentful assets we have to deal with this...
+    // The contentful asset nodes don't start at 0 either - no dayZeroDescription.
     const dayNames = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
     return dayNames[num] || num.toString();
   };
