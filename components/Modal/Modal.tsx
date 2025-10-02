@@ -4,7 +4,7 @@ import { ModalImage } from "../../@types/Modal";
 export default function Modal({ currImage, id, onClose }: { currImage: ModalImage; id: string; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="relative max-w-[90vw]">
+      <div className="relative max-w-[90vw] hover:cursor-pointer">
         <Image
           src={currImage.url}
           alt={id}
