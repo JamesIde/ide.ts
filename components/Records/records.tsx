@@ -1,6 +1,7 @@
-import SafeAreaView from "components/SafeAreaView/safeAreaView";
+import SafeAreaView from "components/Misc/safeAreaView";
 import { IThumbnail } from "../../@types/generated/contentful";
 import RecordThumbnail from "./recordThumbnail";
+import LineSeparator from "components/Misc/lineSeparator";
 
 export default function Records({ records, displayHeroRecord }: { records: IThumbnail[]; displayHeroRecord: boolean }) {
   if (displayHeroRecord) {
@@ -16,12 +17,7 @@ export default function Records({ records, displayHeroRecord }: { records: IThum
   return (
     <SafeAreaView>
       <div className="mx-auto xl:w-[40%] lg:w-[70%] md:w-[70%] h-auto mt-20">
-        <div className="flex items-center gap-4 mb-6 px-2">
-          <div className="text-xs font-mono uppercase tracking-wider">
-            {displayHeroRecord ? "Latest" : "All"} Records
-          </div>
-          <div className="h-px flex-1 bg-border bg-black" />
-        </div>
+        <LineSeparator displayHeroRecord={displayHeroRecord} name="Records" />
         <div className="grid grid-cols-1 gap-3 ">
           {records.map((record) => {
             return <RecordThumbnail record={record} key={record.sys.id} />;

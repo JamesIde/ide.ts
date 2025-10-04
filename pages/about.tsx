@@ -1,4 +1,4 @@
-import SafeAreaView from "components/SafeAreaView/safeAreaView";
+import SafeAreaView from "components/Misc/safeAreaView";
 import Helmet from "../components/Navigation/Helmet";
 import Layout from "../components/Navigation/Layout";
 

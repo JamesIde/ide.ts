@@ -13,7 +13,7 @@ import ViewCount from "../../components/Views/ViewCount";
 import Mapbox from "components/Mapbox/Mapbox";
 import { GPX_MAPPER } from "lib/gpx-mapper/mapper";
 import ImageGrid from "components/Records/imageGrid";
-import SafeAreaView from "components/SafeAreaView/safeAreaView";
+import SafeAreaView from "components/Misc/safeAreaView";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);

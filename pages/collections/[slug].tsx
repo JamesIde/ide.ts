@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
-import SafeAreaView from "components/SafeAreaView/safeAreaView";
+import SafeAreaView from "components/Misc/safeAreaView";
 export default function Collection({ collection }: { collection: IPhotoCollection }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
