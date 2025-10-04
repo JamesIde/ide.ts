@@ -4,7 +4,7 @@ import Records from "../components/Records/records";
 import Entries from "../components/Entries/entries";
 import PhotoCollection from "../components/PhotoCollection/photoCollection";
 import Helmet from "../components/Navigation/Helmet";
-import Navigation from "../components/Navigation/Navigation";
+import Layout from "components/Navigation/Layout";
 
 export async function getStaticProps() {
   const cEntries = await getContentfulEntries("entries");
@@ -36,10 +36,11 @@ export default function Home({
   return (
     <>
       <Helmet title="Home" />
-      <Navigation color="black" />
-      {/* <Banner banner={banner} /> */}
-      <Records records={records} />
-      <PhotoCollection photos={photos} />
+      <Layout>
+        {/* <Banner banner={banner} /> */}
+        <Records records={records} displayHeroRecord={true} />
+        <PhotoCollection photos={photos} displayHeroRecord={true} />
+      </Layout>
       {/* <Entries entries={entries} /> */}
     </>
   );

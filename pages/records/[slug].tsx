@@ -13,6 +13,7 @@ import ViewCount from "../../components/Views/ViewCount";
 import Mapbox from "components/Mapbox/Mapbox";
 import { GPX_MAPPER } from "lib/gpx-mapper/mapper";
 import ImageGrid from "components/Records/imageGrid";
+import SafeAreaView from "components/SafeAreaView/safeAreaView";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);
@@ -77,7 +78,7 @@ export default function Record({ record }: { record: IThumbnail }) {
   const dayData = mapRecordDescriptionsByDay(record);
 
   return (
-    <>
+    <SafeAreaView>
       <Layout>
         <Helmet title={record.fields.title!} />
         <div id="global-wrapper" onClick={closeModal}>
@@ -147,7 +148,7 @@ export default function Record({ record }: { record: IThumbnail }) {
           {modal && <Modal currImage={currImage} id={record.sys.id} onClose={closeModal} />}
         </div>
       </Layout>
-    </>
+    </SafeAreaView>
   );
 }
 

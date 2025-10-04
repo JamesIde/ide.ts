@@ -89,7 +89,6 @@
 
 /* Home Page Heading (LATEST) */
 .heading {
-  font-family: "Playfair Display", serif;
   font-size: 2rem;
   line-height: 1.2;
   color: #343a40;
@@ -97,7 +96,6 @@
 }
 
 .thumbnail-title {
-  font-family: "Playfair Display", serif;
   font-size: 1.5rem;
   line-height: 1.2;
   color: #343a40;
@@ -105,12 +103,10 @@
 }
 
 .playfair {
-  font-family: "Playfair Display", serif;
 }
 
 /* Main Record Title */
 .nav-title {
-  font-family: "Playfair Display", serif;
   font-size: 1.7rem;
   line-height: 1.2;
   color: #343a40;
@@ -118,7 +114,6 @@
 }
 
 .record-details > .record-stats > h1 {
-  font-family: "Playfair Display", serif;
   font-size: 2rem;
   line-height: 1.2;
   color: #343a40;
@@ -127,7 +122,6 @@
 
 /* For travel, about, general note headings */
 .record-details > h1 {
-  font-family: "Playfair Display", serif;
   font-size: 2rem;
   line-height: 1.2;
   color: #343a40;
@@ -230,7 +224,6 @@ ul > li > a {
 }
 
 .record.stats > h1 {
-  font-family: "Playfair Display", serif;
   font-size: 2rem;
   line-height: 1.2;
   color: #343a40;
