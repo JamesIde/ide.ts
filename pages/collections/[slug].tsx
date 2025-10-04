@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { ModalImage } from "../../@types/Modal";
 import Modal from "../../components/Modal/Modal";
+import SafeAreaView from "components/SafeAreaView/safeAreaView";
 export default function Collection({ collection }: { collection: IPhotoCollection }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
@@ -53,71 +54,76 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
     },
   };
   return (
-    <Layout>
-      <Helmet title={collection.fields.title!} />
-      <div className="mx-auto mb-4" onClick={closeModal}>
-        <div className="m-2 xl:w-[65%] lg:w-[65%] md:w-[65%] mx-auto pl-4 pr-4">
-          <div className="mb-1 mx-auto  text-[20px] text-[#343a40] font-semibold text-center ">
-            {collection.fields.title}
+    <SafeAreaView>
+      <Layout>
+        <Helmet title={collection.fields.title!} />
+        <div className="mx-auto mb-4" onClick={closeModal}>
+          <div className="m-2 xl:w-[65%] lg:w-[65%] md:w-[65%] mx-auto pl-4 pr-4">
+            <div className="mb-1 mx-auto  text-[20px] text-[#343a40] font-semibold text-center ">
+              {collection.fields.title}
+            </div>
+            <p className="text-center text-sm text-gray-600 mb-5">
+              {new Date(collection.fields.date!).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            {documentToReactComponents(collection.fields.main!, options)}
           </div>
-          <p className="text-center text-sm text-gray-600 mb-1">
-            {new Date(collection.fields.date!).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-          {documentToReactComponents(collection.fields.main!, options)}
-        </div>
-        <div className="collection-grid-container">
-          <div className="collection-grid pl-4 pr-4">
-            {collection.fields.photos.map(function (photo) {
-              if (
-                (photo.fields.file.details.image?.height >= 4000 && photo.fields.file.details.image?.width < 6000) ||
-                (photo.fields.file.details.image?.height >= 3000 && photo.fields.file.details.image?.width < 3000)
-              ) {
-                return (
-                  <Image
-                    src={`https:${photo.fields.file.url}`}
-                    alt={photo.fields.description}
-                    className="border-2 collection-img-span2 hover:border-blue-500 hover:cursor-pointer duration-500"
-                    width={500}
-                    height={1000}
-                    style={{
-                      objectFit: "cover",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                    quality={100}
-                    key={photo.sys.id}
-                    onClick={(e) => imageModal(e, photo)}
-                  />
-                );
-              } else {
-                return (
-                  <Image
-                    src={`https:${photo.fields.file.url}`}
-                    alt={photo.fields.description}
-                    className="border-2 collection-img hover:border-blue-500 hover:cursor-pointer duration-500"
-                    width={1000}
-                    height={500}
-                    style={{
-                      objectFit: "cover",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                    quality={100}
-                    key={photo.sys.id}
-                    onClick={(e) => imageModal(e, photo)}
-                  />
-                );
-              }
-            })}
+          <div className="2xl:w-[65%] 2xl:mx-auto w-full">
+            <div className="collection-grid-container">
+              <div className="collection-grid pl-4 pr-4">
+                {collection.fields.photos.map(function (photo) {
+                  if (
+                    (photo.fields.file.details.image?.height >= 4000 &&
+                      photo.fields.file.details.image?.width < 6000) ||
+                    (photo.fields.file.details.image?.height >= 3000 && photo.fields.file.details.image?.width < 3000)
+                  ) {
+                    return (
+                      <Image
+                        src={`https:${photo.fields.file.url}`}
+                        alt={photo.fields.description}
+                        className="border-2 collection-img-span2 hover:border-blue-500 hover:cursor-pointer duration-500"
+                        width={500}
+                        height={1000}
+                        style={{
+                          objectFit: "cover",
+                          height: "100%",
+                          width: "100%",
+                        }}
+                        quality={100}
+                        key={photo.sys.id}
+                        onClick={(e) => imageModal(e, photo)}
+                      />
+                    );
+                  } else {
+                    return (
+                      <Image
+                        src={`https:${photo.fields.file.url}`}
+                        alt={photo.fields.description}
+                        className="border-2 collection-img hover:border-blue-500 hover:cursor-pointer duration-500"
+                        width={1000}
+                        height={500}
+                        style={{
+                          objectFit: "cover",
+                          height: "100%",
+                          width: "100%",
+                        }}
+                        quality={100}
+                        key={photo.sys.id}
+                        onClick={(e) => imageModal(e, photo)}
+                      />
+                    );
+                  }
+                })}
+              </div>
+              {modal && <Modal currImage={currImage} id={collection.sys.id} onClose={closeModal} />}
+            </div>
           </div>
-          {modal && <Modal currImage={currImage} id={collection.sys.id} onClose={closeModal} />}
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </SafeAreaView>
   );
 }
 

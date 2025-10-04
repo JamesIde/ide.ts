@@ -20,7 +20,7 @@ export function Navigation() {
   }, []);
 
   const navigationMap = new Map<string, string>([
-    ["Trips", "records"],
+    ["Multiday Trips", "records"],
     ["Photo Collections", "collections"],
     ["About", "about"],
     ["Gear", "gear"],
@@ -29,7 +29,7 @@ export function Navigation() {
   // TODO combine into one
   const navStylesDesktop = "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
   const navStylesDesktopActivated =
-    "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors underline";
+    "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-orange-500";
 
   const navStylesMobile = "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
   const navStylesMobileActivated =
@@ -91,7 +91,11 @@ export function Navigation() {
               </Link>
             ))}
             {/* TODO */}
-            <div className="">Contact</div>
+            <div className={navStylesMobile}>
+              <a href="mailto:james.ide775@gmail.com" target="_blank">
+                Contact
+              </a>
+            </div>
           </div>
         </div>
       )}

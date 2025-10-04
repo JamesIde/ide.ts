@@ -9,14 +9,12 @@ import { Analytics } from "@vercel/analytics/react";
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (
-    <>
-      <main className={GeistSans.className}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-          <Analytics />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </main>
-    </>
+    <main className={GeistSans.className}>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+        <Analytics />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </main>
   );
 }
