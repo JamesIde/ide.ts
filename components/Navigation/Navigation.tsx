@@ -59,7 +59,7 @@ export function Navigation() {
               </Link>
             ))}
             <div className="bg-black rounded-lg text-white py-1 px-2 text-sm hover:cursor-pointer">
-              <a href="mailto:james.ide775@gmail.com" target="_blank">
+              <a href="mailto:james.ide775@gmail.com" target="_blank" rel="noreferrer">
                 Contact
               </a>
             </div>
@@ -92,7 +92,7 @@ export function Navigation() {
             ))}
             {/* TODO */}
             <div className={navStylesMobile}>
-              <a href="mailto:james.ide775@gmail.com" target="_blank">
+              <a href="mailto:james.ide775@gmail.com" target="_blank" rel="noreferrer">
                 Contact
               </a>
             </div>
