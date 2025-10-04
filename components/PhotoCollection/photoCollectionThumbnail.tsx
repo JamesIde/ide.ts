@@ -3,7 +3,7 @@ import Image from "next/image";
 import { IPhotoCollection } from "../../@types/generated/contentful";
 export default function PhotoCollectionThumbnail({ collection }: { collection: IPhotoCollection }) {
   return (
-    <div className="grid grid-cols-1 p-2">
+    <div className="grid grid-cols-1 mb-4">
       <div className="px-6 py-2">
         <div className="mb-1 mx-auto text-[20px] text-[#343a40] leading-6 font-semibold text-center hover:text-orange-500 thumbnail-title">
           <Link href={`collections/${collection.fields.slug}`}>{collection.fields.title}</Link>

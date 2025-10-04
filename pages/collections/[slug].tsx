@@ -73,7 +73,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
           </div>
           <div className="2xl:w-[65%] 2xl:mx-auto w-full">
             <div className="collection-grid-container">
-              <div className="collection-grid pl-4 pr-4">
+              <div className="collection-grid pl-2 pr-2">
                 {collection.fields.photos.map(function (photo) {
                   if (
                     (photo.fields.file.details.image?.height >= 4000 &&

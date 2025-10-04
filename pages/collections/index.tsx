@@ -18,7 +18,9 @@ function Index({ photos }: { photos: IPhotoCollection[] }) {
   return (
     <Layout>
       <SafeAreaView>
-        <PhotoCollection photos={photos} displayHeroRecord={false} />
+        <div className="mt-20">
+          <PhotoCollection photos={photos} displayHeroRecord={false} />
+        </div>
       </SafeAreaView>
     </Layout>
   );
