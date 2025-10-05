@@ -82,7 +82,7 @@ export default function Record({ record }: { record: IThumbnail }) {
       <Layout>
         <Helmet title={record.fields.title!} />
         <div id="global-wrapper" onClick={closeModal}>
-          <div className="lg:w-[1100px] sm:w-[600px] overflow-hidden mx-auto text-black mt-2 mb-3 p-2">
+          <div className="lg:w-[1100px] sm:w-[600px] overflow-hidden mx-auto text-black mt-10 mb-3 p-2">
             <section id="record-details">
               <Image
                 src={`https:${record.fields.featuredImage?.fields.file?.url}`}

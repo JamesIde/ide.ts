@@ -33,7 +33,7 @@ export function Navigation() {
 
   const navStylesMobile = "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
   const navStylesMobileActivated =
-    "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors underline";
+    "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-orange-500";
 
   return (
     <nav
