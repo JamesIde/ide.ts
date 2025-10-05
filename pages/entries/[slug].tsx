@@ -1,10 +1,7 @@
 import { IEntries } from "../../@types/generated/contentful";
 import Helmet from "../../components/Navigation/Helmet";
 import Layout from "../../components/Navigation/Layout";
-import {
-  getBlogEntryBySlug,
-  getBlogEntrySlugs,
-} from "../../lib/api/contentful";
+import { getBlogEntryBySlug, getBlogEntrySlugs } from "../../lib/api/contentful";
 import Image from "next/image";
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -39,13 +36,9 @@ export default function Entry({ entry }: { entry: IEntries }) {
       [MARKS.BOLD]: (text) => <b className="font-bold">{text}</b>,
     },
     renderNode: {
-      [BLOCKS.PARAGRAPH]: (node, children) => (
-        <p className="mb-4 mx-auto lg:w-3/5 px-2">{children}</p>
-      ),
+      [BLOCKS.PARAGRAPH]: (node, children) => <p className="mb-4 mx-auto lg:w-3/5 px-2">{children}</p>,
       [BLOCKS.HEADING_4]: (node, children) => (
-        <h4 className="text-xl font-bold mb-3 mx-auto lg:w-3/5 px-2">
-          {children}
-        </h4>
+        <h4 className="text-xl font-bold mb-3 mx-auto lg:w-3/5 px-2">{children}</h4>
       ),
       [INLINES.HYPERLINK]: (node, children) => (
         <a
@@ -109,9 +102,7 @@ export default function Entry({ entry }: { entry: IEntries }) {
       <Helmet title={entry.fields.title} />
       <div className="xl:w-[65%] lg:w-full md:w-[65%] overflow-hidden mx-auto text-black mt-2 px-2">
         <div className="py-2 mx-auto ">
-          <div className="mb-1 mx-auto font-playfair text-[20px] text-black font-semibold text-center ">
-            {entry.fields.title}
-          </div>
+          <div className="mb-1 mx-auto  text-[20px] text-black font-semibold text-center ">{entry.fields.title}</div>
           <p className="text-center text-sm text-gray-600">
             {new Date(entry.fields.date!).toLocaleDateString("en-AU", {
               year: "numeric",

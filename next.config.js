@@ -11,6 +11,7 @@ const nextConfig = {
     ],
     minimumCacheTTL: 2678400, // 31 days
   },
+  transpilePackages: ["geist"],
 };
 
 module.exports = nextConfig

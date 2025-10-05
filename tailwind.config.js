@@ -9,6 +9,8 @@ module.exports = {
       fontFamily: {
         playfair: ["Playfair Display"],
         nova: ["Proxima Nova"],
+        sans: ['var(--font-geist-sans)'],
+        mono: ['var(--font-geist-mono)'],
       },
       colors: {
         "rich-indigo": "#6060FF",
