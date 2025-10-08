@@ -11,7 +11,7 @@ export default function Modal({ currImage, id, onClose }: { currImage: ModalImag
           width={parseInt(currImage.width)}
           height={parseInt(currImage.height)}
           className={"max-w-full max-h-[90vh] object-contain transition-opacity duration-300 opacity-100"}
-          quality={100}
+          quality={75}
           priority
         />
         <button onClick={onClose} className="absolute top-2 right-2 text-white bg-black bg-opacity-50 rounded-full p-2">
