@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -13,6 +14,12 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />
         <Analytics />
+        <Script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "6b0b0bcf220c483a96bbc3d151bbf815"}'
+          strategy="afterInteractive"
+        />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </main>
