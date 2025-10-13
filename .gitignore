@@ -39,3 +39,12 @@ next-env.d.ts
 # Sentry Config File
 .sentryclirc
 .contentlayer
+
+# CDN
+.wrangler
+cdn/sync/node_modules
+cdn/sync/dist
+cdn/cdn/wrangler.toml
+config/prisma.d.ts
+config/prisma.js.map
+config/prisma.js

@@ -1,20 +1,19 @@
-import { createClient } from "contentful";
-import {
-  IEntries,
-  IPhotoCollection,
-  IThumbnail,
-} from "../../@types/generated/contentful";
+import { createClient, Entry, EntryCollection } from "contentful";
+import { IEntries, IPhotoCollection, IThumbnail } from "../../@types/generated/contentful";
 import prisma from "../../config/prisma";
+
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID as string,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN as string,
 });
 
-export async function getContentfulEntries(contentType: string) {
+export async function getContentfulEntries<T>(
+  contentType: "entries" | "thumbnail" | "photoCollection"
+): Promise<EntryCollection<T>> {
   const entries = await client.getEntries({
     content_type: contentType,
   });
-  return entries;
+  return entries as unknown as any;
 }
 
 /**
@@ -49,7 +48,6 @@ export async function seedContentfulRecords(records: IThumbnail[]) {
  * Each content type has a function to generate all slugs (used for dynamic routing)
  * And a function to get a single piece by slug
  */
-
 export async function getRecordSlugs() {
   const entries = await client.getEntries({
     content_type: "thumbnail",
@@ -68,7 +66,7 @@ export async function getRecordBySlug(slug: string) {
     content_type: "thumbnail",
     "fields.slug": slug,
   });
-  return record.items[0] as IThumbnail;
+  return record.items;
 }
 
 export async function getPhotoCollectionSlugs() {
@@ -89,7 +87,7 @@ export async function getPhotoCollectionBySlug(slug: string) {
     content_type: "photoCollection",
     "fields.slug": slug,
   });
-  return collection.items[0] as IPhotoCollection;
+  return collection.items;
 }
 
 export async function getBlogEntrySlugs() {

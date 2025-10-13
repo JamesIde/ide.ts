@@ -70,6 +70,7 @@ export default function Record({ record }: { record: IThumbnail }) {
     // TODO - if a trip ever exceeds 10 days, this would need to be adjusted.
     // It's because of the original naming of the contentful assets we have to deal with this...
     // The contentful asset nodes don't start at 0 either - no dayZeroDescription.
+    // TODO - if this changes, update utils.ts in 'sync' to accommodate for longer trips.
     const dayNames = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
     return dayNames[num] || num.toString();
   };
@@ -152,7 +153,7 @@ export default function Record({ record }: { record: IThumbnail }) {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const record: IThumbnail = await getRecordBySlug(params.slug);
+  const record: IThumbnail = await getRecordBySlug(params.slug)[0];
   return {
     props: {
       record,

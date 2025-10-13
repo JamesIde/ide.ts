@@ -122,7 +122,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const collection = await getPhotoCollectionBySlug(params.slug);
+  const collection: IPhotoCollection = await getPhotoCollectionBySlug(params.slug)[0];
   return {
     props: {
       collection,
