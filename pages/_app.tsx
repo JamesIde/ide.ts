@@ -20,7 +20,12 @@ export default function App({ Component, pageProps }: AppProps) {
           gtag('config', 'G-GHS0468GG6');
           `}
         </Script>
-        <Toaster />
+        <Script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "6b0b0bcf220c483a96bbc3d151bbf815"}'
+          strategy="afterInteractive"
+        />
         <Component {...pageProps} />
         <Analytics />
         <ReactQueryDevtools initialIsOpen={false} />
