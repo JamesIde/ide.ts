@@ -19,12 +19,13 @@ export async function uploadImageCDN(r2Directory: string, images: Map<string, Ar
   );
 }
 
-export async function uploadFetch(fileName: string, arrayBuffer: ArrayBuffer) {
+async function uploadFetch(fileName: string, arrayBuffer: ArrayBuffer) {
   const headers = new Headers();
 
   headers.set("Authorization", `Basic ${process.env.BASIC_AUTH_HASH}`);
   headers.set("Content-Type", "application/octet-stream");
   headers.set("x-cf-file-path", fileName);
+
   var url = `https://${process.env.CDN_BASE_URL}`;
 
   try {

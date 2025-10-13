@@ -1,5 +1,10 @@
 import { Entry, Asset } from "contentful";
-import { IPhotoCollection, IThumbnail } from "../../../@types/generated/contentful";
+import {
+  IPhotoCollection,
+  IPhotoCollectionFields,
+  IThumbnail,
+  IThumbnailFields,
+} from "../../../@types/generated/contentful";
 import { CollectionSubset, AssetSubset } from "../models/models";
 
 /**
@@ -10,8 +15,24 @@ export function extractPhotoCollectionSubset(item: Entry<IPhotoCollection[]>): C
   return {
     slug: item.fields["slug"],
     baseType: "collections",
-    assets: extractAssetSubset(item.fields["photos"]),
+    assets: extractPhotoCollectionAssets(item as any), // TODO fix any
   };
+}
+
+/**
+ * Iterates over each photo in the photo collection and extracts asset data.
+ * Also accounts for the hero / featured image
+ */
+function extractPhotoCollectionAssets(item: IPhotoCollection) {
+  var assets: AssetSubset[][] = [];
+
+  if (item.fields.featuredImage) {
+    assets.push(extractAssetSubset([item.fields.featuredImage]));
+  }
+
+  var photos = extractAssetSubset(item.fields.photos);
+  assets.push(photos);
+  return assets.flat();
 }
 
 /**
@@ -22,22 +43,28 @@ export function extractMultidayTripCollectionSubset(item: Entry<IThumbnail[]>): 
   return {
     slug: item.fields["slug"],
     baseType: "records",
-    assets: extractMultidayTripAssets(item.fields as unknown as IThumbnail),
+    assets: extractMultidayTripAssets(item.fields as any), // TODO fix any
   };
 }
 
 /**
  * Iterates over a multi-day trip asset and extracts the assets from the individual image block.
- * Returns a single array of all assets found in the entry type.
+ * Returns a single array of all assets found in the entry type. Also accounts for the hero / featured image
  * Note: Supports up to 10 days worth of image blocks.
  */
-function extractMultidayTripAssets(record: IThumbnail) {
+function extractMultidayTripAssets(record: IThumbnailFields) {
   var assets: AssetSubset[][] = [];
   let dayIndex = 1;
   while (record?.[`day${getDayName(dayIndex)}Description`]) {
     assets.push(extractAssetSubset(record[`imageBlock${dayIndex}`]));
     dayIndex++;
   }
+
+  // The trip reports often have a featured image
+  if (record.featuredImage) {
+    assets.push(extractAssetSubset([record.featuredImage]));
+  }
+
   return assets.flat();
 }
 

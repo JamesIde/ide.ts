@@ -4,9 +4,6 @@ import { sync } from "./sync";
 
 const app: Express = express();
 
-app.get("/", async (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-  await sync();
-});
+app.get("/", async (req: Request, res: Response) => await sync());
 
 app.listen(config.port, () => {});

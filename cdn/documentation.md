@@ -39,7 +39,6 @@ Cloudflare R2 storage is not free, but it should cost me pennies in comparison t
 
 ##### TODO:
 
-- CORS
 - Dynamic rendering of image formats by query params including formats
 
 #### Additional Resources Used:
@@ -48,6 +47,13 @@ Cloudflare R2 storage is not free, but it should cost me pennies in comparison t
 - [Cloudflare Transform Images using Workers](https://developers.cloudflare.com/images/transform-images/transform-via-workers/)
 - [Blog creating a CDN using Cloudflare Workers](https://transloadit.com/devtips/creating-a-free-image-cdn-with-cloudflare-r2/)
 
-### Image Sync Between Contentful and R2 Bucket
+## Image Sync Between Contentful and R2 Bucket
 
-TODO notes - goal is to move away from Contentful into Markdown. Use Contentful CDN as backup. Greater control over the quality of the images and they should be faster to serve than Contentful. Also get rid of Next Image not preloading all images when a user visits the site, meaning when they click to view an image in the modal it downloads it again.
+New set of functionality for syncing existing assets in Contentful with the R2 bucket for the CDN to serve them. The site will use the Contentful CDN url as the backup option in the event of the Cloudflare CDN not working. Currently it is unidirectional with Contentful being the source of truth. Assets will be uploaded there first, embedded in whichever entries, then this script will need to be run to sync the new images.
+
+The images are downloaded in their highest quality and stored in R2, then the Cloudflare worker will optimize them on-the-fly, much like Contentful. The endgoal here is to move everything into markdown and get rid of Contentful.
+I would like this site to be either hosted on Cloudflare, or self-hosted with as little dependencies as possible and the ability to sync the two services is a good step forward.
+
+The scripts are tailored to my content models in Contentful and have issues with the Typescript types due to a buggy library I used a few years ago to generate them. It is entirely bespoke.
+
+Currently its a lightweight express app calling the main syncing function but could easily be converted to a single script. This script will only ever be called locally and never deployed.

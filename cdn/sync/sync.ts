@@ -3,19 +3,15 @@ import { IPhotoCollection, IThumbnail } from "../../@types/generated/contentful"
 import { AssetSubset, CollectionSubset } from "./models/models";
 import * as dotenv from "dotenv";
 import { downloadFromContentful, getContentfulEntries } from "./utils/contentful.js";
-import { extractMultidayTripCollectionSubset } from "./utils/data-extract.js";
+import { extractMultidayTripCollectionSubset, extractPhotoCollectionSubset } from "./utils/data-extract.js";
 import { checkExistsCDN, uploadImageCDN } from "./utils/cdn-api";
 dotenv.config();
 
 export async function sync() {
+  // TODO - drive this by query param
   console.log("Contentful and R2 image sync starting");
-  // var photoCollections = await getContentfulEntries<IPhotoCollection[]>("photoCollection");
-  // console.log(`Found ${photoCollections.items.length} collections`);
-  // photoCollections.items.forEach((collection) => {
-  //   var extractedData = extractCollectionSubset(collection);
-  //   console.log(extractedData);
-  // });
 
+  var photoCollections = await getContentfulEntries<IPhotoCollection[]>("photoCollection");
   var multidayTrips = await getContentfulEntries<IThumbnail[]>("thumbnail");
 
   for (const trip of multidayTrips.items) {
@@ -23,11 +19,19 @@ export async function sync() {
     await processAssets(content);
     console.log(`Finished processing ${content.slug}`);
   }
+
+  for (const collection of photoCollections.items) {
+    const content = extractPhotoCollectionSubset(collection);
+    await processAssets(content);
+    console.log(`Finished processing ${content.slug}`);
+  }
+
   console.log("Contentful and R2 image sync finished");
 }
 
 async function processAssets(collection: CollectionSubset) {
   console.log(`Begin process for ${collection.slug}`);
+
   var cdnExistResponses = await checkExistsCDN(collection);
   var missingImages = mapResults(collection, cdnExistResponses);
 
