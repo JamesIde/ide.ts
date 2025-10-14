@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { IPhotoCollection } from "../../@types/generated/contentful";
+import CDNImage from "components/Image/CDNImage";
 export default function PhotoCollectionThumbnail({ collection }: { collection: IPhotoCollection }) {
   return (
     <div className="grid grid-cols-1 mb-4 p-2">
@@ -17,12 +18,11 @@ export default function PhotoCollectionThumbnail({ collection }: { collection: I
         </p>
       </div>
       <Link href={`collections/${collection.fields.slug}`}>
-        <Image
-          alt={collection.fields.title!}
-          src={`https:${collection.fields.featuredImage?.fields.file.url}`}
-          width={1200}
-          height={800}
-          className="flex mx-auto"
+        <CDNImage
+          height={1920}
+          width={1080}
+          alt={collection.fields?.title}
+          url={`collections/${collection.fields.slug}/${collection.fields.featuredImage.fields.file.fileName}`}
         />
       </Link>
     </div>

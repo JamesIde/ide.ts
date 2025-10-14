@@ -2,7 +2,7 @@ import { Env } from "../cloudflare-worker";
 import { ExecutionContext } from "@cloudflare/workers-types";
 import { createErrorResponse, createResponse, validateIdentity } from "../utils/utils";
 
-export async function Exists(request: Request, env: Env, ctx: ExecutionContext, fileName: string): Promise<Response> {
+export async function Exists(request: Request, env: Env, fileName: string): Promise<Response> {
   try {
     if (!validateIdentity(request)) {
       return createErrorResponse("Unauthorized", 401);

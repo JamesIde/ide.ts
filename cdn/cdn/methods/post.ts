@@ -2,7 +2,7 @@ import { Env } from "../cloudflare-worker";
 import { ExecutionContext } from "@cloudflare/workers-types";
 import { createErrorResponse, createResponse, validateIdentity } from "../utils/utils";
 
-export async function Post(request: Request, env: Env, ctx: ExecutionContext) {
+export async function Post(request: Request, env: Env) {
   if (!validateIdentity(request)) {
     return createErrorResponse("Unauthorized", 401);
   }

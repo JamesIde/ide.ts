@@ -29,16 +29,16 @@ export default {
 
       // CDN endpoint for checking if the image exists
       if (check) {
-        return await Exists(request, env, ctx, new URL(request.url).pathname.slice(1));
+        return await Exists(request, env, new URL(request.url).pathname.slice(1));
       }
 
       // CDN endpoint to serve the image
-      return await Get(request, env, ctx);
+      return await Get(request, env);
     }
 
     // CDN endpoint to upload a file
     if (request.method === "POST") {
-      return await Post(request, env, ctx);
+      return await Post(request, env);
     }
     return createErrorResponse("Invalid method", 400);
   },

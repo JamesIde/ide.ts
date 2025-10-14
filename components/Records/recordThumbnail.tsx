@@ -1,3 +1,4 @@
+import CDNImage from "components/Image/CDNImage";
 import { IThumbnail } from "../../@types/generated/contentful";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,12 +6,11 @@ function RecordThumbnail({ record }: { record: IThumbnail }) {
   return (
     <div className=" ml-5 mr-5 border-[1px]">
       <Link href={`records/${record.fields.slug}`}>
-        <Image
-          alt={record.fields?.description!}
-          src={`https:${record.fields.featuredImage?.fields.file.url}`}
-          width={1200}
-          height={200}
-          priority={true}
+        <CDNImage
+          height={1920}
+          width={1080}
+          alt={record.fields?.description}
+          url={`records/${record.fields.slug}/${record.fields.featuredImage.fields.file.fileName}`}
         />
       </Link>
       <div className="px-6 py-4 max-w-fit mx-auto ">

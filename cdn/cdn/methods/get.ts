@@ -2,13 +2,7 @@ import { Env } from "../cloudflare-worker";
 import { ExecutionContext } from "@cloudflare/workers-types";
 import { createErrorResponse, createResponse } from "../utils/utils";
 
-/**
- * Method retrieves the image from the Cloudflare R2 bucket and caches the image for 30 days.
- */
-
-const CACHE_TIME = 60 * 60 * 24 * 30;
-
-export async function Get(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+export async function Get(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   const key = url.pathname.slice(1);
 
@@ -35,6 +29,7 @@ export async function Get(request: Request, env: Env, ctx: ExecutionContext): Pr
           width: width ? parseInt(width) : undefined,
           height: height ? parseInt(height) : undefined,
           quality: quality,
+          format: "webp",
         },
       },
     });

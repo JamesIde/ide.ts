@@ -1,6 +1,6 @@
 export interface ModalImage {
   url: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   description?: string;
 }

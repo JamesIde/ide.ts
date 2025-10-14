@@ -66,7 +66,7 @@ export async function getRecordBySlug(slug: string) {
     content_type: "thumbnail",
     "fields.slug": slug,
   });
-  return record.items;
+  return record.items[0] as IThumbnail;
 }
 
 export async function getPhotoCollectionSlugs() {
@@ -87,7 +87,7 @@ export async function getPhotoCollectionBySlug(slug: string) {
     content_type: "photoCollection",
     "fields.slug": slug,
   });
-  return collection.items;
+  return collection.items[0] as IPhotoCollection;
 }
 
 export async function getBlogEntrySlugs() {
