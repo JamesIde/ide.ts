@@ -84,6 +84,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
                   ) {
                     return (
                       <CDNImage
+                        key={`${photo.fields.file.fileName}`}
                         height={1920}
                         width={1080}
                         alt={photo.fields.description}
@@ -108,6 +109,7 @@ export default function Collection({ collection }: { collection: IPhotoCollectio
                   } else {
                     return (
                       <CDNImage
+                        key={`${photo.fields.file.fileName}`}
                         height={2560}
                         width={1440}
                         alt={photo.fields.description}

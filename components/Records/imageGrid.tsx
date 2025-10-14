@@ -11,6 +11,7 @@ function ImageGrid({ images, slug, onImageClick }) {
 
         return (
           <CDNImage
+            key={photo.fields.file.fileName}
             height={config.height}
             width={config.width}
             alt={photo.fields.description}

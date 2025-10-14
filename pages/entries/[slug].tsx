@@ -11,9 +11,9 @@ export default function Entry({ entry }: { entry: IEntries }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
-    width: "",
-    height: "",
-    description: "",
+    width: undefined,
+    height: undefined,
+    description: undefined,
   });
 
   const imageModal = (e: any, photo: any) => {
@@ -125,8 +125,8 @@ export default function Entry({ entry }: { entry: IEntries }) {
               className="cursor-pointer  h-[96vh] object-contain"
               alt={entry.sys.id}
               key={entry.sys.id}
-              width={parseInt(currImage.width)}
-              height={parseInt(currImage.height)}
+              width={currImage.width}
+              height={currImage.height}
               loading="eager"
             />
           </div>
