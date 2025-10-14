@@ -6,9 +6,7 @@ The flow is unidirectional with Contentful being the source of truth. Images are
 
 ### Cloudflare Worker CDN
 
-This worker handles image requests serving them from the R2 bucket and
-converting them to webp using the transformation functionality by the worker.
-The response is then cached for 30 days.
+This worker handles the image requests by requesting them from the publicly available R2 bucket. This bucket has a custom domain which is required in order to take advantage of Cloudflares caching. Image transformation properties are applied during this request. The response it then cached by Cloudflares CDN.
 
 #### Some notes on the implementation:
 
@@ -16,7 +14,7 @@ The documentation is slightly confusing regarding caching, serving data, and how
 I had to move the domain over from Vercel to Cloudflare in order to put a custom domain (or route)
 over the Cloudflare worker in order to take advantage of the caching.
 The typescript types frequently run into issues with the existing fetch types hence the unfortunate use of 'any'
-over the place.
+over the place. Probably the most frustrating part of this is not being able to directly transform the image from the R2 bucket. Instead, we have to fetch the image and apply the transformation properties in the request. [See here for more.](https://www.reddit.com/r/CloudFlare/comments/1j19be7/comment/mfi8t18/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
 
 #### A note on R2 Pricing:
 

@@ -6,6 +6,7 @@ import { Post } from "./methods/post";
 
 export interface Env {
   MY_BUCKET: R2Bucket;
+  ASSETS_PUBLIC_URL: string;
 }
 
 export const corsHeaders = {

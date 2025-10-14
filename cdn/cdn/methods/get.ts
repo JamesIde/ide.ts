@@ -10,7 +10,6 @@ const CACHE_TIME = 60 * 60 * 24 * 30;
 
 export async function Get(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
-
   const key = url.pathname.slice(1);
 
   if (!key || key === "") {
@@ -18,43 +17,27 @@ export async function Get(request: Request, env: Env, ctx: ExecutionContext): Pr
   }
 
   try {
-    const object = await env.MY_BUCKET.get(key);
-    if (object === null) return createErrorResponse("File not found", 404);
+    /**
+     * The R2 bucket is publicly available under its own domain (assets.jamesaide.com).
+     * The worker makes the request against the bucket with the image transformation props.
+     * Ideally we want the worker to directly transform the object when pulled from R2 using the env.MYBUCKET.get(key) method but that is not possible.
+     * https://www.reddit.com/r/CloudFlare/comments/1j19be7/comment/mfi8t18/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+     */
 
-    const cacheKey = new Request(url.toString(), request);
-    const cache = (caches as any).default;
+    const width = url.searchParams.get("width") || url.searchParams.get("w");
+    const height = url.searchParams.get("height") || url.searchParams.get("h");
+    const quality = parseInt(url.searchParams.get("quality") || url.searchParams.get("q")) || 85;
 
-    let cachedResponse = await cache.match(cacheKey);
-
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Nefarious any to allow the http metadata to be written for the cache (I think...)
-    const headers = new Headers() as any;
-
-    headers.set("etag", object.httpEtag);
-    headers.set("Content-Type", "image/webp");
-    headers.set("Cache-Control", `max-age=${CACHE_TIME}`);
-    headers.set("Access-Control-Allow-Origin", "*");
-
-    object.writeHttpMetadata(headers);
-
-    var data = await object.arrayBuffer();
-
-    var response = createResponse(data, {
-      status: 200,
-      headers,
+    return fetch(`https://${env.ASSETS_PUBLIC_URL}/${key}`, {
       cf: {
         image: {
-          format: "webp",
-          quality: 85,
+          fit: "scale-down",
+          width: width ? parseInt(width) : undefined,
+          height: height ? parseInt(height) : undefined,
+          quality: quality,
         },
       },
     });
-
-    ctx.waitUntil(cache.put(cacheKey, response.clone()));
-    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Something went wrong";
     return createErrorResponse(message, 500);
