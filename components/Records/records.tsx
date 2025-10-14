@@ -1,7 +1,13 @@
+import SafeAreaView from "components/Misc/safeAreaView";
 import { IThumbnail } from "../../@types/generated/contentful";
 import RecordThumbnail from "./recordThumbnail";
+import LineSeparator from "components/Misc/lineSeparator";
 
-export default function Records({ records }: { records: IThumbnail[] }) {
+export default function Records({ records, displayHeroRecord }: { records: IThumbnail[]; displayHeroRecord: boolean }) {
+  if (displayHeroRecord) {
+    records = records.filter((r) => r.fields.slug === process.env.NEXT_PUBLIC_DISPLAY_RECORD_SLUG);
+  }
+
   records.sort((a, b) => {
     const dateA = new Date(a.fields.posted);
     const dateB = new Date(b.fields.posted);
@@ -9,17 +15,15 @@ export default function Records({ records }: { records: IThumbnail[] }) {
   });
 
   return (
-    <div>
-      <h1 className="text-center text-3xl mb-1 mt-4 nav-center text-bold heading">
-        LATEST RECORDS
-      </h1>
-      <div className="mx-auto xl:w-[40%] lg:w-[70%] md:w-[70%] h-auto mt-5 mb-5">
+    <SafeAreaView>
+      <div className="mx-auto xl:w-[40%] lg:w-[70%] md:w-[70%] h-auto mt-20">
+        <LineSeparator displayHeroRecord={displayHeroRecord} name="Records" />
         <div className="grid grid-cols-1 gap-3 ">
           {records.map((record) => {
             return <RecordThumbnail record={record} key={record.sys.id} />;
           })}
         </div>
       </div>
-    </div>
+    </SafeAreaView>
   );
 }
