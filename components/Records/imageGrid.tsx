@@ -1,6 +1,7 @@
+import CDNImage from "components/Image/CDNImage";
 import { Asset } from "contentful";
 import Image from "next/image";
-function ImageGrid({ images, onImageClick }) {
+function ImageGrid({ images, slug, onImageClick }) {
   if (!images) return null;
 
   return (
@@ -9,19 +10,27 @@ function ImageGrid({ images, onImageClick }) {
         const config = getImageConfig(photo);
 
         return (
-          <Image
-            src={`https:${photo.fields.file.url}`}
-            alt={photo.fields.description}
-            className={config.className + "hover:cursor-pointer duration-500 hover:border-blue-500 border-2"}
-            width={config.width}
+          <CDNImage
+            key={photo.fields.file.fileName}
             height={config.height}
+            width={config.width}
+            alt={photo.fields.description}
+            url={`records/${slug}/${photo.fields.file.fileName}`}
             style={{
               objectFit: "cover",
               height: "100%",
               width: "100%",
             }}
-            key={photo.sys.id}
-            onClick={(e) => onImageClick(e, photo)}
+            className={config.className + "hover:cursor-pointer duration-500 hover:border-blue-500 border-2"}
+            onClick={(e) =>
+              onImageClick(
+                e,
+                `records/${slug}/${photo.fields.file.fileName}`,
+                config.width,
+                config.height,
+                photo.fields.description
+              )
+            }
           />
         );
       })}
@@ -30,15 +39,15 @@ function ImageGrid({ images, onImageClick }) {
 }
 export default ImageGrid;
 
-const getImageConfig = (photo: any) => {
+const getImageConfig = (photo: Asset) => {
   const { height, width } = photo.fields.file.details.image || {};
 
   // Portrait X100VI photos or very tall images (span 2 vertically)
   if ((height >= 4000 && width === 3024) || height > 5700) {
     return {
       className: "record-img-span2 hover:cursor-pointer duration-500",
-      width: 500,
-      height: 1000,
+      width: 1080,
+      height: 1920,
     };
   }
 
@@ -51,10 +60,10 @@ const getImageConfig = (photo: any) => {
     };
   }
 
-  // Default/landscape images
+  // Default/landscape images rendered as 2k images
   return {
     className: "record-img hover:cursor-pointer duration-500",
-    width: 1920,
-    height: 1080,
+    width: 1440,
+    height: 2560,
   };
 };

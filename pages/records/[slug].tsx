@@ -14,25 +14,26 @@ import Mapbox from "components/Mapbox/Mapbox";
 import { GPX_MAPPER } from "lib/gpx-mapper/mapper";
 import ImageGrid from "components/Records/imageGrid";
 import SafeAreaView from "components/Misc/safeAreaView";
+import CDNImage from "components/Image/CDNImage";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
     url: "",
-    width: "",
-    height: "",
-    description: "",
+    width: undefined,
+    height: undefined,
+    description: undefined,
   });
 
-  const imageModal = (e: any, photo: any) => {
+  const imageModal = (e: any, url: string, width: number, height: number, description: string) => {
     e.stopPropagation();
     setModal((showModal) => !showModal);
 
     let modalImage: ModalImage = {
-      url: `https:${photo.fields.file.url}`,
-      width: photo.fields.file.details.image?.width,
-      height: photo.fields.file.details.image?.height,
-      description: photo.fields.description,
+      url,
+      width,
+      height,
+      description,
     };
 
     setImage(modalImage);
@@ -71,6 +72,7 @@ export default function Record({ record }: { record: IThumbnail }) {
     // TODO - if a trip ever exceeds 10 days, this would need to be adjusted.
     // It's because of the original naming of the contentful assets we have to deal with this...
     // The contentful asset nodes don't start at 0 either - no dayZeroDescription.
+    // TODO - if this changes, update utils.ts in 'sync' to accommodate for longer trips.
     const dayNames = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
     return dayNames[num] || num.toString();
   };
@@ -84,13 +86,27 @@ export default function Record({ record }: { record: IThumbnail }) {
         <div id="global-wrapper" onClick={closeModal}>
           <div className="lg:w-[1100px] sm:w-[600px] overflow-hidden mx-auto text-black mt-10 mb-3 p-2">
             <section id="record-details">
-              <Image
-                src={`https:${record.fields.featuredImage?.fields.file?.url}`}
-                width={1920}
-                height={1080}
+              <CDNImage
+                height={2560}
+                width={1440}
                 alt={record.fields.title!}
-                loading="eager"
-              />{" "}
+                url={`records/${record.fields.slug}/${record.fields.featuredImage?.fields.file.fileName}`}
+                style={{
+                  objectFit: "cover",
+                  height: "100%",
+                  width: "100%",
+                }}
+                // className="border-2 collection-img hover:border-blue-500 hover:cursor-pointer duration-500"
+                // onClick={(e) =>
+                //   imageModal(
+                //     e,
+                //     `records/${record.fields.slug}/${record.fields.featuredImage?.fields.file.fileName}`,
+                //     2560,
+                //     1440,
+                //     record.fields.title!
+                //   )
+                // }
+              />
               <h1 className="text-2xl text-center nav-title mt-4">{record.fields.title}</h1>
               <p className="text-center mb-2 mt-2 font-mono">[{record.fields.location}]</p>
               <p className="mt-2">{record.fields.description}</p>
@@ -118,7 +134,7 @@ export default function Record({ record }: { record: IThumbnail }) {
                     <ReactMarkdown>{day.description}</ReactMarkdown>
                   </div>
                   <div className="record-grid-container">
-                    <ImageGrid images={day.images} onImageClick={imageModal} />
+                    <ImageGrid images={day.images} onImageClick={imageModal} slug={record.fields.slug} />
                   </div>
                 </>
               ))}
@@ -153,7 +169,7 @@ export default function Record({ record }: { record: IThumbnail }) {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const record: IThumbnail = await getRecordBySlug(params.slug);
+  const record = await getRecordBySlug(params.slug);
   return {
     props: {
       record,
