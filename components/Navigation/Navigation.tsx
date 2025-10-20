@@ -59,11 +59,11 @@ export function Navigation() {
               </Link>
             ))}
             <button
-              className=" rounded-xl flex h-9 items-center justify-center bg-gradient-to-b 
+              className=" rounded-xl flex h-6 items-center justify-center bg-gradient-to-b 
             from-gray-900 from-50% to-gray-800 to-50% px-3 text-gray-50 shadow hover:from-gray-800 
             hover:to-gray-700 active:from-gray-700 active:to-gray-600"
             >
-              <a href="mailto:james.ide775@gmail.com" target="_blank" className="text-sm">
+              <a href="mailto:james.ide775@gmail.com" target="_blank" rel="noopener noreferrer" className="text-sm">
                 Contact
               </a>
             </button>
