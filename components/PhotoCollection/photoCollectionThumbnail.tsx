@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { IPhotoCollection } from "../../@types/generated/contentful";
 import CDNImage from "components/Image/CDNImage";
 export default function PhotoCollectionThumbnail({ collection }: { collection: IPhotoCollection }) {

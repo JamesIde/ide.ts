@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ModalImage } from "../../@types/Modal";
 import CDNImage from "components/Image/CDNImage";
 

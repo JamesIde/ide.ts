@@ -9,12 +9,12 @@ function about() {
     <Layout>
       <SafeAreaView>
         <Helmet title="about" />
-        <div className="xl:w-5/12 lg:w-5/12 md:w-10/12 mx-auto xl:mt-32 p-2 ">
+        <div className="xl:w-5/12 lg:w-6/12 md:w-10/12 mx-auto xl:mt-32 p-2 ">
           <h3 className="text-md font-semibold mb-4 tracking-wider">About</h3>
           <p className="text-gray-600">Software developer and hiker occasionally sharing photos and writing.</p>
-          <div className="mt-2">
-            <div className="h-px flex-1 bg-border bg-black" />
-            <ul className="space-y-3 text-gray-600 mt-4">
+          <div className="md:mt-10 mt-4">
+            <LineSeparator name="Get in touch" />
+            <ul className="space-y-3 text-gray-600 md:mt-4 mt-2">
               <a
                 href="mailto:james.ide775@gmail.com"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
