@@ -58,11 +58,15 @@ export function Navigation() {
                 {label}
               </Link>
             ))}
-            <div className="bg-black rounded-lg text-white py-1 px-2 text-sm hover:cursor-pointer">
-              <a href="mailto:james.ide775@gmail.com" target="_blank" rel="noreferrer">
+            <button
+              className=" rounded-xl flex h-9 items-center justify-center bg-gradient-to-b 
+            from-gray-900 from-50% to-gray-800 to-50% px-3 text-gray-50 shadow hover:from-gray-800 
+            hover:to-gray-700 active:from-gray-700 active:to-gray-600"
+            >
+              <a href="mailto:james.ide775@gmail.com" target="_blank" className="text-sm">
                 Contact
               </a>
-            </div>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}

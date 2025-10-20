@@ -1,6 +1,5 @@
 import CDNImage from "components/Image/CDNImage";
 import { Asset } from "contentful";
-import Image from "next/image";
 function ImageGrid({ images, slug, onImageClick }) {
   if (!images) return null;
 

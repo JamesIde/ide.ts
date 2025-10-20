@@ -1,6 +1,5 @@
 import CDNImage from "components/Image/CDNImage";
 import { IThumbnail } from "../../@types/generated/contentful";
-import Image from "next/image";
 import Link from "next/link";
 function RecordThumbnail({ record }: { record: IThumbnail }) {
   return (
