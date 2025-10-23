@@ -8,12 +8,28 @@ function about() {
   return (
     <Layout>
       <SafeAreaView>
-        <Helmet title="about" />
-        <div className="xl:w-5/12 lg:w-6/12 md:w-10/12 mx-auto xl:mt-32 p-2 ">
+        <Helmet title="About" />
+        <div className="xl:w-5/12 lg:w-6/12 md:w-10/12 mx-auto xl:mt-32 p-4 md:p-2">
           <h3 className="text-md font-semibold mb-4 tracking-wider">About</h3>
-          <p className="text-gray-600">Software developer and hiker occasionally sharing photos and writing.</p>
+
+          <p className="text-gray-600 mt-3 leading-tight">
+            As I’ve gotten older (and not to be dramatic), I’ve realised that it is quite important to me that I have
+            some medium to collate and organise my trips and photos and share them in some way. Partly for my future
+            self to look back on but also to put something as authentic as possible out into the world. I also have
+            found that writing about trips after they have happened has been a great way to internalise and process
+            them, beyond relying on photos on a phone or a hazy recollection of memories in the future.
+          </p>
+          <p className="text-gray-600 mt-3 leading-tight">
+            It is a small site that doesn’t get many views, and I certainly do not promote it anywhere, but if you have
+            found this in your search for knowledge about a particular trip I have done then perhaps there is something
+            of value here for you.
+          </p>
+          <p className="text-gray-600 mt-3 leading-tight">
+            If you have something to say, you can get in touch with me.
+          </p>
+          <p className="text-gray-600 mt-3 leading-tight">And if not, thank you for visiting.</p>
           <div className="md:mt-10 mt-4">
-            <LineSeparator name="Get in touch" />
+            <LineSeparator />
             <ul className="space-y-3 text-gray-600 md:mt-4 mt-2">
               <a
                 href="mailto:james.ide775@gmail.com"
@@ -30,15 +46,6 @@ function about() {
               >
                 <Instagram size={16} />
                 <span>@james.ide</span>
-              </a>
-              <a
-                href="https://www.linkedin.com/in/jamesaide/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Linkedin size={16} />
-                <span>James Ide</span>
               </a>
               <a
                 href="https://github.com/jameside"
