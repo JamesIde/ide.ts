@@ -6,5 +6,4 @@ function LineSeparator({ name }: { name?: string }) {
     </div>
   );
 }
-// TODO gap-4 if name is present
 export default LineSeparator;
