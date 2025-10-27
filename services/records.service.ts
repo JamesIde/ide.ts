@@ -35,6 +35,7 @@ export async function updateRecordViewCount(req: NextApiRequest, res: NextApiRes
       viewCount: updatedRecord.viewCount,
     });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       message: `Error updating view count for record: ${contentfulId}`,
     });
