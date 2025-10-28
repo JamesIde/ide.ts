@@ -7,6 +7,7 @@ import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useState } from "react";
 import { ModalImage } from "../../@types/Modal";
+import SafeAreaView from "components/Misc/safeAreaView";
 export default function Entry({ entry }: { entry: IEntries }) {
   const [modal, setModal] = useState(false);
   const [currImage, setImage] = useState<ModalImage>({
@@ -99,42 +100,44 @@ export default function Entry({ entry }: { entry: IEntries }) {
 
   return (
     <Layout>
-      <Helmet title={entry.fields.title} />
-      <div className="xl:w-[65%] lg:w-full md:w-[65%] overflow-hidden mx-auto text-black mt-2 px-2">
-        <div className="py-2 mx-auto ">
-          <div className="mb-1 mx-auto  text-[20px] text-black font-semibold text-center ">{entry.fields.title}</div>
-          <p className="text-center text-sm text-gray-600">
-            {new Date(entry.fields.date!).toLocaleDateString("en-AU", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
+      <SafeAreaView>
+        <Helmet title={entry.fields.title} />
+        <div className="xl:w-[65%] lg:w-full md:w-[65%] overflow-hidden mx-auto text-black mt-2 px-2">
+          <div className="py-2 mx-auto ">
+            <div className="mb-1 mx-auto  text-[20px] text-black font-semibold text-center ">{entry.fields.title}</div>
+            <p className="text-center text-sm text-gray-600">
+              {new Date(entry.fields.date!).toLocaleDateString("en-AU", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </div>
+          {documentToReactComponents(entry.fields.main, options)}
         </div>
-        {documentToReactComponents(entry.fields.main, options)}
-      </div>
 
-      {modal && (
-        <div
-          className="fixed flex justify-center items-center h-screen top-0 left-0 bg-blurred flex-col"
-          onClick={closeModal}
-        >
-          <div>
-            <Image
-              src={currImage.url}
-              className="cursor-pointer  h-[96vh] object-contain"
-              alt={entry.sys.id}
-              key={entry.sys.id}
-              width={currImage.width}
-              height={currImage.height}
-              loading="eager"
-            />
+        {modal && (
+          <div
+            className="fixed flex justify-center items-center h-screen top-0 left-0 bg-blurred flex-col"
+            onClick={closeModal}
+          >
+            <div>
+              <Image
+                src={currImage.url}
+                className="cursor-pointer  h-[96vh] object-contain"
+                alt={entry.sys.id}
+                key={entry.sys.id}
+                width={currImage.width}
+                height={currImage.height}
+                loading="eager"
+              />
+            </div>
+            <div>
+              <p className="text-white text-center ">{currImage.description}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-white text-center ">{currImage.description}</p>
-          </div>
-        </div>
-      )}
+        )}
+      </SafeAreaView>
     </Layout>
   );
 }
