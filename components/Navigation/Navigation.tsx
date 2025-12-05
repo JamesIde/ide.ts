@@ -22,7 +22,7 @@ export function Navigation() {
   const navigationMap = new Map<string, string>([
     ["Multiday Trips", "records"],
     ["Photo Collections", "collections"],
-    ["About", "about"],
+    // ["About", "about"],
     ["Gear", "gear"],
   ]);
 
