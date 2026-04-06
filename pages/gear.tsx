@@ -14,10 +14,10 @@ export default function gear() {
             <p className="text-sm hover:cursor-pointer" onClick={() => window.location.reload()}>
               See nothing? Click here to refresh
             </p>
-            <p className="text-sm mb-4 mt-4">Last updated 6/12/25</p>
+            <p className="text-sm mb-4 mt-4">Last updated 7/4/26</p>
             {/* div with the id is required for script loading */}
-            <Script src="https://lighterpack.com/e/04e8ql" />
-            <div id="04e8ql"></div>
+            <Script src="https://lighterpack.com/e/ffw2wa" />
+            <div id="ffw2wa"></div>
           </div>
           <div>
             <Link href="/" className="hover:text-sky-700 duration-500 font-mono text-center">
