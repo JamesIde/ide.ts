@@ -22,28 +22,35 @@ export function Navigation() {
   const navigationMap = new Map<string, string>([
     ["Multiday Trips", "records"],
     ["Photo Collections", "collections"],
-    // ["About", "about"],
+    ["About", "about"],
     ["Gear", "gear"],
   ]);
 
   // TODO combine into one
-  const navStylesDesktop = "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
+  const navStylesDesktop =
+    "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
   const navStylesDesktopActivated =
     "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-orange-500";
 
-  const navStylesMobile = "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
+  const navStylesMobile =
+    "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors";
   const navStylesMobileActivated =
     "block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-orange-500";
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || isMobileMenuOpen ? "bg-background/95 backdrop-blur-md border-b border-border" : "bg-transparent"
+        isScrolled || isMobileMenuOpen
+          ? "bg-background/95 backdrop-blur-md border-b border-border"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="flex items-center justify-between h-16 sm:h-20 ">
-          <Link href="/" className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+          <Link
+            href="/"
+            className="text-xl sm:text-2xl font-bold tracking-tight text-foreground"
+          >
             James Ide
           </Link>
 
@@ -53,7 +60,11 @@ export function Navigation() {
               <Link
                 key={path}
                 href={`/${path}`}
-                className={isActive(`/${path}`) ? navStylesDesktopActivated : navStylesDesktop}
+                className={
+                  isActive(`/${path}`)
+                    ? navStylesDesktopActivated
+                    : navStylesDesktop
+                }
               >
                 {label}
               </Link>
@@ -63,7 +74,12 @@ export function Navigation() {
             from-gray-900 from-50% to-gray-800 to-50% px-3 text-gray-50 shadow hover:from-gray-800 
             hover:to-gray-700 active:from-gray-700 active:to-gray-600"
             >
-              <a href="mailto:james.ide775@gmail.com" target="_blank" rel="noopener noreferrer" className="text-sm">
+              <a
+                href="mailto:james.ide775@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm"
+              >
                 Contact
               </a>
             </button>
@@ -88,7 +104,11 @@ export function Navigation() {
               <Link
                 key={path}
                 href={`/${path}`}
-                className={isActive(`/${path}`) ? navStylesMobileActivated : navStylesMobile}
+                className={
+                  isActive(`/${path}`)
+                    ? navStylesMobileActivated
+                    : navStylesMobile
+                }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {label}
@@ -96,7 +116,11 @@ export function Navigation() {
             ))}
             {/* TODO */}
             <div className={navStylesMobile}>
-              <a href="mailto:james.ide775@gmail.com" target="_blank" rel="noreferrer">
+              <a
+                href="mailto:james.ide775@gmail.com"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Contact
               </a>
             </div>
