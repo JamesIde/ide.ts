@@ -6,7 +6,7 @@ function Helmet({ title }: { title: string }) {
       <title>James Ide | {title}</title>
       <meta name="description" content="James Ide's website" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="/favicon.png" />
     </Head>
   );
 }
