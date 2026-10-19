@@ -4,14 +4,14 @@ export const kumanokodo = `<?xml version="1.0" encoding="UTF-8"?>
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <metadata>
-    <name>Kumano_Kodo_complete</name>
-    <time>2026-10-19T00:20:34.820Z</time>
+    <name>Kumano Kodo full v2</name>
+    <time>2026-10-19T03:46:49.840Z</time>
     <link href="https://therideatlas.com">
       <text>The Ride Atlas - Cycling Routes &amp; Guides</text>
     </link>
   </metadata>
   <trk>
-    <name>Kumano_Kodo_complete</name>
+    <name>Kumano Kodo full v2</name>
     <trkseg>
       <trkpt lat="33.7758370" lon="135.5040530">
         <ele>77.0</ele>

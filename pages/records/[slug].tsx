@@ -14,6 +14,7 @@ import { GPX_MAPPER } from "lib/gpx-mapper/mapper";
 import ImageGrid from "components/Records/imageGrid";
 import SafeAreaView from "components/Misc/safeAreaView";
 import CDNImage from "components/Image/CDNImage";
+import dynamic from "next/dynamic";
 
 export default function Record({ record }: { record: IThumbnail }) {
   const [modal, setModal] = useState(false);
@@ -24,7 +25,13 @@ export default function Record({ record }: { record: IThumbnail }) {
     description: undefined,
   });
 
-  const imageModal = (e: any, url: string, width: number, height: number, description: string) => {
+  const imageModal = (
+    e: any,
+    url: string,
+    width: number,
+    height: number,
+    description: string,
+  ) => {
     e.stopPropagation();
     setModal((showModal) => !showModal);
 
@@ -72,11 +79,30 @@ export default function Record({ record }: { record: IThumbnail }) {
     // It's because of the original naming of the contentful assets we have to deal with this...
     // The contentful asset nodes don't start at 0 either - no dayZeroDescription.
     // TODO - if this changes, update utils.ts in 'sync' to accommodate for longer trips.
-    const dayNames = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+    const dayNames = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+    ];
     return dayNames[num] || num.toString();
   };
 
   const dayData = mapRecordDescriptionsByDay(record);
+
+  const Mapbox = dynamic(() => import("components/Mapbox/Mapbox"), {
+    ssr: false,
+    loading: () => (
+      <div className="h-[500px] animate-pulse rounded-xl bg-gray-100" />
+    ),
+  });
 
   return (
     <SafeAreaView>
@@ -106,8 +132,12 @@ export default function Record({ record }: { record: IThumbnail }) {
                 //   )
                 // }
               />
-              <h1 className="text-2xl text-center nav-title mt-4">{record.fields.title}</h1>
-              <p className="text-center mb-2 mt-2 font-mono">[{record.fields.location}]</p>
+              <h1 className="text-2xl text-center nav-title mt-4">
+                {record.fields.title}
+              </h1>
+              <p className="text-center mb-2 mt-2 font-mono">
+                [{record.fields.location}]
+              </p>
               <p className="mt-2">{record.fields.description}</p>
               <div className="flex justify-between mt-1">
                 <div className="flex flex-col items-right ml-auto">
@@ -120,7 +150,9 @@ export default function Record({ record }: { record: IThumbnail }) {
             {record.fields.attributions && (
               <div id="attributions">
                 <p className="text-center pb-2">
-                  <ReactMarkdown {...markdownConfig}>{record.fields.attributions}</ReactMarkdown>
+                  <ReactMarkdown {...markdownConfig}>
+                    {record.fields.attributions}
+                  </ReactMarkdown>
                 </p>
                 <hr />
               </div>
@@ -133,7 +165,11 @@ export default function Record({ record }: { record: IThumbnail }) {
                     <ReactMarkdown>{day.description}</ReactMarkdown>
                   </div>
                   <div className="record-grid-container">
-                    <ImageGrid images={day.images} onImageClick={imageModal} slug={record.fields.slug} />
+                    <ImageGrid
+                      images={day.images}
+                      onImageClick={imageModal}
+                      slug={record.fields.slug}
+                    />
                   </div>
                 </>
               ))}
@@ -142,10 +178,14 @@ export default function Record({ record }: { record: IThumbnail }) {
                 <Mapbox line={GPX_MAPPER[record.fields.slug]} />
               </div>
               {record.fields?.travelDescription && (
-                <ReactMarkdown {...markdownConfig}>{record.fields?.travelDescription!}</ReactMarkdown>
+                <ReactMarkdown {...markdownConfig}>
+                  {record.fields?.travelDescription!}
+                </ReactMarkdown>
               )}
               {record.fields?.aboutDescription && (
-                <ReactMarkdown {...markdownConfig}>{record.fields?.aboutDescription!}</ReactMarkdown>
+                <ReactMarkdown {...markdownConfig}>
+                  {record.fields?.aboutDescription!}
+                </ReactMarkdown>
               )}
             </div>
             <div className="record-details">
@@ -154,13 +194,26 @@ export default function Record({ record }: { record: IThumbnail }) {
               <div id={record.fields.lighterpackId}></div>
             </div>
           </div>
-          <Link activeClass="active" to="global-wrapper" spy={true} smooth={true} offset={-100} duration={500}>
+          <Link
+            activeClass="active"
+            to="global-wrapper"
+            spy={true}
+            smooth={true}
+            offset={-100}
+            duration={500}
+          >
             <p className="w-max mx-auto hover:cursor-pointer mb-5 font-mono hover:text-orange-500 duration-500">
               Back to top
             </p>
           </Link>
 
-          {modal && <Modal currImage={currImage} id={record.sys.id} onClose={closeModal} />}
+          {modal && (
+            <Modal
+              currImage={currImage}
+              id={record.sys.id}
+              onClose={closeModal}
+            />
+          )}
         </div>
       </Layout>
     </SafeAreaView>
