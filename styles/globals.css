@@ -114,18 +114,16 @@
 }
 
 .record-details > .record-stats > h1 {
-  font-size: 2rem;
-  line-height: 1.2;
+ font-size: 1.5rem;
   color: #343a40;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 /* For travel, about, general note headings */
 .record-details > h1 {
-  font-size: 2rem;
-  line-height: 1.2;
+  font-size: 1.5rem;
   color: #343a40;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 /* Record Stat Icon ULS */
