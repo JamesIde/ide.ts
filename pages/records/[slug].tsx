@@ -188,11 +188,13 @@ export default function Record({ record }: { record: IThumbnail }) {
                 </ReactMarkdown>
               )}
             </div>
-            <div className="record-details">
-              <h1 className="mb-3 mt-3">Gear</h1>
-              <Script src={record.fields.lighterpackLink} />
-              <div id={record.fields.lighterpackId}></div>
-            </div>
+            {record.fields.lighterpackLink && (
+              <div className="record-details">
+                <h1 className="mb-3 mt-3">Gear</h1>
+                <Script src={record.fields.lighterpackLink} />
+                <div id={record.fields.lighterpackId}></div>
+              </div>
+            )}
           </div>
           <Link
             activeClass="active"
