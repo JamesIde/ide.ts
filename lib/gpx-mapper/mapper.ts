@@ -1,4 +1,4 @@
-import { kumanokodo } from "data/gpx/kumano-kodo";
+import { kumanokodo } from "data/gpx/kumano-kodo-2026";
 import { wallsofj } from "data/gpx/walls-of-jerusalem-2022";
 import { westernarthurs } from "data/gpx/western-arthurs-2022";
 import { wildsouthcoastway } from "data/gpx/wild-south-coast-way-2021";
