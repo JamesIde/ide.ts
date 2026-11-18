@@ -89308,5 +89308,4 @@ export const routeburngreenstone = `
       </trkpt>
     </trkseg>
   </trk>
-</gpx>
-`;
+</gpx>`;
