@@ -1,4 +1,5 @@
 import { kumanokodo } from "data/gpx/kumano-kodo-2026";
+import { routeburngreenstone } from "data/gpx/routeburn-greenstone";
 import { wallsofj } from "data/gpx/walls-of-jerusalem-2022";
 import { westernarthurs } from "data/gpx/western-arthurs-2022";
 import { wildsouthcoastway } from "data/gpx/wild-south-coast-way-2021";
@@ -21,4 +22,5 @@ export const GPX_MAPPER: GpxMap = {
   "the-western-arthurs-traverse": westernarthurs,
   "walls-of-jerusalem": wallsofj,
   "kumano-kodo": kumanokodo,
+  "the-land-of-tears-routeburn-greenstone": routeburngreenstone,
 };

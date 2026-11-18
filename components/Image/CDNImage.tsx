@@ -18,7 +18,6 @@ function CDNImage({
   className?: any;
 }) {
   const cdnUrl = `${process.env.NEXT_PUBLIC_BASE_CDN_URL}${url}?h=${height}&w=${width}&q=${quality}`;
-
   return (
     <img
       src={cdnUrl}
