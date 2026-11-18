@@ -8,7 +8,7 @@ import { processTrack } from "lib/gpx-mapper/processTrack";
 
 function Mapbox({ line }: { line: string }) {
   const { track, markers, bounds } = useMemo(() => {
-    const [file, error] = parseGPX(line);
+    const [file, error] = parseGPX(line.trim());
     if (error) throw error;
 
     const geojson = file.toGeoJSON();
@@ -16,6 +16,7 @@ function Mapbox({ line }: { line: string }) {
     const lineString = geojson.features.find(
       (f) => f.geometry.type === "LineString",
     );
+
     if (!lineString) throw new Error("GPX file contains no track");
 
     const [minX, minY, maxX, maxY] = turf.bbox(geojson as any);
